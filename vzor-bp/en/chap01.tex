@@ -1,7 +1,21 @@
 \chapter{Preliminaries}
 
 %An~example citation: \cite{Andel07}
-\textit{What we will talk about}
+\textit{What we will talk about, theory}
 
 \section{Machine learning}
-The field of Machine learning encompasses a broad range of algorithms and statistical methods for data processing. In his book on Machine learning, Flach provides the following general definition: \textquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience.} (\citet{Flach:2012:MLA:2490546})
+The field of machine learning encompasses a broad range of algorithms and statistical methods for data processing. In his book on machine learning, Flach provides the following general definition:
+
+\blockquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience.} (\citet{Flach:2012:MLA:2490546}) % page number? (3)
+
+More precisely, a machine learning problem is the task of using previously gained knowledge to solve a similar problem. This procedure can be repeated as to improve the overall `experience'.
+% find a better source and rewrite
+
+The exact meaning of knowledge and performance varies with different tasks. Some examples of knowledge of an algorithm include labeled training data, rewards for previous decisions and many others. The performance usually takes the form of some score --- which is in some cases accordance with the `ground truth', i.e. labeled training data, in other cases the success of an action or an error measure. % citation; also improve
+
+
+With growing `experience', the performance may increase as well.
+\textit{Define overfitting, generalization error, how to avoid. Bias vs variance.}
+% overfitting
+
+\subsection{Model ensembles}
