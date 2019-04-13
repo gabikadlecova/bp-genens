@@ -6,12 +6,11 @@
 \section{Machine learning}
 The field of machine learning encompasses a broad range of algorithms and statistical methods for data processing. In his book on machine learning, Flach provides the following general definition:
 
-\blockquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience.} (\citet{Flach:2012:MLA:2490546}) % page number? (3)
+\blockquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience.} (\cite{Flach:2012:MLA:2490546}) % page number? (3)
 
-More precisely, a machine learning problem is the task of using previously gained knowledge to solve a similar problem. This procedure can be repeated as to improve the overall `experience'.
-% find a better source and rewrite
+\textit{Here a detailed definition. Should be rewritten.}
 
-The exact meaning of knowledge and performance varies with different tasks. Some examples of knowledge of an algorithm include labeled training data, rewards for previous decisions and many others. The performance usually takes the form of some score --- which is in some cases accordance with the `ground truth', i.e. labeled training data, in other cases the success of an action or an error measure. % citation; also improve
+The exact meaning varies with different tasks. In some cases, knowledge is gained by processing labeled training data, in other cases it means comparing rewards of previous actions. The performance usually takes the form of some score --- which can be accordance with some `ground truth', i.e. comparison of the algorithm output with labeled testing data, or the success of an action. % 	REWRITE THIS, examples like clf and reinf
 
 
 With growing `experience', the performance may increase as well.
@@ -19,3 +18,24 @@ With growing `experience', the performance may increase as well.
 % overfitting
 
 \subsection{Model ensembles}
+
+\section{Metalearning}
+
+
+\section{Evolutionary computing}
+Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best traits are most likely to reproduce, thus passing to the offspring advantageous characteristics, hence the `survival of the fittest'. % Similar to Engelbrecht...
+
+In an evolutionary algorithms, the goal is to find the ``best'' solution to the given problem. The term `population' refers to a set of solutions encoded as chromosomes, which represents the defining features of a particular solution. The `natural selection' can be then understood as a stochastic search through the space of possible chromosome values. (\cite{Engelbrecht:2007:CII:1557464}) % tohle je skoro doslova, jak moc to musim menit? Kdyz je to v podstate definice
+
+
+
+The advantage of this approach is that genetic algorithms perform multi-directional search, maintaining a population of potentially different solutions, which proves to be more robust than other directed search methods. (\cite{Michalewicz:1996:GAD:229930})
+
+\section{Genetic programming}
+In this section, we present a subfield of evolutionary computing -- the genetic programming -- where the population is a set of computer programs. The aim of this technique is to evolve programs which provide a better solution to the given problem. There are various approaches in means of how to represent the individuals and what kind of genetic operators to use. The fitness is computed by running the program and comparing the result with the desired output. \cite{Poli:2008:FGG:1796422}
+\subsection{Tree-based genetic programming}
+The individuals are most frequently represented in the form of \textit{syntax trees}. Inner nodes of the tree are functions, whereas the leaves are constants and variables. Both functions and constants are selected from a set of possible nodes which is provided as input to the algorithm.
+
+% sem hodit gene op? Obrazky?
+
+\section{Workflows}
