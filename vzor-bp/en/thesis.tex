@@ -55,6 +55,21 @@
 % Packages added by the author of the thesis
 \usepackage[autostyle]{csquotes}
 
+% python-like algorithm environment
+\usepackage[ruled,noline]{algorithm2e}
+
+\newcommand{\forcond}{$i=0$ \KwTo $n$}
+\SetKwFunction{FRecurs}{FnRecursive}%
+
+\SetStartEndCondition{ }{}{}%
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKwFunction{Range}{range}%%
+\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+\SetKwFor{While}{while}{:}{}%
+\renewcommand{\forcond}{$i$ \KwTo\Range{$n$}}
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+
 
 % TODO notice this line, discuss it
 \PassOptionsToPackage{usenames}{xcolor}
@@ -133,6 +148,9 @@ Abstract.
 
 %%% Bibliography
 \include{bibliography}
+
+%%% Algorithms used in the thesis.
+\listofalgorithms
 
 %%% Figures used in the thesis (consider if this is needed)
 \listoffigures

@@ -10,7 +10,7 @@ The field of machine learning encompasses a broad range of algorithms and statis
 
 \textit{Here a detailed definition. Should be rewritten.}
 
-The exact meaning varies with different tasks. In some cases, knowledge is gained by processing labeled training data, in other cases it means comparing rewards of previous actions. The performance usually takes the form of some score --- which can be accordance with some `ground truth', i.e. comparison of the algorithm output with labeled testing data, or the success of an action. % 	REWRITE THIS, examples like clf and reinf
+The exact meaning varies with different tasks. In some cases, knowledge is gained by processing labelled training data, in other cases it means comparing rewards of previous actions. The performance usually takes the form of some score --- which can be accordance with some `ground truth', i.e. comparison of the algorithm output with labelled testing data, or the success of an action. % 	REWRITE THIS, examples like clf and reinf
 
 
 With growing `experience', the performance may increase as well.
@@ -23,19 +23,49 @@ With growing `experience', the performance may increase as well.
 
 
 \section{Evolutionary computing}
-Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best traits are most likely to reproduce, thus passing to the offspring advantageous characteristics, hence the `survival of the fittest'. % Similar to Engelbrecht...
+Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best characteristics are most likely to reproduce, thus passing the traits to the offspring. As the evolution is repeated over several generations, the most advantageous traits predominate. This phenomenon is also called `survival of the fittest'. % Similar to Engelbrecht...
 
-In an evolutionary algorithms, the goal is to find the ``best'' solution to the given problem. The term `population' refers to a set of solutions encoded as chromosomes, which represents the defining features of a particular solution. The `natural selection' can be then understood as a stochastic search through the space of possible chromosome values. (\cite{Engelbrecht:2007:CII:1557464}) % tohle je skoro doslova, jak moc to musim menit? Kdyz je to v podstate definice
+In an evolutionary algorithm, the goal is to find the ``best'' solution to the given problem. The term `population' refers to a set of solutions encoded as chromosomes which represent the defining features of a particular solution. The `natural selection' can be then understood as a stochastic search through the space of possible chromosome values. (\cite{Engelbrecht:2007:CII:1557464}) % tohle je skoro doslova, jak moc to musim menit? Kdyz je to v podstate definice
 
+A typical evolutionary algorithm
 
+\begin{algorithm}
+\DontPrintSemicolon
+  \KwData{population size $n$, stopping condition $c$}
+  \KwResult{evolved individuals}
+  \;
+  $P(0) \longleftarrow$ population of size $n$
 
-The advantage of this approach is that genetic algorithms perform multi-directional search, maintaining a population of potentially different solutions, which proves to be more robust than other directed search methods. (\cite{Michalewicz:1996:GAD:229930})
+  \While{$c$ is not met}{
+      \For{individual $ind$} {
+         compute fitness $f(ind)$
+      }
+      \For{i in \Range{$n/2$}} {
+         $i_1, i_2 \longleftarrow$ select two individuals
+         
+         \If{$p_{cx}$} {
+            perform crossover
+         }
+         
+         \If{$p_{mut}$} {
+            perform mutation
+         
+         }
+      }
+      $P(n+1) \longleftarrow$ select individuals from $P(n)$   
+  }
+  \;
+  return $P(c)$  
+\caption{Evolutionary algorithm\label{EA}}
+\end{algorithm}
+
+The advantage of this approach is that genetic algorithms perform multi-directional search, maintaining a population of potentially different solutions, which proves to be more robust than other directed search methods. (\cite{Michalewicz:1996:GAD:229930}, \cite{Mitchell:1997:ML:541177}) % Mitchell page 260
 
 \section{Genetic programming}
-In this section, we present a subfield of evolutionary computing -- the genetic programming -- where the population is a set of computer programs. The aim of this technique is to evolve programs which provide a better solution to the given problem. There are various approaches in means of how to represent the individuals and what kind of genetic operators to use. The fitness is computed by running the program and comparing the result with the desired output. \cite{Poli:2008:FGG:1796422}
+In this section, we present a subfield of evolutionary computing --- the genetic programming --- where the population is a set of computer programs. The aim of this technique is to evolve programs which provide a better solution to the given problem. There are various approaches in means of how to represent the individuals and what kind of genetic operators to use. The fitness is computed by running the program and comparing the result with the desired output. \cite{Poli:2008:FGG:1796422}
 \subsection{Tree-based genetic programming}
-The individuals are most frequently represented in the form of \textit{syntax trees}. Inner nodes of the tree are functions, whereas the leaves are constants and variables. Both functions and constants are selected from a set of possible nodes which is provided as input to the algorithm.
+The individuals are most frequently represented in the form of \textit{syntax trees}. Inner nodes of the tree are functions, whereas leaves are constants and variables. Both functions and constants are selected from a set of possible nodes which is provided as input to the algorithm.
 
-% sem hodit gene op? Obrazky?
+% sem hodit gene ops? Obrazky?
 
 \section{Workflows}
