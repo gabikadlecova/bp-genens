@@ -7,16 +7,17 @@
 The field of machine learning encompasses a broad range of algorithms and statistical methods for data processing. In his book on machine learning, Flach provides the following general definition:
 
 \blockquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience.} (\cite{Flach:2012:MLA:2490546}) % page number? (3)
+%
+% Here a detailed definition
+%
 
-\textit{Here a detailed definition.}
+The knowledge of a system is gained through learning from data. This process is referred to as the \textit{training} phase. In this process, the algorithm adjusts its \textit{parameters} according to the nature of training data. 
+The result of the training process is the prediction function, which depends on learned parameters. By applying this function on previously unseen data, denominated as the `testing' data, we obtain the output of the algorithm. The result can be then compared with the with the expected output value to determine the performance. (\cite{Bishop:2006:PRM:1162264})
 
-% This is not good, find a better source (or ask).
-%The exact meaning varies with different tasks. In some cases, knowledge is gained by processing labelled training data, in other cases it means comparing rewards of previous actions. The performance usually takes the form of some score --- which can be accordance with some `ground truth', i.e. comparison of the algorithm output with labelled testing data, or the success of an action. % 	REWRITE THIS, examples like clf and reinf
-
-
-%With growing `experience', the performance may increase as well.
-\textit{Define overfitting, generalization error, how to avoid. Bias vs variance.}
-% overfitting
+The character of the data varies with different machine learning problems. 
+%
+% Define overfitting, generalization errotedr, how to avoid. Bias vs variance.
+%
 
 \subsection{Model ensembles}
 \textit{Mention learnability?}
@@ -27,7 +28,7 @@ The field of machine learning encompasses a broad range of algorithms and statis
 
 
 \section{Evolutionary computing}
-Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best characteristics are most likely to reproduce, thus passing the traits to the offspring. As the evolution is repeated over several generations, the most advantageous traits predominate. This phenomenon is also called `survival of the fittest'. % Similar to Engelbrecht...
+Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best characteristics are most likely to reproduce, thus passing the traits to the offspring. As the evolution is repeated over several generations, the most advantageous traits predominate. This phenomenon is also called `survival of the fittest'. % Similar to Engelbrecht... So maybe rewrite it
 
 In an evolutionary algorithm, the goal is to find the ``best'' solution to the given problem. The term `population' refers to a set of solutions encoded as chromosomes which represent the defining features of a particular solution. The `natural selection' can be then understood as a stochastic search through the space of possible chromosome values. (\cite{Engelbrecht:2007:CII:1557464}) % tohle je skoro doslova, jak moc to musim menit? Kdyz je to v podstate definice
 
@@ -70,6 +71,8 @@ In this section, we present a subfield of evolutionary computing --- the genetic
 \subsection{Tree-based genetic programming}
 The individuals are most frequently represented in the form of \textit{syntax trees}. Inner nodes of the tree are functions, whereas leaves are constants and variables. Both functions and constants are selected from a set of possible nodes which is provided as input to the algorithm.
 
-% sem hodit gene ops? Obrazky?
+% Genetic operators? Pictures?
+
+\subsection{Developmental genetic programming}
 
 \section{Workflows}
