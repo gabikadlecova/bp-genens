@@ -12,6 +12,7 @@ The field of machine learning encompasses a broad range of algorithms and statis
 %
 The knowledge of a system is gained through learning from \textit{experience}. This procedure is referred to as the \textit{training} phase. In this process, the algorithm adjusts its parameters according to the nature of training data. 
 The result of the process is a prediction function, which depends on learned parameters. By applying this function on previously unseen data, denominated as the \textit{testing} data, we obtain the output of the algorithm. The result is then evaluated to determine the performance of the method. (\cite{Bishop:2006:PRM:1162264}) The character of the learning process varies with different machine learning problems. There are three main classes of tasks: \textit{supervised}, \textit{unsupervised} and \textit{reinforcement} learning.
+% This should be improved
 
 In case of supervised learning, the training data is a set of labelled examples and the task is to predict labels of previously unseen data. The field is further subdivided into two groups. If the labels are elements of a finite number of discrete categories, the problem is called \textit{classification}. The continuous case is then called \textit{regression}.
 % This is Bishop as well...
@@ -20,8 +21,12 @@ In contrast to supervised learning, in unsupervised learning the training data i
 
 The task of reinforcement learning is to find suitable actions as to maximize a reward. The training data is typically some history of previous actions and corresponding rewards.
 %
-% Define overfitting, generalization errotedr, how to avoid. Bias vs variance.
+% Define overfitting, generalization error, how to avoid. Bias vs variance.
 %
+It is important to note that good performance on training data does not ensure just as good performance on new data. Sometimes the model performs exceptionally well on training data, but fares much worse on testing data. This behaviour is called \textit{overfitting} and is undesirable. It usually occurs when unnecessarily subtle details of the data are learned. The opposite concept is called \textit{generalisation}, which is the ability to perform well on different types of testing data.
+
+A related term is the so-called `\textit{bias-variance dilemma}'. A low-complexity model will not overfit, but a lot of error will be made, thus introducing a certain bias from the correct output. On the other hand, by increasing the number of model parameters, it will highly depend on training data. Then, with small changes in data there will be a high variance in output. A balance can rarely be achieved in practice, hence it is often necessary to choose the side which is less harmful to the task.
+% Cite Flach? Page 93-94
 
 \subsection{Model ensembles}
 \textit{Mention learnability?}
@@ -40,7 +45,7 @@ As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should define a su
 
 \begin{algorithm}
 \DontPrintSemicolon
-  \KwData{population size $n$, stopping condition $c$}
+  \KwData{population size $n$, stopping condition $c$, crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
   \;
   $P(0) \longleftarrow$ population of size $n$
