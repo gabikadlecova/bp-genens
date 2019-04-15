@@ -4,48 +4,107 @@
 \textit{What we will talk about, theory}
 
 \section{Machine learning}
-The field of machine learning encompasses a broad range of algorithms and statistical methods for data processing. In his book on machine learning, Flach provides the following general definition:
+The field of machine learning encompasses a broad range of algorithms and
+statistical methods for data processing. In his book on machine learning,
+Flach provides the following general definition:
 
-\blockquote{Machine learning is the systematic study of algorithms and systems that improve their knowledge or performance with experience. (\cite{Flach:2012:MLA:2490546})} % page number? (3)
+\blockquote{Machine learning is the systematic study of algorithms and systems
+that improve their knowledge or performance with experience.
+(\cite{Flach:2012:MLA:2490546})} % page number? (3)
 %
 % Here a detailed definition
 %
-The knowledge of a system is gained through learning from \textit{experience}. This procedure is referred to as the \textit{training} phase. In this process, the algorithm adjusts its parameters according to the nature of training data. 
-The result of the process is a prediction function, which depends on learned parameters. By applying this function on previously unseen data, denominated as the \textit{testing} data, we obtain the output of the algorithm. The result is then evaluated to determine the performance of the method. (\cite{Bishop:2006:PRM:1162264}) The character of the learning process varies with different machine learning problems. There are three main classes of tasks: \textit{supervised}, \textit{unsupervised} and \textit{reinforcement} learning.
+The knowledge of a system is gained through learning from \textit{experience}.
+This procedure is referred to as the \textit{training} phase. In this process, 
+the algorithm adjusts its parameters according to the nature of training data.
+The result of the process is a prediction function, which depends on learned
+parameters. By applying this function on previously unseen data, denominated 
+as the \textit{testing} data, we obtain the output of the algorithm. The 
+result is then evaluated to determine the performance of the method. 
+(\cite{Bishop:2006:PRM:1162264}) The character of the learning process
+varies with different machine learning problems. There are three main classes 
+of tasks: \textit{supervised}, \textit{unsupervised} and \textit{reinforcement} 
+learning.
 % This should be improved
 
-In case of supervised learning, the training data is a set of labelled examples and the task is to predict labels of previously unseen data. The field is further subdivided into two groups. If the labels are elements of a finite number of discrete categories, the problem is called \textit{classification}. The continuous case is then called \textit{regression}.
+In case of supervised learning, the training data is a set of labelled examples
+and the task is to predict labels of previously unseen data. The field is 
+further subdivided into two groups. If the labels are elements of a finite 
+number of discrete categories, the problem is called \textit{classification}. 
+The continuous case is then called \textit{regression}.
 % This is Bishop as well...
 
-In contrast to supervised learning, in unsupervised learning the training data is unlabelled. The key task is therefore to divide the data into  groups of similar examples.
+In contrast to supervised learning, in unsupervised learning the training data 
+is unlabelled. The key task is therefore to divide the data into groups of 
+similar examples.
 
-The task of reinforcement learning is to find suitable actions as to maximize a reward. The training data is typically some history of previous actions and corresponding rewards.
+The task of reinforcement learning is to find suitable actions as to maximize 
+a reward. The training data is typically some history of previous actions 
+and corresponding rewards.
 %
 % Define overfitting, generalization error, how to avoid. Bias vs variance.
 %
-It is important to note that good performance on training data does not ensure just as good performance on new data. Sometimes the model performs exceptionally well on training data, but fares much worse on testing data. This behaviour is called \textit{overfitting} and is undesirable. It usually occurs when unnecessarily subtle details of the data are learned. The opposite concept is called \textit{generalisation}, which is the ability to perform well on different types of testing data.
 
-A related term is the so-called `\textit{bias-variance dilemma}'. A low-complexity model will not overfit, but a lot of error will be made, thus introducing a certain bias from the correct output. On the other hand, by increasing the number of model parameters, it will highly depend on training data. Then, with small changes in data there will be a high variance in output. A balance can rarely be achieved in practice, hence it is often necessary to choose the side which is less harmful to the task.
+It is important to note that good performance on training data does not ensure 
+just as good performance on new data. Sometimes the model performs 
+exceptionally well on training data, but fares much worse on testing data. 
+This behaviour is called \textit{overfitting} and usually occurs when 
+unnecessarily subtle details of the data are learned. The opposite concept 
+is called \textit{generalisation}, which is the ability to perform well on 
+different types of testing data.
+
+A related term is the so-called `\textit{bias-variance dilemma}'. A 
+low-complexity model will not overfit, but a lot of errors will be made, thus 
+introducing a certain bias from the correct output. On the other hand, by 
+increasing the number of model parameters, it will highly depend on training 
+data. Then, with small changes in data there will be a high variance in 
+output. A balance can rarely be achieved in practice, hence it is often 
+necessary to choose the side which is less harmful to the task.
 % Cite Flach? Page 93-94
 
 \subsection{Model ensembles}
-\textit{Mention learnability?}
+Model ensembles are powerful learning techniques that combine simpler models 
+to achieve better results. 
+% Mention netflix like they did in the paper?
+% Find sources where they mention successful applications
 
-\textit{Other definitions...}
-
+Shapire proved that a model is weakly learnable if and only if it is
+PAC-learnable. \cite{Schapire:1990:SWL:83637.83645}
+% Flach
+% Need advice for this section.
 \section{Metalearning}
 
 
 \section{Evolutionary computing}
-Evolutionary computing is a heuristic method of optimization inspired by Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In a population, individuals with the best characteristics are most likely to reproduce, thus passing the traits to the offspring. As the evolution is repeated over several generations, the most advantageous traits predominate. This phenomenon is also called `survival of the fittest'. % Similar to Engelbrecht... So maybe rewrite it
+Evolutionary computing is a heuristic method of optimization inspired by 
+Charles Darwin's theory of \textit{natural selection}. \cite{darwin} In 
+a population, individuals with the best characteristics are most likely
+to reproduce, thus passing the traits to the offspring. As the evolution 
+is repeated over several generations, the most advantageous traits 
+predominate. This phenomenon is also called `survival of the fittest'. 
+% Similar to Engelbrecht... So maybe rewrite it
 
-In an evolutionary algorithm, the goal is to find the ``best'' solution to the given problem. The term `population' refers to a set of solutions encoded as chromosomes which represent the defining features of a particular solution. The `natural selection' can be then understood as a stochastic search through the space of possible chromosome values. (\cite{Engelbrecht:2007:CII:1557464}) % tohle je skoro doslova, jak moc to musim menit? Kdyz je to v podstate definice
+In an evolutionary algorithm, the goal is to find the ``best'' solution 
+to the given problem. The term `population' refers to a set of solutions 
+encoded as chromosomes which represent the defining features of a 
+particular solution. The `natural selection' can be then understood 
+as a stochastic search through the space of possible chromosome values. 
+(\cite{Engelbrecht:2007:CII:1557464}) 
+% tohle je skoro doslova, jak moc to musim menit? 
+% Kdyz je to v podstate definice
 
-As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should define a suitable \textit{selection} method, \textit{mutation} and/or \textit{crossover} operators and the \textit{fitness function}. The algorithm terminates when some \textit{stopping condition} is met. Some commonly used criteria, as listed by Engelbrecht, are for example a limit on the number of generations, a fitness threshold or termination after no improvement is observed. (\citep{Engelbrecht:2007:CII:1557464})
+As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should 
+define a suitable \textit{selection} method, \textit{mutation} and/or 
+\textit{crossover} operators and the \textit{fitness function}. 
+The algorithm terminates when some \textit{stopping condition} is met. 
+Some commonly used criteria, as listed by Engelbrecht, are for example 
+a limit on the number of generations, a fitness threshold or termination 
+after no improvement is observed. (\citep{Engelbrecht:2007:CII:1557464})
 
 \begin{algorithm}
 \DontPrintSemicolon
-  \KwData{population size $n$, stopping condition $c$, crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
+  \KwData{population size $n$, stopping condition $c$, 
+          crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
   \;
   $P(0) \longleftarrow$ population of size $n$
@@ -73,12 +132,32 @@ As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should define a su
 \caption{Evolutionary algorithm\label{alg:EA}}
 \end{algorithm}
 
-The advantage of genetic algorithms is such that there are potentially many different solutions present in every population. With well defined selection and fitness, the algorithm performs a multi-directional search. In comparison with other directed search methods, this proves to be a more robust approach. (\cite{Michalewicz:1996:GAD:229930}, \cite{Mitchell:1997:ML:541177}) % Mitchell page 260
+The advantage of genetic algorithms is such that there are potentially 
+many different solutions present in every population. With well defined 
+selection and fitness, the algorithm performs a multi-directional search. 
+In comparison with other directed search methods, this proves to be a more 
+robust approach. (\cite{Michalewicz:1996:GAD:229930}, 
+\cite{Mitchell:1997:ML:541177}) % Mitchell page 260
 
 \section{Genetic programming}
-In this section, we present a subfield of evolutionary computing --- the genetic programming --- where the population is a set of computer programs. The aim of this technique is to evolve programs which provide a good solution to the given problem. There are various approaches in means of how to represent the individuals and what kind of genetic operators to use. The fitness is computed by running the program and comparing the result with the desired output. \cite{Poli:2008:FGG:1796422}
+In this section, we present a subfield of evolutionary computing --- 
+the genetic programming --- where the population is a set of computer 
+programs. The aim of this technique is to evolve programs which provide 
+a good solution to the given problem. There are various approaches in means 
+of how to represent the individuals and what kind of genetic operators to 
+use. The fitness is computed by running the program and comparing the result 
+with the desired output. \cite{Poli:2008:FGG:1796422}
 \subsection{Tree-based genetic programming}
-The individuals are most frequently represented in the form of \textit{syntax trees}. Inner nodes of the tree are functions, whereas leaves are constants and variables. Both functions and constants are selected from a set of possible nodes which is provided as input to the algorithm.
+The individuals are most frequently represented in the form of 
+\textit{syntax trees}. Inner nodes of the tree are functions, whereas leaves 
+are constants and variables. The initialization step is thus very important, as
+there are many different ways how to design trees. Also, specialized genetic
+operators need to be designed.
+
+Both functions and constants are selected from a set of possible nodes which 
+is provided as input to the algorithm.
+% set... cite Koza's book
+
 
 % Genetic operators? Pictures?
 
