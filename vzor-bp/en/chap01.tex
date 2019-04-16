@@ -147,6 +147,8 @@ a good solution to the given problem. There are various approaches in means
 of how to represent the individuals and what kind of genetic operators to 
 use. The fitness is computed by running the program and comparing the result 
 with the desired output. \cite{Poli:2008:FGG:1796422}
+
+\textit{Mention typed GP here}
 \subsection{Tree-based genetic programming}
 The individuals are most frequently represented in the form of 
 \textit{syntax trees}. Inner nodes of the tree are functions, whereas leaves 
@@ -154,13 +156,39 @@ are constants and variables. The initialization step is thus very important, as
 there are many different ways how to design trees. Also, specialized genetic
 operators need to be designed.
 
+\paragraph{Initialization}
 During the initialization, both functions and constants are selected from a set
 of possible nodes which is provided as input to the algorithm. As was mentioned,
-there are various methods
-
+there are various methods of initialization. We well present two methods which
+are among the simplest and most used ones --- \textit{grow} and \textit{full}.
 % set... cite Koza's book
 
+In both cases, nodes are inserted to the tree up to a certain height limit.
+The two methods differ only in the way how nodes are selected. The grow method
+allows to select both functions and terminals before the limit is reached;
+afterwards, only terminals can be inserted. The full method restricts the
+selection only to functions on all levels but the last one, thus generating 
+a full tree. Leaves are then
+chosen from the terminal set like in the previous approach.
 
+The drawback of the full method is that all trees are very similar. On the
+contrary, the grow method generates a wide range of sizes and shapes, but the
+number of nodes in a tree might be too small. Because of that, a method called
+\textit{ramped half-and-half} is often used in practice. It combines both 
+of the presented methods; half of the population is generated using the full
+method, the other one via grow method. Also, instead of one height limit, a
+range of values is used to introduce more diversity.
+
+\paragraph{Genetic operators}
+The most common type of crossover is \textit{subtree crossover} of two
+individuals. A random node --- the crossover point ---
+is selected in each individual independently. Then, subtrees corresponding
+to the points are exchanged between them.
+
+Similarly, the most used mutation technique is \textit{subtree mutation}.
+Just like in subtree crossover, a mutation point is randomly chosen.
+Afterwards, the corresponding subtree is entirely replaced by a new randomly
+generated tree.
 % Genetic operators? Pictures?
 
 \subsection{Developmental genetic programming}
