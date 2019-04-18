@@ -75,7 +75,7 @@ Here, the models are trained on data samples or feature subsets and the results
 are then combined into a final hypothesis.
 % Flach
 
-\textbf{Variant A, possibly inacurrate}
+% Variant A, possibly inacurrate
 The computational learning theory defines the term \emph{learnability},
 which describes whether a model outputs a correct hypothesis by learning on
 random sets of instances from a unknown distribution. A \emph{strong learner}
@@ -88,7 +88,7 @@ success rate over 0.5). A more detailed elaboration of the learnability
 theory is beyond the scope of this work and can be found in books 
 of \citep{Flach:2012:MLA:2490546} and \citep{Mitchell:1997:ML:541177}.
 
-%\textbf{Variant B, possibly tedious to read}
+% Variant B, possibly tedious to read
 %The computational learning theory defines the term \emph{learnability},
 %which describes whether a concept language can be reliably learnt. A concept is
 %defined as a logical expression which describes a set of instances. A 
@@ -106,7 +106,11 @@ The assumption of strong learnability may appear to be quite strict when
 compared to the weak learnability, as the model must output a correct 
 hypothesis on almost all example sets. However, Shapire proved that a model 
 is weakly learnable if and only if it is strongly learnable. 
-\cite{Schapire:1990:SWL:83637.83645}
+\citep{Schapire:1990:SWL:83637.83645} This was proven in a constructive manner
+by iteratively correcting the errors of the hypotheses, thus \emph{boosting} 
+the model. The boosting method has directly inspired one of the most successful
+ensemble methods --- the award winning AdaBoost, which is described in the
+section \textbf{???}.
 % shortly about bias etc.
 % examples
 
