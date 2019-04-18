@@ -60,7 +60,8 @@ increasing the number of model parameters, it will highly depend on training
 data. Then, with small changes in data there will be a high variance in 
 output. A balance can rarely be achieved in practice, hence it is often 
 necessary to choose the side which is less harmful to the task.
-% Cite Flach? Page 93-94
+% Cite Flach? Page 93-94 TODO CITE!!!!!! citep, s page
+(\cite[p.~93--94]{Flach:2012:MLA:2490546})
 
 \subsection{Model ensembles}
 Model ensembles are powerful learning techniques that combine simpler models 
@@ -71,7 +72,15 @@ to achieve better results.
 Shapire proved that a model is weakly learnable if and only if it is
 PAC-learnable. \cite{Schapire:1990:SWL:83637.83645}
 % Flach
-% Need advice for this section.
+% Short, only for motivation, beyond the scope
+% shortly about bias etc.
+% examples
+
+
+% AutoML
+% problemy - jak to skladat dohromady,...
+% jak slozit model vs jak vybrat model
+% doporucovani hyperparam.
 
 \section{Metalearning}
 When using machine learning in practice, it is not always evident which model
@@ -103,6 +112,7 @@ to reproduce, thus passing the traits to the offspring. As the evolution
 is repeated over several generations, the most advantageous traits 
 predominate. This phenomenon is also called `survival of the fittest'. 
 % Similar to Engelbrecht... So maybe rewrite it
+% optimalizator,...
 
 In an evolutionary algorithm, the goal is to find the ``best'' solution 
 to the given problem. The term `population' refers to a set of solutions 
@@ -113,6 +123,8 @@ as a stochastic search through the space of possible chromosome values.
 % tohle je skoro doslova, jak moc to musim menit? 
 % Kdyz je to v podstate definice
 
+% genotyp fenotyp
+
 As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should 
 define a suitable \textit{selection} method, \textit{mutation} and/or 
 \textit{crossover} operators and the \textit{fitness function}. 
@@ -121,6 +133,10 @@ Some commonly used criteria, as listed by Engelbrecht, are for example
 a limit on the number of generations, a fitness threshold or termination 
 after no improvement is observed. (\citep{Engelbrecht:2007:CII:1557464})
 
+% Ze mame ruzny metody, co to delaj ruzne, konkretni popiseme v nasem reseni
+% jednobodovy apod nepsat, spis to trochu uzavrit
+
+% ocislovat radky, odkazovat na ne, zakladni prvky jsou
 \begin{algorithm}
 \DontPrintSemicolon
   \KwData{population size $n$, stopping condition $c$, 
@@ -162,6 +178,8 @@ robust approach. (\cite{Michalewicz:1996:GAD:229930},
 \subsection{Multi-objective optimization}
 
 \section{Genetic programming}
+% zkratky Genetic progr, GP... uvest...
+% mozna seznam zkratek...
 In this section, we present a subfield of evolutionary computing --- 
 the genetic programming --- where the population is a set of computer 
 programs. The aim of this technique is to evolve programs which provide 
