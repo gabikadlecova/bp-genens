@@ -75,25 +75,37 @@ Here, the models are trained on data samples or feature subsets and the results
 are then combined into a final hypothesis.
 % Flach
 
+\textbf{Variant A, possibly inacurrate}
 The computational learning theory defines the term \emph{learnability},
-which describes whether a concept language can be reliably learnt. A concept is
-defined as a logical expression which describes a set of instances. A 
-hypothesis space is then the space of possible concepts.
+which describes whether a model outputs a correct hypothesis by learning on
+random sets of instances from a unknown distribution. A \emph{strong learner}
+is a model which outputs most of the time a correct hypothesis. It is not
+required that it always produces a hypothesis with error equal to zero, as 
+the set of chosen instances might be atypical or not representative enough.
+Similarly, a \emph{weak learner} is then a model which outputs most of the time
+a hypothesis, which is slightly better than random guessing (i.e. has a
+success rate over 0.5). A more detailed elaboration of the learnability
+theory is beyond the scope of this work and can be found in books 
+of \citep{Flach:2012:MLA:2490546} and \citep{Mitchell:1997:ML:541177}.
 
-Having a model $M$ and a concept language $C$, $C$ is (strongly)
-\emph{PAC-learnable} by $M$ if the model outputs most of the time a hypothesis 
-with a very small error. The model is not required to be correct every time, 
-as the set of chosen instances described by the language might be atypical 
-or not representative enough.  We can also define the \emph{weak learnability} 
-of $C$ by $M$ where $M$ outputs a hypothesis which is slightly better than 
-random guessing (i.e. success rate over 0.5). A more detailed elaboration
-is beyond the scope of this work and can be found in books of 
-\citep{Flach:2012:MLA:2490546} and \citep{Mitchell:1997:ML:541177}.
+%\textbf{Variant B, possibly tedious to read}
+%The computational learning theory defines the term \emph{learnability},
+%which describes whether a concept language can be reliably learnt. A concept is
+%defined as a logical expression which describes a set of instances. A 
+%hypothesis space is then the space of possible concepts.
+
+%Having a model $M$ and a concept language $C$, $C$ is (strongly)
+%\emph{PAC-learnable} by $M$ if the model outputs most of the time a hypothesis 
+%with a very small error. The model is not required to be correct every time, 
+%as the set of chosen instances described by the language might be atypical 
+%or not representative enough.  We can also define the \emph{weak learnability} 
+%of $C$ by $M$ where $M$ outputs a hypothesis which is slightly better than 
+%random guessing (i.e. success rate over 0.5). 
 
 The assumption of strong learnability may appear to be quite strict when 
 compared to the weak learnability, as the model must output a correct 
 hypothesis on almost all example sets. However, Shapire proved that a model 
-is weakly learnable if and only if it is PAC-learnable. 
+is weakly learnable if and only if it is strongly learnable. 
 \cite{Schapire:1990:SWL:83637.83645}
 % shortly about bias etc.
 % examples
