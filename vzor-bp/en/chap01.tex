@@ -41,9 +41,6 @@ similar examples.
 The task of reinforcement learning is to find suitable actions as to maximize 
 a reward. The training data is typically some history of previous actions 
 and corresponding rewards.
-%
-% HYPOTHESIS! will be needed later in the text
-%
 
 It is important to note that good performance on training data does not ensure 
 just as good performance on new data. Sometimes the model performs 
@@ -71,7 +68,8 @@ can be found in Flach's book. (\citet[p.~93--94,~338]{Flach:2012:MLA:2490546})
 % Mention netflix like they did in the paper?
 % Find sources where they mention successful applications
 Model ensembles are powerful learning techniques that combine simpler models 
-to achieve better results. % Here I'll mention some applications...
+to achieve better results. They are widely used in practice, specific examples
+can be found in the review of \cite{Rokach:2009:TCE:1609202.1609436}.
 
 The rationale behind ensembles is also of theoretical character, namely from
 statistics and from computational learning theory. In statistics, a general
@@ -150,21 +148,22 @@ training error increases over $0.5$ --- which is when the algorithm stops
 improving. The resulting prediction is again an average of all model
 predictions, but with putting more weight on models with a lower training
 error. \citep[335]{Flach:2012:MLA:2490546}
-% shortly about bias etc.
+
+\section{AutoML}
+When using machine learning in practice, it is not always evident which model
+is suitable for a particular problem. Moreover, there is a vast number of model
+and parameter combinations to choose from, not to mention model ensembles. 
+AutoML, aims to solve these problems by automatizing the process of model 
+selection.
 
 
-% AutoML
+...section model architecture: NAS, ensembles, examples in chapter 2.
 % problemy - jak to skladat dohromady,...
 % jak slozit model vs jak vybrat model
 % doporucovani hyperparam.
 
-\section{Metalearning}
-When using machine learning in practice, it is not always evident which model
-is suitable for a particular problem. Moreover, there is a vast number of model
-and parameter combinations to choose from, not to mention model ensembles. The metalearning, also known as `learning to learn', aims to solve these 
-problems by automatizing the process of model selection. As a new field, it
-offers numerous concepts, from full automation of the process to model 
-recommendation.
+\subsection{Metalearning}
+The metalearning, also known as `learning to learn' \ldots
 
 Just as the traditional learning --- here referred to as \emph{base-learning}
 --- metalearning improves with experience. The difference lies in the learning
@@ -181,7 +180,7 @@ can be extracted from substantially different data.
 \textit{Describe meta-data, meta-features, EVA approach.}
 
 \section{Evolutionary computing}
-Evolutionary computing is a heuristic method of optimization inspired by 
+Evolutionary computing is a heuristic optimization method inspired by 
 Charles Darwin's theory of \emph{natural selection}. \cite{darwin} In 
 a population, individuals with the best characteristics are most likely
 to reproduce, thus passing the traits to the offspring. As the evolution 
@@ -191,10 +190,12 @@ predominate. This phenomenon is also called `survival of the fittest'.
 % optimalizator,...
 
 In an evolutionary algorithm, the goal is to find the ``best'' solution 
-to the given problem. The term `population' refers to a set of solutions 
-encoded as chromosomes which represent the defining features of a 
-particular solution. The `natural selection' can be then understood 
-as a stochastic search through the space of possible chromosome values. 
+to the given problem by optimizing a \emph{objective function}. The term
+`population' refers to a set of solutions encoded as chromosomes which 
+represent the defining features of a particular solution. This corresponds
+to the genotype--phenotype relationship from genetics. The `natural selection'
+can be then understood as a stochastic search through the space of possible 
+chromosome values. 
 (\cite{Engelbrecht:2007:CII:1557464}) 
 % tohle je skoro doslova, jak moc to musim menit? 
 % Kdyz je to v podstate definice
@@ -203,7 +204,7 @@ as a stochastic search through the space of possible chromosome values.
 
 As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should 
 define a suitable \emph{selection} method, \emph{mutation} and/or 
-\emph{crossover} operators and the \emph{fitness function}. 
+\emph{crossover} operators and a \emph{fitness function}.
 The algorithm terminates when some \emph{stopping condition} is met. 
 Some commonly used criteria, as listed by Engelbrecht, are for example 
 a limit on the number of generations, a objective function threshold or
@@ -253,6 +254,20 @@ robust approach. (\cite{Michalewicz:1996:GAD:229930},
 \cite{Mitchell:1997:ML:541177}) % Mitchell page 260
 
 \subsection{Multi-objective optimization}
+In many problems, the quality of the solution depends on more than one
+objective function. With this, it is much harder to say whether one solution
+is strictly better than another. Multi-objective optimization formally
+describes this class of problems.
+
+In an optimization problem, the task is to maximize or minimize the objective
+function $f(x)$, where $x$ is a vector from the search space. The problem may
+also be restricted by constraints in the form of equalities and inequalities.
+In multi-objective optimization, the setting remains the same, but the
+objective function changes to an \emph{objective vector} ---
+for objective functions $f_i(x), i = 1,\ldots,k$, the objective vector is 
+defined as $f(x)~=~(f_1(x), f_2(x), \ldots, f_k(x))$.
+
+
 
 \section{Genetic programming}
 % zkratky Genetic progr, GP... uvest...
