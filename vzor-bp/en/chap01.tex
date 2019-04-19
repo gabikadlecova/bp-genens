@@ -59,10 +59,15 @@ introducing a certain bias from the correct output. On the other hand, by
 increasing the number of model parameters, it will highly depend on training 
 data. Then, with small changes in data there will be a high variance in 
 output. A balance can rarely be achieved in practice, hence it is often 
-necessary to choose the side which is less harmful to the task.
-(\citet[p.~93--94]{Flach:2012:MLA:2490546})
+necessary to choose the side which is less harmful to the task. Another option
+is to use some of the ensemble methods described in \ref{ensemble}. For
+example, \hyperref[bagging]{bagging} is a method of variance reduction, while
+\hyperref[boosting]{boosting} noticeably reduces the bias. More on this topic
+can be found in Flach's book. (\citet[p.~93--94,~338]{Flach:2012:MLA:2490546})
 
-\subsection{Model ensembles}
+% here more on supervised learning, hypotheses,...
+
+\subsection{Model ensembles} \label{ensemble}
 % Mention netflix like they did in the paper?
 % Find sources where they mention successful applications
 Model ensembles are powerful learning techniques that combine simpler models 
@@ -109,10 +114,43 @@ is weakly learnable if and only if it is strongly learnable.
 \citep{Schapire:1990:SWL:83637.83645} This was proven in a constructive manner
 by iteratively correcting the errors of the hypotheses, thus \emph{boosting} 
 the model. The boosting method has directly inspired one of the most successful
-ensemble methods --- the award winning AdaBoost, which is described in the
-section \textbf{???}.
+ensemble methods --- the award winning AdaBoost.
+\cite{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}
+
+In the following sections, we will present some of the most used ensemble 
+methods.
+\phantomsection
+\paragraph{Bagging} \label{bagging}
+\emph{Bootstrap aggregating}, usually abbreviated to bagging, is a highly
+effective ensemble method. First, $n$ samples are independently taken from 
+the original dataset with replacement. This is referred to as 
+\emph{bootstrapping}. Then, we use the samples to train an ensemble of $n$
+different models. It can be then used to generate predictions, which can be
+then \emph{aggregated} by voting or averaging.
+
+This method takes advantage of the statistical stability described at the
+beginning of this section. As the examples are drawn with replacement, there
+will be some instances missing in every sample. Thus, we introduce diversity
+between the ensemble models. \citep[331]{Flach:2012:MLA:2490546}
+
+\phantomsection
+\paragraph{Boosting} \label{boosting}
+The above-mentioned boosting technique uses a different approach to model
+combining. Before the learning process starts, we add weights to the training 
+examples (the base-learner must support weighting). Then, we learn the model
+on the modified training set, which produces a set of misclassified instances
+along with the (weighted) training error. We then adjust the weights in such a
+way that weights of the correctly classified examples decrease and those of
+the incorrectly classified examples increase. Therefore, when we continue and
+learn a new model on the data with changed weights, it will concentrate more 
+on the problematic instances.
+
+The algorithm stops after a fixed number of iterations or when the weighted
+training error increases over $0.5$ --- which is when the algorithm stops
+improving. The resulting prediction is again an average of all model
+predictions, but with putting more weight on models with a lower training
+error. \citep[335]{Flach:2012:MLA:2490546}
 % shortly about bias etc.
-% examples
 
 
 % AutoML
