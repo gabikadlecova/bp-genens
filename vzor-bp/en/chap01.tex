@@ -179,7 +179,7 @@ can be extracted from substantially different data.
 
 \textit{Describe meta-data, meta-features, EVA approach.}
 
-\section{Evolutionary computing}
+\section{Evolutionary computing} \label{ea}
 Evolutionary computing is a heuristic optimization method inspired by 
 Charles Darwin's theory of \emph{natural selection}. \cite{darwin} In 
 a population, individuals with the best characteristics are most likely
@@ -256,8 +256,9 @@ robust approach. (\cite{Michalewicz:1996:GAD:229930},
 \subsection{Multi-objective optimization}
 In many problems, the quality of the solution depends on more than one
 objective function. With this, it is much harder to say whether one solution
-is strictly better than another. Multi-objective optimization formally
-describes this class of problems.
+is strictly better than another. Multi-objective optimization (MOO) formally
+describes this class of problems. We first define the general terminology
+and then present MOO in evolutionary computation.
 
 In an optimization problem, the task is to maximize or minimize the objective
 function $f(x)$, where $x$ is a vector from the search space. The problem may
@@ -267,6 +268,82 @@ objective function changes to an \emph{objective vector} ---
 for objective functions $f_i(x), i = 1,\ldots,k$, the objective vector is 
 defined as $f(x)~=~(f_1(x), f_2(x), \ldots, f_k(x))$.
 
+Although the problem setting is similar, the meaning of optimality needs to 
+be redefined. For once, given a pair of solutions, one solution may be better 
+than the other solution in one objective function and worse in another. For 
+this purpose, we need the following definition.
+
+\begin{definition}[Domination]
+In a minimization problem, a vector $x_1$ dominates a vector $x_2$ if and 
+only if 
+\begin{compactitem}
+\item $\forall i=1,\ldots,k: f_i(x_1) \leq f_i(x_2)$, and
+\item $\exists j=1,\ldots,k: f_j(x_1) < f_j(x_2)$
+\end{compactitem}
+\end{definition}
+
+As it is possible to have solutions where neither one dominates the other,
+it is impossible to determine one optimal solution. Hence we define the 
+\emph{Pareto-optimality}.
+
+\begin{definition}[Pareto-optimality]
+A vector $x_1$ is said to be \emph{Pareto-optimal}, if there is no other vector
+$x_2$ that dominates it. The \emph{Pareto-optimal set} $P^*$ is the set of all
+non-dominated solutions. Finally, the \emph{Pareto-optimal front} (Pareto front)
+is defined as
+$PF^* =\{\, f=(f_1(x^*),\ldots f_k(x^*)) \mid x^* \in P^* ) \,\}$.
+\end{definition}
+
+\citep[p.~551-561,~569--573]{Engelbrecht:2007:CII:1557464}
+
+If we use evolutionary computation to solve multi-objective problems, the
+algorithm needs to be modified. As not every individuals are directly
+comparable, we cannot use the selection operators defined in
+\ref{ea}. As such, there are various approaches on how to solve this problem,
+which can be divided into three groups:
+
+\begin{compactitem}
+\item Weighted aggregation --- define a single objective function as a weighted
+sum of sub-objectives and proceed with standard evolutionary algorithm
+\item Population-based non-Pareto solutions --- works with the sub-objectives,
+but does not use the dominance
+\item Pareto-based solutions --- tries to approximate the Pareto front
+\end{compactitem}
+
+From these three groups, we describe in more detail one Pareto-based algorithm.
+More examples are presented in 
+\cite[p.~170-173]{Engelbrecht:2007:CII:1557464}.
+The algorithm is called Nondominated sorting genetic algorithm (NSGA). It is a
+\emph{ranking} selection, which means that individuals are sorted by their
+fitness values and the selection is performed with regard to the ordering.
+
+To compute the fitness, the individuals are divided into non-dominated fronts.
+This is done by finding a Pareto front of a subpopulation, assigning a
+front number to its individuals and removing the from the subpopulation.
+The process is repeated with front numbers increasing until no unassigned
+individuals remain. Every front then obtains a dummy fitness value, where
+the fitness of a front $F(n)$ is better than the fitness of $F(n+1)$. Moreover,
+for every individual the value is divided by a \emph{niching} factor (while
+keeping the fitness inequality). The 
+niching factor is defined as
+$$N(i)=\sum_{j\neq i}{S(d((i,j))}$$ where 
+\begin{equation}
+    S(d(i,j))=
+    \begin{cases}
+      1 - (\dfrac{d(i,j)}{\sigma_{share}})^2, & \text{if}\ d(i,j) < \sigma_{share} \\
+      0, & \text{otherwise.}
+    \end{cases}
+\end{equation}
+This is the definition from the original article of
+\cite{Srinivas:1994:MOU:1326668.1326671}, but it can be computed in a different
+manner, for example as the count of individuals closer than $\sigma_{share}$
+\citep{Engelbrecht:2007:CII:1557464}.
+
+As the algorithm has some drawbacks, like dependence on $\sigma_{share}$,
+a very high computational complexity and lack of elitism, the authors of
+NSGA have proposed an improved variant called NSGA-II. This algorithm not only
+adresses the above-mentioned problems, it also outperforms other elitist
+algorithms \citep{Deb:2002:FEM:2221359.2221582}.
 
 
 \section{Genetic programming}
