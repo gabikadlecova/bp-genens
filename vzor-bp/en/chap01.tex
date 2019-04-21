@@ -17,7 +17,7 @@ that improve their knowledge or performance with experience.
 The knowledge of a system is gained through learning from \emph{experience}.
 This procedure is referred to as the \emph{training} phase. In this process, 
 the algorithm adjusts its parameters according to the nature of training data.
-The result of the process is a prediction function, which depends on learned
+The result of the process is a prediction function which depends on learned
 parameters. By applying this function on previously unseen data, denominated 
 as the \emph{testing} data, we obtain the output of the algorithm. The 
 result is then evaluated to determine the performance of the method. 
@@ -56,7 +56,7 @@ introducing a certain bias from the correct output. On the other hand, by
 increasing the number of model parameters, it will highly depend on training 
 data. Then, with small changes in data there will be a high variance in 
 output. A balance can rarely be achieved in practice, hence it is often 
-necessary to choose the side which is less harmful to the task. Another option
+necessary to choose the side that is less harmful to the task. Another option
 is to use some of the ensemble methods described in \ref{ensemble}. For
 example, \hyperref[bagging]{bagging} is a method of variance reduction, while
 \hyperref[boosting]{boosting} noticeably reduces the bias. More on this topic
@@ -183,11 +183,9 @@ can be extracted from substantially different data.
 Evolutionary computing is a heuristic optimization method inspired by 
 Charles Darwin's theory of \emph{natural selection}. \cite{darwin} In 
 a population, individuals with the best characteristics are most likely
-to reproduce, thus passing the traits to the offspring. As the evolution 
-is repeated over several generations, the most advantageous traits 
-predominate. This phenomenon is also called `survival of the fittest'. 
-% Similar to Engelbrecht... So maybe rewrite it
-% optimalizator,...
+to reproduce, thus passing the traits to the offspring. As the 
+evolution is repeated over several generations, the most advantageous traits 
+predominate. This phenomenon is also called `survival of the fittest'.
 
 In an evolutionary algorithm, the goal is to find the ``best'' solution 
 to the given problem by optimizing a \emph{objective function}. The term
@@ -196,17 +194,62 @@ represent the defining features of a particular solution. This corresponds
 to the genotype--phenotype relationship from genetics. The `natural selection'
 can be then understood as a stochastic search through the space of possible 
 chromosome values. 
-(\cite{Engelbrecht:2007:CII:1557464}) 
-% tohle je skoro doslova, jak moc to musim menit? 
-% Kdyz je to v podstate definice
+(\cite{Engelbrecht:2007:CII:1557464})
 
-% genotyp fenotyp
+\textit{exploration vs exploitation...}
 
+% Maybe a better section name
+\subsection{Evolutionary algorithms in detail}
 As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should 
 define a suitable \emph{selection} method, \emph{mutation} and/or 
 \emph{crossover} operators and a \emph{fitness function}.
 The algorithm terminates when some \emph{stopping condition} is met. 
-Some commonly used criteria, as listed by Engelbrecht, are for example 
+
+\paragraph{Selection}
+The selection may be divided into two steps. The first is the 
+\emph{parent selection}, also called \emph{mating selection} which is applied 
+on line \ref{parent:sel}, and the second is called
+\emph{environmental selection} or \emph{recombination}.
+Sometimes the latter is omitted, as the selection can be limited to copying 
+all offspring to the new population.
+
+The purpose of the parent selection is to select individuals for the
+mating process. Usually, it is a probabilistic process with `better'
+individuals being more likely to be selected. The worse individuals have some
+chance to be selected as well for the sake of maintaining diversity in the
+population. An example of the mating selection is the
+\emph{tournament selection}, where individuals `compete' in rounds and the
+overall winner is selected. A round is won by an individual, if it has a 
+greater fitness value.
+
+The environmental selection is used to create a new population. Unlike the
+mating selection which is a stochastic process, replacement is usually
+deterministic. Individuals with a higher fitness are usually preferred as in
+the first type of selection, but the decision may take into account the age
+of the individuals. As such, it is possible to include or not to include the
+parents along with the offspring. A popular option is to directly choose
+a small number of the most successful individuals. This method is called
+\emph{elitism} \citep{Eiben:2015:IEC:2810085}.
+An example of an elitist selection algorithm is NSGA-II, which
+is described in \ref{nsgaii}.
+% TODO cite pages directly, when citing from a single source for several
+% paragraphs (because it's good)
+
+\paragraph{Crossover and mutation}
+The crossover and mutation are genetic operators that alter the structure of
+individuals. Both operations are highly dependent on problem encoding.
+
+During the crossover, the genetic information of the parents is combined into
+one or more children. Most usually, two parents are used to produce two
+offspring, though the counts may differ in some special types of evolutionary
+algorithms. Ideally, if we have two parents with different but nevertheless
+`good' features, the offspring receives both of them. 
+
+The mutation is a stochastic operator which is used to introduce diversity into
+the population.
+
+\paragraph{Stopping criteria}
+Some commonly used stopping criteria, as listed by Engelbrecht, are for example 
 a limit on the number of generations, a objective function threshold or
 termination after no improvement is observed.
 (\citep{Engelbrecht:2007:CII:1557464})
@@ -217,29 +260,29 @@ termination after no improvement is observed.
 % ocislovat radky, odkazovat na ne, zakladni prvky jsou
 \begin{algorithm}
 \DontPrintSemicolon
-  \KwData{population size $n$, stopping condition $c$, 
+  \KwData{population size $k$, stopping condition $c$, 
           crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
   \;
-  $P(0) \longleftarrow$ population of size $n$
+  $P(0) \longleftarrow$ population of size $k$
 
   \While{$c$ is not met}{
       \For{individual $ind$} {
          compute fitness $f(ind)$
       }
-      \For{i in \Range{$n/2$}} {
-         $i_1, i_2 \longleftarrow$ select two individuals
-         
+      \For{i in \Range{$k/2$}} {
+         $i_1, i_2 \longleftarrow$ select two individuals \label{parent:sel}
+
          \If{$p_{cx}$} {
-            perform crossover
+            $crossover(i_1, i_2)$ \label{crossover}
          }
          
-         \If{$p_{mut}$} {
-            perform mutation
-         
+         \If{$p_{mut}$ for $k=1,2$} {
+            $mutation(i_k)$ \label{mutation}
          }
       }
-      $P(n+1) \longleftarrow$ select individuals from $P(n)$   
+      \;
+      $P(n+1) \longleftarrow$ select $k$ individuals from $P(n)$ \label{envir:sel}
   }
   \;
   return $P(c)$  
@@ -339,6 +382,7 @@ This is the definition from the original article of
 manner, for example as the count of individuals closer than $\sigma_{share}$
 \citep{Engelbrecht:2007:CII:1557464}.
 
+\label{nsgaii}
 As the algorithm has some drawbacks, like dependence on $\sigma_{share}$,
 a very high computational complexity and lack of elitism, the authors of
 NSGA have proposed an improved variant called NSGA-II. This algorithm not only
@@ -351,7 +395,7 @@ algorithms \citep{Deb:2002:FEM:2221359.2221582}.
 % mozna seznam zkratek...
 In this section, we present a subfield of evolutionary computing --- 
 the genetic programming --- where the population is a set of computer 
-programs. The aim of this technique is to evolve programs which provide 
+programs. The aim of this technique is to evolve programs that provide 
 a good solution to the given problem. There are various approaches in means 
 of how to represent the individuals and what kind of genetic operators to 
 use. The fitness is computed by running the program and comparing the result 
@@ -368,7 +412,7 @@ operators need to be designed.
 \paragraph{Initialization}
 During the initialization, both functions and constants are selected from a set
 of possible nodes which is provided as input to the algorithm. As was mentioned,
-there are various methods of initialization. We well present two methods which
+there are various methods of initialization. We well present two methods that
 are among the simplest and most used ones --- \emph{grow} and \emph{full}.
 % set... cite Koza's book
 
