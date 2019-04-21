@@ -236,8 +236,13 @@ is described in \ref{nsgaii}.
 % paragraphs (because it's good)
 
 \paragraph{Crossover and mutation}
-The crossover and mutation are genetic operators that alter the structure of
-individuals. Both operations are highly dependent on problem encoding.
+The crossover and mutation (also called reproduction operators
+\citep{Engelbrecht:2007:CII:1557464}) are genetic operators that create new
+individuals. Both operations are highly dependent on problem encoding, as they
+alter the structure of the genomes of individuals. In the schema of the 
+\hyperref[evolutionary algorithm]{alg:EA}, reproduction operators are applied
+on parents selected by the mating selection, as can be seen on lines
+\ref{crossover} and \ref{mutation}.
 
 During the crossover, the genetic information of the parents is combined into
 one or more children. Most usually, two parents are used to produce two
