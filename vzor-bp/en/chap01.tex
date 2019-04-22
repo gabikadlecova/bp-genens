@@ -207,9 +207,9 @@ The algorithm terminates when some \emph{stopping condition} is met.
 
 \paragraph{Selection}
 The selection may be divided into two steps. The first is the 
-\emph{parent selection}, also called \emph{mating selection} which is applied 
-on line \ref{parent:sel}, and the second is called
-\emph{environmental selection} or \emph{recombination}.
+\emph{parent selection}, also called \emph{mating selection}
+(line \ref{parent:sel}), and the second is called
+\emph{environmental selection} or \emph{recombination} (line \ref{envir:sel}).
 Sometimes the latter is omitted, as the selection can be limited to copying 
 all offspring to the new population.
 
@@ -222,36 +222,41 @@ population. An example of the mating selection is the
 overall winner is selected. A round is won by an individual, if it has a 
 greater fitness value.
 
-The environmental selection is used to create a new population. Unlike the
-mating selection which is a stochastic process, replacement is usually
-deterministic. Individuals with a higher fitness are usually preferred as in
-the first type of selection, but the decision may take into account the age
-of the individuals. As such, it is possible to include or not to include the
-parents along with the offspring. A popular option is to directly choose
-a small number of the most successful individuals. This method is called
-\emph{elitism} \citep{Eiben:2015:IEC:2810085}.
+The environmental selection is used to create a new 
+population. Unlike the mating selection which is a stochastic process,
+replacement is usually deterministic. Individuals with a higher fitness are
+usually preferred as in the first type of selection, but the decision may take 
+into account the age of the individuals. As such, it is possible to include 
+or not to include the parents along with the offspring. A popular option is to 
+directly choose a small number of the most successful individuals. This method 
+is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
 An example of an elitist selection algorithm is NSGA-II, which
-is described in \ref{nsgaii}.
+is described in section \ref{nsgaii}.
 % TODO cite pages directly, when citing from a single source for several
 % paragraphs (because it's good)
 
 \paragraph{Crossover and mutation}
 The crossover and mutation (also called reproduction operators
-\citep{Engelbrecht:2007:CII:1557464}) are genetic operators that create new
-individuals. Both operations are highly dependent on problem encoding, as they
-alter the structure of the genomes of individuals. In the schema of the 
-\hyperref[evolutionary algorithm]{alg:EA}, reproduction operators are applied
-on parents selected by the mating selection, as can be seen on lines
-\ref{crossover} and \ref{mutation}.
+\citep{Engelbrecht:2007:CII:1557464}) are genetic operators that modify the
+structure of individuals to create new ones. Both operations are highly
+dependent on problem encoding, as they directly alter the genomes. An example
+of the operators can be found in section \ref{gp:treebased}. In the schema 
+of the \hyperref[alg:EA]{evolutionary algorithm}, reproduction operators
+are applied on parents selected by the mating selection, as can be seen on 
+lines \ref{crossover} and \ref{mutation}.
 
 During the crossover, the genetic information of the parents is combined into
 one or more children. Most usually, two parents are used to produce two
 offspring, though the counts may differ in some special types of evolutionary
 algorithms. Ideally, if we have two parents with different but nevertheless
-`good' features, the offspring receives both of them. 
+`good' features, the offspring receives both of them.
+\citep{Eiben:2015:IEC:2810085}
 
 The mutation is a stochastic operator which is used to introduce diversity into
-the population.
+the population. The structure of the genome is randomly changed in the hope
+of creating a more fit individual. Thus, it must be applied with care, as it is
+also possible that some good part may be distorted in the process. This can be
+avoided by setting a low mutation probability or by elitism.
 
 \paragraph{Stopping criteria}
 Some commonly used stopping criteria, as listed by Engelbrecht, are for example 
@@ -263,8 +268,9 @@ termination after no improvement is observed.
 % jednobodovy apod nepsat, spis to trochu uzavrit
 
 % ocislovat radky, odkazovat na ne, zakladni prvky jsou
-\begin{algorithm}
+\begin{algorithm} \label{alg:EA}
 \DontPrintSemicolon
+\caption{Evolutionary algorithm}
   \KwData{population size $k$, stopping condition $c$, 
           crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
@@ -276,7 +282,7 @@ termination after no improvement is observed.
          compute fitness $f(ind)$
       }
       \For{i in \Range{$k/2$}} {
-         $i_1, i_2 \longleftarrow$ select two individuals \label{parent:sel}
+         $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
 
          \If{$p_{cx}$} {
             $crossover(i_1, i_2)$ \label{crossover}
@@ -285,13 +291,14 @@ termination after no improvement is observed.
          \If{$p_{mut}$ for $k=1,2$} {
             $mutation(i_k)$ \label{mutation}
          }
+         \;
+         add $i_1, i_2$ to offspring population $P_o(n)$
       }
       \;
-      $P(n+1) \longleftarrow$ select $k$ individuals from $P(n)$ \label{envir:sel}
+      $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)$ \label{envir:sel}
   }
   \;
   return $P(c)$  
-\caption{Evolutionary algorithm\label{alg:EA}}
 \end{algorithm}
 
 The advantage of genetic algorithms is such that there are potentially 
@@ -301,7 +308,7 @@ In comparison with other directed search methods, this proves to be a more
 robust approach. (\cite{Michalewicz:1996:GAD:229930}, 
 \cite{Mitchell:1997:ML:541177}) % Mitchell page 260
 
-\subsection{Multi-objective optimization}
+\subsection{Multi-objective optimization} \label{moo}
 In many problems, the quality of the solution depends on more than one
 objective function. With this, it is much harder to say whether one solution
 is strictly better than another. Multi-objective optimization (MOO) formally
@@ -332,17 +339,16 @@ only if
 
 As it is possible to have solutions where neither one dominates the other,
 it is impossible to determine one optimal solution. Hence we define the 
-\emph{Pareto-optimality}.
+\emph{Pareto-optimality}
+\citep[p.~551-561,~569--573]{Engelbrecht:2007:CII:1557464}.
 
 \begin{definition}[Pareto-optimality]
 A vector $x_1$ is said to be \emph{Pareto-optimal}, if there is no other vector
 $x_2$ that dominates it. The \emph{Pareto-optimal set} $P^*$ is the set of all
 non-dominated solutions. Finally, the \emph{Pareto-optimal front} (Pareto front)
 is defined as
-$PF^* =\{\, f=(f_1(x^*),\ldots f_k(x^*)) \mid x^* \in P^* ) \,\}$.
+$PF^* =\{\, f=(f_1(x^*),\ldots f_k(x^*)) \mid x^* \in P^* ) \,\}$. 
 \end{definition}
-
-\citep[p.~551-561,~569--573]{Engelbrecht:2007:CII:1557464}
 
 If we use evolutionary computation to solve multi-objective problems, the
 algorithm needs to be modified. As not every individuals are directly
@@ -399,27 +405,41 @@ algorithms \citep{Deb:2002:FEM:2221359.2221582}.
 % zkratky Genetic progr, GP... uvest...
 % mozna seznam zkratek...
 In this section, we present a subfield of evolutionary computing --- 
-the genetic programming --- where the population is a set of computer 
+the genetic programming (GP) --- where the population is a set of computer 
 programs. The aim of this technique is to evolve programs that provide 
 a good solution to the given problem. There are various approaches in means 
 of how to represent the individuals and what kind of genetic operators to 
-use. The fitness is computed by running the program and comparing the result 
-with the desired output. \cite{Poli:2008:FGG:1796422}
+use.
 
-\textit{Mention typed GP here}
-\subsection{Tree-based genetic programming}
+\subsection{Tree-based genetic programming} \label{gp:treebased}
 The individuals are most frequently represented in the form of 
-\emph{syntax trees}. Inner nodes of the tree are functions, whereas leaves 
-are constants and variables. The initialization step is thus very important, as
+\emph{syntax trees}. Inner nodes of the tree are \emph{functions}, whereas 
+leaves  are constants (\emph{terminals}) and variables. Together, all possible
+functions and terminals form the \emph{primitive set}. Every function of the
+set must have a well-defined arity value.
+
+An extension of the genetic programming is \emph{strongly typed GP}. It
+constraints the primitive set in such a way that every primitive has an output
+type and furthermore every function defines input types of its arguments.
+
+The initialization step is very important, as
 there are many different ways how to design trees. Also, specialized genetic
-operators need to be designed.
+operators need to be designed. On the other hand, the selection step remains
+largely the same. \cite{Poli:2008:FGG:1796422}
+ 
+The fitness is usually computed by running the program and comparing the result 
+with the desired output. It is also possible to apply genetic programming on
+multi-objective problems, where the second objective may be the running time
+of the problem or some other domain-specific property
+\citep{Poli:2008:FGG:1796422}. More about multi-objective optimization can be
+read in section \ref{moo}.
 
 \paragraph{Initialization}
-During the initialization, both functions and constants are selected from a set
-of possible nodes which is provided as input to the algorithm. As was mentioned,
-there are various methods of initialization. We well present two methods that
-are among the simplest and most used ones --- \emph{grow} and \emph{full}.
-% set... cite Koza's book
+During the initialization, the nodes of the tree are selected from the
+primitive set which is provided as input to the algorithm
+\citep{Koza:1992:GPP:138936}. As was mentioned, there are various methods of 
+initialization. We well present two methods that are among the simplest and 
+most used ones --- \emph{grow} and \emph{full}.
 
 In both cases, nodes are inserted to the tree up to a certain height limit.
 The two methods differ only in the way how nodes are selected. The grow method
@@ -436,6 +456,7 @@ number of nodes in a tree might be too small. Because of that, a method called
 of the presented methods; half of the population is generated using the full
 method, the other one via grow method. Also, instead of one height limit, a
 range of values is used to introduce more diversity.
+\citep{Poli:2008:FGG:1796422}
 
 \paragraph{Genetic operators}
 The most common type of crossover is \emph{subtree crossover} of two
@@ -446,9 +467,32 @@ to the points are exchanged between them.
 Similarly, the most used mutation technique is \emph{subtree mutation}.
 Just like in subtree crossover, a mutation point is randomly chosen.
 Afterwards, the corresponding subtree is entirely replaced by a new randomly
-generated tree.
-% Genetic operators? Pictures?
+generated tree. Another possibility is to swap a node with a different one
+from the primitive set. In the case of strongly typed GP, both input an output
+types must match the types of the previous node.
+\citep{Poli:2008:FGG:1796422}
 
 \subsection{Developmental genetic programming}
+In simple GP, it is not possible to directly evolve other graph structures
+than trees. There are other types of GP that enable this, but individuals
+and genetic operators may become fairly complex. However, there is also a
+subfield of tree-based GP --- developmental GP --- which allows to indirectly
+evolve not only arbitrary graphs, but also much more complex real-world
+structures.
 
-\section{Workflows}
+The key concept of the developmental genetic programming is the
+specific \emph{cellular encoding} of individuals. It was first presented by
+\cite{Gruau:1994:thesis} as a form of evolution of neural network architecture.
+The \emph{cell} is a basic structure from which all individuals are created.
+The root of the GP tree responds to this cell and every subtree corresponds
+to operations which modify specific parts of the cell. In the case of neural
+networks, these operation are for example node insertion or parallel/serial
+duplication of a part of the network. John Koza has used the developmental GP
+to evolve analogue circuits \citep{Koza:1998:circuits}. With this, it was even
+possible to achieve human-competitive result, that is, reinventing a circuit
+that has been previously designed for a specific purpose by hand.
+
+More about the encoding and modifying operations will be presented in
+chapter \ref{our:solution}.
+
+% Maybe Koza's pict?
