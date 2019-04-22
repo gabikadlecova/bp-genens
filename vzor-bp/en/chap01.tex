@@ -152,15 +152,38 @@ error. \citep[335]{Flach:2012:MLA:2490546}
 \section{AutoML}
 When using machine learning in practice, it is not always evident which model
 is suitable for a particular problem. Moreover, there is a vast number of model
-and parameter combinations to choose from, not to mention model ensembles. 
-AutoML, aims to solve these problems by automatizing the process of model 
-selection.
+and parameter combinations to choose from, not to mention model ensembles.
+Furthermore, there are also other time-consuming tasks to perform during
+a machine learning workflow. AutoML aims to solve these problems by
+automatizing the process.
+% AutoML is yet to be defined...
+
+% Goals - what, how, why
+
+\subsection{Machine learning workflows}
+\textit{Here will be a pretty workflow image} % compliant to PDF/A
 
 
 ...section model architecture: NAS, ensembles, examples in chapter 2.
 % problemy - jak to skladat dohromady,...
 % jak slozit model vs jak vybrat model
 % doporucovani hyperparam.
+
+
+% Model creation
+%    Architecture
+%    Parameters
+
+% Model recommendation
+%    Metalearning
+
+% Combining both - my GP,... (maybe auto-sklearn)
+
+
+% Order may be changed
+\subsection{Creating model architecture}
+
+\subsection{Hyperparameter optimization}
 
 \subsection{Metalearning}
 The metalearning, also known as `learning to learn' \ldots
@@ -173,11 +196,11 @@ metalearning may include several runs or many different tasks.
 In the research area of model recommendation, the training data is most
 frequently a history of previous runs. A suitable model is then chosen by
 examining which models were successful on similar tasks. As the problem data
-may differ significantly, the task cannot be usually compared directly.
+may differ significantly, the tasks cannot be usually compared directly.
 Therefore, we need to accumulate some kind of \emph{metaknowledge} which
-can be extracted from substantially different data.
+can be extracted even from substantially different data.
 
-\textit{Describe meta-data, meta-features, EVA approach.}
+\textit{Describe meta-data, meta-features, compare to EVA approach.}
 
 \section{Evolutionary computing} \label{ea}
 Evolutionary computing is a heuristic optimization method inspired by 
@@ -233,7 +256,7 @@ is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
 An example of an elitist selection algorithm is NSGA-II, which
 is described in section \ref{nsgaii}.
 % TODO cite pages directly, when citing from a single source for several
-% paragraphs (because it's good)
+% paragraphs
 
 \paragraph{Crossover and mutation}
 The crossover and mutation (also called reproduction operators
@@ -402,8 +425,7 @@ algorithms \citep{Deb:2002:FEM:2221359.2221582}.
 
 
 \section{Genetic programming}
-% zkratky Genetic progr, GP... uvest...
-% mozna seznam zkratek...
+% TODO GP and dev-GP applications
 In this section, we present a subfield of evolutionary computing --- 
 the genetic programming (GP) --- where the population is a set of computer 
 programs. The aim of this technique is to evolve programs that provide 
