@@ -171,7 +171,9 @@ learning problem. In literature, it is also labelled as a `machine learning
 pipeline' \cite{DBLP:journals/corr/abs-1810-13306}. However, in the context
 of AutoML it may not be a suitable term, as a pipeline is a linear acyclic
 graph and some parts of the flow may by cyclic, as can be seen
-in figure \ref{pic01:workflow}.
+in figure \ref{pic01:workflow}. The term \emph{pipeline} is also used for
+models which comprise several feature preprocessing methods and/or model
+ensembles. % cite sklearn?
 
 \begin{figure}[h]\centering
 \includegraphics[width=\textwidth]{../img/workflow-pdfa.pdf}
@@ -225,25 +227,40 @@ Some examples of frameworks which try to solve the HPO are mentioned in section
 \cite{automl_book}.
 
 \subsection{Creating model architecture}
-\textit{NAS, arbitrary sized pipes}
+The creation of model architecture is a problem related to the HPO. It is an
+important part of the design of a neural networks, which is currently a very
+popular area of research. It also needs to be considered in traditional machine
+learning when employing model ensembles. The problem may be solved at the same
+time as HPO, which however introduces even more complexity in the search space.
+More on this subject is discussed in the following chapters.
 
 \subsection{Metalearning}
-The metalearning, also known as `learning to learn' \ldots
+The metalearning, also known as `learning to learn' is a field closely related
+to AutoML. The subjects of study of this method are universal properties of 
+data and the learning process itself. It is often employed in the design of
+pipelines or in neural architecture search, as it can significantly
+improve the performance and running time
+\citep{DBLP:journals/corr/abs-1810-03548}.
 
-Just as the traditional learning --- here referred to as \emph{base-learning}
+Just as in case of the traditional learning --- or also \emph{base-learning}
 --- metalearning improves with experience. The difference lies in the learning
 process. While base-learning comprises of a single run on a specific task,
-metalearning may include several runs or many different tasks.
+metalearning may include a several runs or many different tasks. 
 
-In the research area of model recommendation, the training data is most
+In the research area of model recommendation, which is one of the applications
+of metalearning, the training data is most
 frequently a history of previous runs. A suitable model is then chosen by
-examining which models were successful on similar tasks. As the problem data
-may differ significantly, the tasks cannot be usually compared directly.
-Therefore, we need to accumulate some kind of \emph{metaknowledge} which
-can be extracted even from substantially different data.
+examining which models were successful on similar tasks.
+Therefore, we need to accumulate some \emph{metadata}. Another problem
+is that the input data may differ significantly and as such, the tasks usually
+cannot be compared directly. Thus, it is necessary to create so-called
+\emph{metafeatures} which can be extracted even from substantially different
+data.
 
-\textit{Describe meta-data, meta-features, compare to EVA approach.}
-% also describe specific meta ensembles
+There are many other concepts used in metalearning; some are presented in more
+detail in following chapters, others can be found in a the book
+\citep{Brazdil:2008:MAD:1507541} or in a recent survey
+\citep{DBLP:journals/corr/abs-1810-03548}.
 
 \section{Evolutionary computing} \label{ea}
 Evolutionary computing is a heuristic optimization method inspired by 
