@@ -170,7 +170,7 @@ A machine learning workflow is the process of solving a particular machine
 learning problem. In literature, it is also labelled as a `machine learning
 pipeline' \cite{DBLP:journals/corr/abs-1810-13306}. However, in the context
 of AutoML it may not be a suitable term, as a pipeline is a linear acyclic
-graph and some parts of the flow may be in fact iterative, as can be seen
+graph and some parts of the flow may by cyclic, as can be seen
 in figure \ref{pic01:workflow}.
 
 \begin{figure}[h]\centering
@@ -179,11 +179,16 @@ in figure \ref{pic01:workflow}.
 \label{pic01:workflow}
 \end{figure}
 
-...section model architecture: NAS, ensembles, examples in chapter 2.
-% problemy - jak to skladat dohromady,...
-% jak slozit model vs jak vybrat model
-% doporucovani hyperparam.
-
+The process of solving the problem is iterative; it is usually necessary to try
+out many different settings, as there are no algorithms that would perform
+well on all types of problems.
+There are many possibilities in what to optimize. Some models concentrate only
+on one part of the workflow, for example on automatic feature engineering,
+other handle multiple steps at once. As mentioned above, there is no general
+categorization % hierarchy? better word
+of AutoML frameworks. Thus, in the following sections we present only some
+AutoML approaches relevant to this work. For more examples and a proposition
+of a general AutoML framework refer to \cite{DBLP:journals/corr/abs-1810-13306}.
 
 % Model creation
 %    Architecture  \_ CASH - combined algorithm selection and hyperparams
@@ -196,12 +201,31 @@ in figure \ref{pic01:workflow}.
 
 % Combining both - my GP,... (maybe auto-sklearn)
 
-
-% Order may be changed
-\subsection{Creating model architecture}
-
 % or CASH
 \subsection{Hyperparameter optimization}
+Automated hyperparameter optimization (HPO) is the most basic, but nevertheless
+very important task of AutoML. As has already been mentioned, there is no
+silver-bullet method that would solve all machine learning problems.
+Furthermore, every method depends on some hyperparameters that greatly
+influence its performance. Combining this, we get a large search space of
+possible models. This problem is called]
+\emph{combined algorithm selection and hyperparameter optimization problem}
+(CASH) and a formal definition can be found in
+\citep{DBLP:journals/corr/abs-1208-3719}.
+
+There are several limitations which complicate the search through this space.
+For large models (for example in deep learning) and large dataset, the
+learning process and evaluation take a lot of time. Moreover, the
+configuration space may be quite complex, with many continuous hyperparameters
+which also depend on each other. It is also necessary to avoid overfitting,
+which is not always obvious as the training set may not be large enough.
+
+Some examples of frameworks which try to solve the HPO are mentioned in section
+\ref{ch2:related}. Various approaches are presented in the book written by
+\cite{automl_book}.
+
+\subsection{Creating model architecture}
+\textit{NAS, arbitrary sized pipes}
 
 \subsection{Metalearning}
 The metalearning, also known as `learning to learn' \ldots
