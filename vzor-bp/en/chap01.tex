@@ -146,9 +146,6 @@ learning workflow. Examples of existing methods are presented in chapter
 \ref{ch2:related}.
 
 \subsection{Machine learning workflows}
-\textit{TODO message for supervisor --- dnes jsem se rozepsala na dvojce,
-takže se slovní popis workflowu objeví až zítra (sobota)}\\
-
 A machine learning workflow is the process of solving a particular machine
 learning problem. In literature, it is also labelled as a `machine learning
 pipeline' \cite{DBLP:journals/corr/abs-1810-13306}. However, in the context
@@ -157,6 +154,16 @@ graph and some parts of the flow may by cyclic, as can be seen
 in figure \ref{pic01:workflow}. The term \emph{pipeline} is also used for
 models which comprise several feature preprocessing methods and/or model
 ensembles. % cite sklearn? for the pipeline
+
+The process can be decomposed into well-defined steps, which are depicted in
+figure \ref{pic01:workflow}. The first two steps can be performed
+by an expert from an unrelated field, whereas the rest is the task of a machine
+learning scientist. The feature engineering comprises of initial data cleaning,
+feature extraction and feature selection. % Should I describe this more?
+After that, a suitable machine learning model must be selected along with
+suitable hyperparameters; the latter is performed in the optimization step.
+Finally, the resulting model is evaluated, most often on a set of previously
+unseen \emph{validation data}.
 
 \begin{figure}[h]\centering
 \includegraphics[width=\textwidth]{../img/workflow-pdfa.pdf}
