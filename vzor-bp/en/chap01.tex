@@ -13,10 +13,8 @@ Flach provides the following general definition:
 
 \blockquote{Machine learning is the systematic study of algorithms and systems
 that improve their knowledge or performance with experience.
-(\cite{Flach:2012:MLA:2490546})} % page number? (3)
-%
-% Here a detailed definition
-%
+(\cite{Flach:2012:MLA:2490546})} % page number? (3) TODO
+
 The knowledge of a system is gained through learning from \emph{experience}.
 This procedure is referred to as the \emph{training} phase. In this process, 
 the algorithm adjusts its parameters according to the nature of training data.
@@ -28,7 +26,6 @@ result is then evaluated to determine the performance of the method.
 varies with different machine learning problems. There are three main classes 
 of tasks: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement} 
 learning.
-% This should be improved
 
 In case of supervised learning, the training data is a set of labelled examples
 and the task is to predict labels of previously unseen data. The field is 
@@ -62,11 +59,7 @@ example, \hyperref[bagging]{bagging} is a method of variance reduction, while
 \hyperref[boosting]{boosting} noticeably reduces the bias. More on this topic
 can be found in Flach's book. (\citet[p.~93--94,~338]{Flach:2012:MLA:2490546})
 
-% here more on supervised learning, hypotheses,...
-
 \subsection{Model ensembles} \label{ensemble}
-% Mention netflix like they did in the paper?
-% Find sources where they mention successful applications
 Model ensembles are powerful learning techniques that combine simpler models 
 to achieve better results. They are widely used in practice, specific examples
 can be found in the review of \cite{Rokach:2009:TCE:1609202.1609436}.
@@ -76,9 +69,8 @@ statistics and from computational learning theory. In statistics, a general
 idea is to average measurements to get more stable and reliable results.
 Here, the models are trained on data samples or feature subsets and the results
 are then combined into a final hypothesis.
-% Flach
+% Flach TODO cite
 
-% Variant A, possibly inacurrate
 The computational learning theory defines the term \emph{learnability},
 which describes whether a model outputs a correct hypothesis by learning on
 random sets of instances from a unknown distribution. A \emph{strong learner}
@@ -90,20 +82,6 @@ a hypothesis, which is slightly better than random guessing (i.e. has a
 success rate over 0.5). A more detailed elaboration of the learnability
 theory is beyond the scope of this work and can be found in books 
 of \citep{Flach:2012:MLA:2490546} and \citep{Mitchell:1997:ML:541177}.
-
-% Variant B, possibly tedious to read
-%The computational learning theory defines the term \emph{learnability},
-%which describes whether a concept language can be reliably learnt. A concept is
-%defined as a logical expression which describes a set of instances. A 
-%hypothesis space is then the space of possible concepts.
-
-%Having a model $M$ and a concept language $C$, $C$ is (strongly)
-%\emph{PAC-learnable} by $M$ if the model outputs most of the time a hypothesis 
-%with a very small error. The model is not required to be correct every time, 
-%as the set of chosen instances described by the language might be atypical 
-%or not representative enough.  We can also define the \emph{weak learnability} 
-%of $C$ by $M$ where $M$ outputs a hypothesis which is slightly better than 
-%random guessing (i.e. success rate over 0.5). 
 
 The assumption of strong learnability may appear to be quite strict when 
 compared to the weak learnability, as the model must output a correct 
@@ -157,9 +135,8 @@ Furthermore, it is necessary to preprocess the data and construct features
 for the learning process. All these aforementioned tasks require human 
 expertise and are typically time-consuming. AutoML aims to automatize the
 process and make machine learning available to non-experts.
-% todo internet source - AutoML page
+% TODO internet source - AutoML page
 
-% Goals - what, how, why
 There seems to be no generally accepted definition of AutoML as for now.
 According to \cite{DBLP:journals/corr/abs-1810-13306},
 \textquote{\textit{AutoML attempts to construct machine learning programs
@@ -169,6 +146,9 @@ learning workflow. Examples of existing methods are presented in chapter
 \ref{ch2:related}.
 
 \subsection{Machine learning workflows}
+\textit{TODO message for supervisor --- dnes jsem se rozepsala na dvojce,
+takže se slovní popis workflowu objeví až zítra (sobota)}\\
+
 A machine learning workflow is the process of solving a particular machine
 learning problem. In literature, it is also labelled as a `machine learning
 pipeline' \cite{DBLP:journals/corr/abs-1810-13306}. However, in the context
@@ -176,7 +156,7 @@ of AutoML it may not be a suitable term, as a pipeline is a linear acyclic
 graph and some parts of the flow may by cyclic, as can be seen
 in figure \ref{pic01:workflow}. The term \emph{pipeline} is also used for
 models which comprise several feature preprocessing methods and/or model
-ensembles. % cite sklearn?
+ensembles. % cite sklearn? for the pipeline
 
 \begin{figure}[h]\centering
 \includegraphics[width=\textwidth]{../img/workflow-pdfa.pdf}
@@ -190,23 +170,11 @@ well on all types of problems.
 There are many possibilities in what to optimize. Some models concentrate only
 on one part of the workflow, for example on automatic feature engineering,
 other handle multiple steps at once. As mentioned above, there is no general
-categorization % hierarchy? better word
+categorization % hierarchy? better word?
 of AutoML frameworks. Thus, in the following sections we present only some
 AutoML approaches relevant to this work. For more examples and a proposition
 of a general AutoML framework refer to \cite{DBLP:journals/corr/abs-1810-13306}.
 
-% Model creation
-%    Architecture  \_ CASH - combined algorithm selection and hyperparams
-%    Parameters    /  + AutoML for arbitrary size pipes
-%                         - except for TPOT trees and ML-plan
-%                           (hieararchical task networks)
-
-% Model recommendation
-%    Metalearning
-
-% Combining both - my GP,... (maybe auto-sklearn)
-
-% or CASH
 \subsection{Hyperparameter optimization}
 Automated hyperparameter optimization (HPO) is the most basic, but nevertheless
 very important task of AutoML. As has already been mentioned, there is no
@@ -334,7 +302,7 @@ is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
 An example of an elitist selection algorithm is NSGA-II, which
 is described in section \ref{nsgaii}.
 % TODO cite pages directly, when citing from a single source for several
-% paragraphs
+% paragraphs?
 
 \paragraph{Crossover and mutation}
 The crossover and mutation (also called reproduction operators
@@ -365,10 +333,6 @@ a limit on the number of generations, a objective function threshold or
 termination after no improvement is observed.
 (\citep{Engelbrecht:2007:CII:1557464})
 
-% Ze mame ruzny metody, co to delaj ruzne, konkretni popiseme v nasem reseni
-% jednobodovy apod nepsat, spis to trochu uzavrit
-
-% ocislovat radky, odkazovat na ne, zakladni prvky jsou
 \begin{algorithm} \label{alg:EA}
 \DontPrintSemicolon
 \caption{Evolutionary algorithm}
@@ -407,7 +371,7 @@ many different solutions present in every population. With well defined
 selection and fitness, the algorithm performs a multi-directional search. 
 In comparison with other directed search methods, this proves to be a more 
 robust approach. (\cite{Michalewicz:1996:GAD:229930}, 
-\cite{Mitchell:1997:ML:541177}) % Mitchell page 260
+\cite{Mitchell:1997:ML:541177}) % Mitchell page 260 TODO
 
 \subsection{Multi-objective optimization} \label{moo}
 In many problems, the quality of the solution depends on more than one
@@ -501,7 +465,6 @@ NSGA have proposed an improved variant called NSGA-II. This algorithm not only
 adresses the above-mentioned problems, it also outperforms other elitist
 algorithms \citep{Deb:2002:FEM:2221359.2221582}.
 
-
 \section{Genetic programming}
 % TODO GP and dev-GP applications
 In this section, we present a subfield of evolutionary computing --- 
@@ -594,5 +557,3 @@ that has been previously designed for a specific purpose by hand.
 
 More about the encoding and modifying operations will be presented in
 chapter \ref{our:solution}.
-
-% Maybe Koza's pict?
