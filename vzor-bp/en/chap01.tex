@@ -235,9 +235,26 @@ important part of the design of a neural networks, which is currently a very
 popular area of research. It also needs to be considered in traditional machine
 learning when employing model ensembles. The problem may be solved at the same
 time as HPO, which however introduces even more complexity in the search space.
-More on this subject is discussed in the following chapters.
 
-\subsection{Metalearning}
+There are many difficulties that have to be solved when designing automated
+architecture search methods. With increasing size of the search space 
+the optimization time may become very long.
+Moreover, some complex models may score only slightly better
+but at the cost of a considerably longer running time. Also, evaluation cost of
+a single model may be very high, preventing the AutoML system from being usable
+in practice.
+
+The \hyperref[metalearning]{metalearning} could be very useful in the process,
+enabling to start with promising models instead of spending time on poor ones
+\citep{DBLP:journals/corr/abs-1810-03548}.
+Another option is to estimate the performance of the architecture. There are
+various approaches. For example, we can evaluate the model on smaller subsets of
+data, which however introduces some bias in the estimate. Another option is to
+decrease the training time, if it is possible, and extrapolate the learning
+curve. More on this topic is described in a recent survey by
+\cite{2018arXiv180805377E}.
+
+\subsection{Metalearning} \label{metalearning}
 The metalearning, also known as `learning to learn' is a field closely related
 to AutoML. The subjects of study of this method are universal properties of 
 data and the learning process itself. It is often employed in the design of
@@ -281,8 +298,6 @@ to the genotype--phenotype relationship from genetics. The `natural selection'
 can be then understood as a stochastic search through the space of possible 
 chromosome values. 
 (\cite{Engelbrecht:2007:CII:1557464})
-
-\textit{exploration vs exploitation...}
 
 % Maybe a better section name
 \subsection{Evolutionary algorithms in detail}

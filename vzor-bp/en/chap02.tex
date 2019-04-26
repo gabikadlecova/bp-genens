@@ -1,34 +1,46 @@
 \chapter{Related work} \label{ch2:related}
-% todo ask - capital letters in citations (keep english title convention?)
 
-% section name tb edited
-\section{Examples of methods solving CASH}
-\begin{itemize}
-\item Auto-WEKA --- uses Bayesian optimization to search in space of WEKA
-algorithm implementations. The property of the selected model is converted to
-a hyperparameter, induces several 'conditional` hyperparameters (e.g. some are
-present only if the method is an ensemble,...). Limits ensemble subestimator count
-to 5, does not allow to have ensembles as ensemble subestimators. One feature
-preprocessing. First defined the CASH problem.
 
-\item Hyperopt-sklearn % not read yet, it's in the book
-\item Auto-sklearn --- improved existing systems, metalearning step, builds
-ensembles from models it evaluated
-\end{itemize}
+\section{Hyperparameter optimization methods} \label{CASH}
+The first attempt to solve the CASH problem was the AutoML system \emph{Auto-WEKA}
+\citep{DBLP:journals/corr/abs-1208-3719}. It employs a Bayesian optimization
+method to find the optimal set of hyperparameters. To solve the model selection
+at the same time, an artificial hyperparameter which represents the selected
+model is added to the system. Other specific hyperparameters are induced from its
+value --- for example the hyperparameters of the model itself or subestimators of
+ensembles. The same principle holds also for feature preprocessing methods.
+
+The successor of Auto-WEKA, \emph{Auto-sklearn}, improved existing systems by
+adding a metalearning step to the algorithm. The optimization step is the same
+as in Auto-WEKA, but the algorithm is \emph{warm-started} via a history of most
+successful models on similar datasets. In the end, the resulting models are
+combined together to a specific ensemble. This is done to take advantage of all
+potentially good methods instead of choosing only one (not necessarily the best)
+and discarding the rest. \citep{Feurer:2015:ERA:2969442.2969547}
+% AutoNet --- based on autoweka, CASH for ANN, architecture as well (via
+% parametrization)
+
+Although these systems work quite well in practice, they support only a small
+number of model architectures. The algorithms used in Auto-WEKA are general
+enough, but the number of subestimators is limited to 5 and only base-learners can
+be used. Auto-sklearn abandoned ensembles altogether in the optimization process
+and does not support an arbitrary ensemble in the final step of the algorithm.
+The reason behind this limitation is that by increasing the model complexity the
+configuration space becomes too large.
+
+A similar system has been developed for the purpose of automatic tuning of neural
+networks --- Auto-Net. \citep{pmlr-v64-mendoza_towards_2016}
 
 \section{Architecture search}
-\subsection{NAS} % or not a subsection, but just a few words
-% + AutoNet
+The search for an ideal model architecture can be understood as a part of the
+CASH problem. This subfield of AutoML has recently gained in popularity with the
+demand for automated \emph{neural architecture search} (NAS)
+\cite{2018arXiv180805377E}. Similarly, it also encompasses the task of
+arbitrary-sized pipeline design. The latter is a yet to be explored subfield of
+AutoML; there are only two systems which however do not consistently outperform
+fixed-size methods from section \ref{CASH}. \citep{automl_book} One of the methods
+--- \emph{ML-Plan} --- is based on hierarchical planning \citep{Mohr2018}. The
+other one --- TPOT --- uses genetic programming and will be described in more
+detail in the following section.
 
-\subsection{Pipelines of arbitrary size}
-\begin{itemize}
-\item TPOT
-\item the hierarchical networks
-\end{itemize}
-
-% skupiny co se resi za problemy
-% dvoufazove - sebrat clanky, jedna veta, co k tomu chcem, skupiny
-%    - tohle se tyka tohohle problemu, neco okrajove, neco vic
-%    - skupiny treba uvest (hyperparam opt viz 1.4 neco, ukazali, ze jim to...)
-% Nemusi byt souvisly, ale roztridit clanky. Veta per clanek co ho charakterizuje
-% Pak vytridit... atd. Protoze se to bude posouvat, co je co
+\subsection{TPOT}
