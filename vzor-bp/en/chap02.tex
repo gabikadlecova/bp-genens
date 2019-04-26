@@ -1,8 +1,30 @@
 \chapter{Related work} \label{ch2:related}
+% todo ask - capital letters in citations (keep english title convention?)
 
-\section{AutoML}
+% section name tb edited
+\section{Examples of methods solving CASH}
+\begin{itemize}
+\item Auto-WEKA --- uses Bayesian optimization to search in space of WEKA
+algorithm implementations. The property of the selected model is converted to
+a hyperparameter, induces several 'conditional` hyperparameters (e.g. some are
+present only if the method is an ensemble,...). Limits ensemble subestimator count
+to 5, does not allow to have ensembles as ensemble subestimators. One feature
+preprocessing. First defined the CASH problem.
 
-\section{TPOT}
+\item Hyperopt-sklearn % not read yet, it's in the book
+\item Auto-sklearn --- improved existing systems, metalearning step, builds
+ensembles from models it evaluated
+\end{itemize}
+
+\section{Architecture search}
+\subsection{NAS} % or not a subsection, but just a few words
+% + AutoNet
+
+\subsection{Pipelines of arbitrary size}
+\begin{itemize}
+\item TPOT
+\item the hierarchical networks
+\end{itemize}
 
 % skupiny co se resi za problemy
 % dvoufazove - sebrat clanky, jedna veta, co k tomu chcem, skupiny
