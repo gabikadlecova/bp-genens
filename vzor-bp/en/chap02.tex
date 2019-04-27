@@ -1,7 +1,10 @@
 \chapter{Related work} \label{ch2:related}
+In this section we present existing AutoML system. The examples are divided into
+two groups, where the first comprises of methods focusing mainly on simple
+models and the second of systems which enable more complex architectures.
+Finally we compare one of the systems (TPOT) with our approach.
 
-
-\section{Hyperparameter optimization methods} \label{CASH}
+\paragraph{Hyperparameter optimization methods} \label{CASH}
 The first attempt to solve the CASH problem was the AutoML system \emph{Auto-WEKA}
 \citep{DBLP:journals/corr/abs-1208-3719}. It employs a Bayesian optimization
 method to find the optimal set of hyperparameters. To solve the model selection
@@ -31,16 +34,31 @@ configuration space becomes too large.
 A similar system has been developed for the purpose of automatic tuning of neural
 networks --- Auto-Net. \citep{pmlr-v64-mendoza_towards_2016}
 
-\section{Architecture search}
+\paragraph{Architecture search}
 The search for an ideal model architecture can be understood as a part of the
 CASH problem. This subfield of AutoML has recently gained in popularity with the
 demand for automated \emph{neural architecture search} (NAS)
-\cite{2018arXiv180805377E}. Similarly, it also encompasses the task of
-arbitrary-sized pipeline design. The latter is a yet to be explored subfield of
-AutoML; there are only two systems which however do not consistently outperform
-fixed-size methods from section \ref{CASH}. \citep{automl_book} One of the methods
---- \emph{ML-Plan} --- is based on hierarchical planning \citep{Mohr2018}. The
-other one --- TPOT --- uses genetic programming and will be described in more
-detail in the following section.
+\cite{2018arXiv180805377E}. It also encompasses the task of pipeline design.
 
-\subsection{TPOT}
+There are only few systems that allow unlimited pipeline sizes. The system
+\emph{RECIPE} uses grammar-based GP to evolve pipelines, but still limits the
+size of the pipeline. \citep{10.1007/978-3-319-55696-3_16}
+There are two systems which support arbitrary-sized pipelines. One of them is
+\emph{TPOT}, which uses genetic programming to evolve tree-based models. The
+root of the tree represents a single estimator whereas the branches are feature
+preprocessing methods. \citep{Olson2016EvoBio}
+The other system --- \emph{ML-Plan} --- is based on hierarchical planning
+\citep{Mohr2018}. Both of the methods support a chain of feature preprocessors,
+including feature union and stacking (ensemble methods which construct new
+features from subestimators). However, none of these methods support more
+complex ensemble structures.
+% TODO performance estimation? TPOT newly uses subsets of features...
+\paragraph{Comparison of TPOT with our system}
+Our system relates most to TPOT, as it uses genetic programming to optimize
+the pipelines. However, instead of using the simple GP like TPOT does, we use
+the developmental GP which enables us to create more complex ensemble
+structures. TPOT also focuses more on the feature preprocessing step of the 
+workflow, providing additional built-in transformers beyond the scikit-learn 
+provided algorithms. TPOT uses either a standard tournament selection or 
+NSGA-II and multiobjective fitness. The latter is however composed from the 
+score and the tree size, whereas ours uses the score and evaluation time.
