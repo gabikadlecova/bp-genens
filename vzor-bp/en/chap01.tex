@@ -165,7 +165,7 @@ suitable hyperparameters; the latter is performed in the optimization step.
 Finally, the resulting model is evaluated, most often on a set of previously
 unseen \emph{validation data}.
 
-\begin{figure}[h]\centering
+\begin{figure}[ht]\centering
 \includegraphics[width=\textwidth]{../img/workflow-pdfa.pdf}
 \caption{A typical machine learning workflow}
 \label{pic01:workflow}
@@ -340,9 +340,10 @@ a limit on the number of generations, a objective function threshold or
 termination after no improvement is observed.
 (\citep{Engelbrecht:2007:CII:1557464})
 
-\begin{algorithm} \label{alg:EA}
-\DontPrintSemicolon
-\caption{Evolutionary algorithm}
+
+\begin{algorithm}
+\DontPrintSemicolon 
+\caption{Evolutionary algorithm\label{alg:EA}}
   \KwData{population size $k$, stopping condition $c$, 
           crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
@@ -542,7 +543,7 @@ from the primitive set. In the case of strongly typed GP, both input an output
 types must match the types of the previous node.
 \citep{Poli:2008:FGG:1796422}
 
-\subsection{Developmental genetic programming}
+\subsection{Developmental genetic programming} \label{devGP}
 In simple GP, it is not possible to directly evolve other graph structures
 than trees. There are other types of GP that enable this, but individuals
 and genetic operators may become fairly complex. However, there is also a
