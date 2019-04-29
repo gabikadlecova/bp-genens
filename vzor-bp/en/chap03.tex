@@ -30,7 +30,7 @@ union, most of the pipelines become in fact directed acyclic graphs (figure
 encoding. Instead we use the developmental GP with cellular encoding described
 in section \ref{devGP}.
 \begin{figure}[ht]\centering
-\includegraphics[width=0.8\textwidth]{../img/pipeline-pdfa.pdf}
+\includegraphics[width=0.7\textwidth]{../img/pipeline-pdfa.pdf}
 \caption{Schema of an example pipeline}
 \label{pic02:pipeline}
 \end{figure}
@@ -38,6 +38,14 @@ in section \ref{devGP}.
 In our case, the embryo is an empty pipeline. To create a complex pipeline, we
 modify it by inserting steps into it. All modification operations are listed in
 table \ref{tab03:nodes}.
+
+\begin{figure}[ht]\centering
+    \subfloat[Tree encoding]{{\includegraphics[width=0.25\textwidth]{../img/ada.png} }}%
+    \qquad
+    \subfloat[Encoded pipeline]{{\includegraphics[width=0.5\textwidth]{../img/ada-pdfa.pdf} }}%
+    \caption{An example pipeline encoded to a tree individual}%
+    \label{pic:pipeencoding}%
+\end{figure}
 
 The process can be demonstrated on figure
 \ref{pic:pipeencoding}. The root of the tree represents the embryo which will
@@ -49,13 +57,12 @@ either an ensemble or a simple method. Here it is the AdaBoost ensemble which
 has one base classifier. The subestimator is again a pipeline, which is composed
 of a MinMaxScaler and Stochastic gradient descent classifier.
 
-\begin{figure}[ht]\centering
-    \subfloat[Tree encoding]{{\includegraphics[width=0.3\textwidth]{../img/ada.png} }}%
-    \qquad
-    \subfloat[Encoded pipeline]{{\includegraphics[width=0.6\textwidth]{../img/ada-pdfa.pdf} }}%
-    \caption{An example pipeline encoded to a tree individual}%
-    \label{pic:pipeencoding}%
-\end{figure}
+Table \ref{tab03:nodes} lists the nodes used in the current implementation of
+our system. Input type is defined as a cartesian product of types, output type
+is a single type; terminals define only the output type. Output types of child
+nodes must match the input type of parent node. The list is extensible, it is
+possible to add a definion of similar nodes, e.g. a different ensemble flavour
+like stacking.
 
 % TODO should I describe node types?
 \begin{table}[b!]
@@ -83,7 +90,7 @@ dUnion      & $data^n$               & $data$ & Create feature union in the prep
 and preprocessor present}} \\
 \multicolumn{4}{l}{\footnotesize
 \textsuperscript{2}\textit{In the last level classifier and preprocessing
-can have output type $ens$ and $data$ resp.}}
+can have output type $ens$ and $data$ resp.}} 
 
 \end{tabular}
 \caption{Nodes representing modifying operations}\label{tab03:nodes}
@@ -91,13 +98,39 @@ can have output type $ens$ and $data$ resp.}}
 \end{table}
 
 \subsection{Initialization}
+As the initial population we grow $n$ trees where every tree has a random
+height between 1 and overall maximum height. The tree is grown from root, which
+is either a 'cPipe` or 'cPred` node (table \ref{tab03:nodes}). Then, nodes are
+inserted into the tree according to the input type of the parent. Before the
+height limit is reached (during the \emph{growing phase}), both functions and
+terminals are inserted into the tree. Then, only terminals are inserted to
+keep the limit.
 
+As terminals are inserted in the growing phase as well, the tree may become
+smaller than the height limit. However, if the tree were built using the full
+method, it would introduce a lot of feature preprocessing methods for taller
+trees. Therefore, all node types listed in table \ref{tab03:nodes} may be used
+during the growing phase. Moreover, we define special terminal nodes which are
+used only in the last level (\hyperref[tab03:nodes]{footnote 2}). It is
+necessary to include them, as otherwise it would be impossible to finish the
+tree in one level, but they would force the trees to be very short if used
+during the growing phase.
 
+In addition to this process, we use weights to manage the probability of a node
+to be chosen. The motivation is that some nodes represent lightweight methods
+which have a short execution time, whereas some nodes slow down the evaluation
+process, especially when present multiple times in the tree.
+
+The process is as follows: every node is assigned to a group and each group has
+a well defined weight. When selecting a node $n$ with output type $out$, we 
+first determine all groups $G$ which correspond to any node with output type
+$out$. Then we select a group $g$ from $G$ by a weighted random choice.
+Finally, $n$ is selected by a simple random choice from $g$.
 
 \subsection{Genetic operators}
 
 \subsection{Fitness and selection}
 
-\section{Evaluation and performance estimation} \section{sec:eval}
+\section{Evaluation and performance estimation} \label{sec:eval}
 
 \section{Implementation}
