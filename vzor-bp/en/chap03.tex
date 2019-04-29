@@ -36,8 +36,7 @@ in section \ref{devGP}.
 \end{figure}
 
 In our case, the embryo is an empty pipeline. To create a complex pipeline, we
-modify it by inserting steps into it. All modification operations are listed in
-table \ref{tab03:nodes}.
+modify it by inserting steps into it.
 
 \begin{figure}[ht]\centering
     \subfloat[Tree encoding]{{\includegraphics[width=0.25\textwidth]{../img/ada.png} }}%
@@ -55,14 +54,17 @@ preprocessor chain. The pipeline contains only one preprocessor, hence the
 right subtree is terminated by the corresponding node. The left son can be
 either an ensemble or a simple method. Here it is the AdaBoost ensemble which
 has one base classifier. The subestimator is again a pipeline, which is composed
-of a MinMaxScaler and Stochastic gradient descent classifier.
+of a MinMaxScaler and Stochastic gradient descent classifier. The specific
+hyperparameter of every pipeline step are stored aside the nodes and are not
+depicted in the figures.
 
 Table \ref{tab03:nodes} lists the nodes used in the current implementation of
 our system. Input type is defined as a cartesian product of types, output type
-is a single type; terminals define only the output type. Output types of child
-nodes must match the input type of parent node. The list is extensible, it is
-possible to add a definion of similar nodes, e.g. a different ensemble flavour
-like stacking.
+is a single type; terminals have only the output type defined. Output types of
+child nodes must match the input type of parent node. The list is extensible,
+it is possible to add a definion of similar nodes, e.g. a different ensemble
+flavour like stacking. The nodes that are specific for a given estimator
+correspond to the list of methods in section \ref{tab03:methods}.
 
 % TODO should I describe node types?
 \begin{table}[b!]
@@ -116,7 +118,8 @@ necessary to include them, as otherwise it would be impossible to finish the
 tree in one level, but they would force the trees to be very short if used
 during the growing phase.
 
-In addition to this process, we use weights to manage the probability of a node
+\paragraph{Weighted selection}
+During the node selection, we use weights to manage the probability of a node
 to be chosen. The motivation is that some nodes represent lightweight methods
 which have a short execution time, whereas some nodes slow down the evaluation
 process, especially when present multiple times in the tree.
@@ -127,7 +130,29 @@ first determine all groups $G$ which correspond to any node with output type
 $out$. Then we select a group $g$ from $G$ by a weighted random choice.
 Finally, $n$ is selected by a simple random choice from $g$.
 
+\paragraph{Method hyperparameters}
+Every node has a list of possible values per hyperparameter associated with
+it. During selection, the actual values are randomly selected from every list.
+The validity is not verified in this phase, instead it is handled in the
+evaluation phase \ref{sec:eval}.
+
 \subsection{Genetic operators}
+In our system we use one type of crossover and three different types of
+mutation. The crossover is the standard strongly typed subtree-swap operation.
+The mutation operators will be described in more detail.
+
+\paragraph{Subtree mutation}
+As defined in section \ref{treeops}, in subtree mutation a chosen subtree is
+replaced with a randomly generated tree. In our implementation we moreover
+limit the height of the generated tree. For height $h$ of the subtree, the
+height of the newly generated tree must be between $<1, h + \epsilon>$ for a
+small value of $\epsilon$. This way we ensure that for small subtrees the new
+subtree may be slightly higher and for big subtrees the overall height will not
+increase too much.
+
+\paragraph{Node swap mutation}
+
+\paragraph{Node argument mutation}
 
 \subsection{Fitness and selection}
 
