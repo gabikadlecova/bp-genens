@@ -72,8 +72,8 @@ correspond to the list of methods in section \ref{tab03:methods}.
 \centering
 \begin{tabular}{l c c p{0.38\textwidth}}
 \toprule
-\mc{\textbf{Node}\textsuperscript{1}} & \mc{\textbf{In type}} &
-\mc{\textbf{Out type}\textsuperscript{2}} & \mc{\textbf{Operation}} \\
+\mc{\textbf{Node}\textsuperscript{1}} & \mc{\textbf{In type}\textsuperscript{2}} &
+\mc{\textbf{Out type}\textsuperscript{3}} & \mc{\textbf{Operation}} \\
 \midrule
 cPipe       & $ens \times data$      & $out$  & Create pipeline with a preprocessor chain and a predictor \\
 cPred       & $ens$                  & $out$  & Create pipeline only with a predictor \\
@@ -90,8 +90,12 @@ dUnion      & $data^n$               & $data$ & Create feature union in the prep
 \multicolumn{4}{l}{\footnotesize
 \textsuperscript{1}\textit{There is one specific node per ensemble, classifier
 and preprocessor present}} \\
+
 \multicolumn{4}{l}{\footnotesize
-\textsuperscript{2}\textit{In the last level classifier and preprocessing
+\textsuperscript{2}\textit{Variable arity is allowed (i.e. $n \in <1, max\_n>)$}} \\
+
+\multicolumn{4}{l}{\footnotesize
+\textsuperscript{3}\textit{In the last level classifier and preprocessing
 can have output type $ens$ and $data$ resp.}} 
 
 \end{tabular}
@@ -130,6 +134,13 @@ first determine all groups $G$ which correspond to any node with output type
 $out$. Then we select a group $g$ from $G$ by a weighted random choice.
 Finally, $n$ is selected by a simple random choice from $g$.
 
+\paragraph{Variable arity}
+Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}. This means
+that the actual arity is determined just when the node is about to be inserted
+to the tree. The arity is determined by an interval which may or may not have
+an upper bound. If the upper bound is not provided, it is usually limited by
+a global arity limit to avoid bloat of the trees.
+
 \paragraph{Method hyperparameters}
 Every node has a list of possible values per hyperparameter associated with
 it. During selection, the actual values are randomly selected from every list.
@@ -147,15 +158,42 @@ replaced with a randomly generated tree. In our implementation we moreover
 limit the height of the generated tree. For height $h$ of the subtree, the
 height of the newly generated tree must be between $<1, h + \epsilon>$ for a
 small value of $\epsilon$. This way we ensure that for small subtrees the new
-subtree may be slightly higher and for big subtrees the overall height will not
-increase too much.
+subtree may be slightly higher and for big subtrees the overall height should
+not increase too much.
 
 \paragraph{Node swap mutation}
+In this type of mutation, a randomly chosen node is replaced with a new node.
+Both output and input types must match; if the new node supports variable
+arity, all input types of the old node must satisfy the bounds. For this type
+of mutation, any lower bound must be greater than zero.
 
 \paragraph{Node argument mutation}
+Mutates a hyperparameter of a random node --- chooses a new value from the list
+of possible values. Has many possible extensions which are more described in
+section \ref{future} (future work).
 
 \subsection{Fitness and selection}
 
+The fitness has two objectives --- evaluation score and evaluation time. The
+enviromental selection is done via NSGA-II and the parental selection is a
+tournament selection based on individual dominance and crowding distance.
+Details about method implementations are provided in section \ref{sec:eval}.
+
 \section{Evaluation and performance estimation} \label{sec:eval}
+In this section we elaborate the evaluation process. First we present the
+pipelines and used methods in more detail. Then we present a performance
+estimation method which was used to decrease the running time.
+
+\subsection{Used machine learning methods}
+
+\subsection{Scoring and sampling}
+Fitness evaluation is the major performance\ldots
+% zabira nejvic casu, je hlavni polozkou, nevim jak to napsat
+The long running time is one of the drawbacks of evolution-based systems. On
+large datasets, the evolution time may be too long even for a small number of
+populations of small size. As such, it is necessary to decrease the evaluation
+time of a single individual. We use one of the performance estimation methods
+mentioned in section \ref{sec:modelarch} --- evaluation on smaller subsets of
+data.
 
 \section{Implementation}
