@@ -36,7 +36,10 @@ in section \ref{devGP}.
 \end{figure}
 
 In our case, the embryo is an empty pipeline. To create a complex pipeline, we
-modify it by inserting steps into it. The process can be demonstrated on figure
+modify it by inserting steps into it. All modification operations are listed in
+table \ref{tab03:nodes}.
+
+The process can be demonstrated on figure
 \ref{pic:pipeencoding}. The root of the tree represents the embryo which will
 be modified by subsequent operations. In this case, the left subtree modifies
 the ensemble structure whereas the right subtree modifies the feature
@@ -46,7 +49,7 @@ either an ensemble or a simple method. Here it is the AdaBoost ensemble which
 has one base classifier. The subestimator is again a pipeline, which is composed
 of a MinMaxScaler and Stochastic gradient descent classifier.
 
-\begin{figure}[h]\centering
+\begin{figure}[ht]\centering
     \subfloat[Tree encoding]{{\includegraphics[width=0.3\textwidth]{../img/ada.png} }}%
     \qquad
     \subfloat[Encoded pipeline]{{\includegraphics[width=0.6\textwidth]{../img/ada-pdfa.pdf} }}%
@@ -58,37 +61,43 @@ of a MinMaxScaler and Stochastic gradient descent classifier.
 \begin{table}[b!]
 
 \centering
-%%% Tabulka používá následující balíčky:
-%%%   - booktabs (\toprule, \midrule, \bottomrule)
-%%%   - dcolumn (typ sloupce D: vycentrovaná čísla zarovnaná na
-%%%     desetinnou čárku
-%%%     Všimněte si, že ve zdrojovém kódu jsou desetinné tečky, ale
-%%%     tisknou se čárky.
-%%% Dále používáme příkazy \pulrad a \mc definované v makra.tex
-\begin{tabular}{l l}
+\begin{tabular}{l c c p{0.38\textwidth}}
 \toprule
-\mc{\textbf{Node identifier}} & \mc{\textbf{Operation}} \\
+\mc{\textbf{Node}\textsuperscript{1}} & \mc{\textbf{In type}} &
+\mc{\textbf{Out type}\textsuperscript{2}} & \mc{\textbf{Operation}} \\
 \midrule
-cPipe & Create pipeline with a preprocessor chain and a predictor \\
-cPred & Create pipeline only with a predictor \\
-cData & Create preprocessor chain with feature selector and scaler \\
-cFeatSelect & Create preprocessor chain only with a feature selector \\
-cScale & Create preprocessor chain only with a scaler \\
-dUnion & Create feature union in the preprocessor chain \\
-\textit{classifier id} & Insert classifier \\
-\textit{ensemble id} & Insert ensemble \\
-\textit{preprocessor id} & Insert preprocessor \\
+cPipe       & $ens \times data$      & $out$  & Create pipeline with a preprocessor chain and a predictor \\
+cPred       & $ens$                  & $out$  & Create pipeline only with a predictor \\
+cData       & $featsel \times scale$ & $data$ & Create preprocessor chain with feature selector and scaler \\
+cFeatSelect & $featsel$              & $data$ & Create preprocessor chain only with a feature selector \\
+cScale      & $scale$                & $data$ & Create preprocessor chain only with a scaler \\
+dUnion      & $data^n$               & $data$ & Create feature union in the preprocessor chain \\
+\textit{ensemble} & $out^n$ & $ens$ & Insert ensemble \\
+\textit{classifier} & $\emptyset$ & $out$ & Insert classifier \\
+\textit{selector} & $\emptyset$ & $featsel$ & Insert feature selector \\
+\textit{scaler} & $\emptyset$ & $scale$ & Insert scaler \\
 \bottomrule
+
+\multicolumn{4}{l}{\footnotesize
+\textsuperscript{1}\textit{There is one specific node per ensemble, classifier
+and preprocessor present}} \\
+\multicolumn{4}{l}{\footnotesize
+\textsuperscript{2}\textit{In the last level classifier and preprocessing
+can have output type $ens$ and $data$ resp.}}
 
 \end{tabular}
 \caption{Nodes representing modifying operations}\label{tab03:nodes}
 
 \end{table}
 
+\subsection{Initialization}
+
+
+
 \subsection{Genetic operators}
 
 \subsection{Fitness and selection}
 
-\section{Evaluation and performance estimation}
+\section{Evaluation and performance estimation} \section{sec:eval}
 
 \section{Implementation}
