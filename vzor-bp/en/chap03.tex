@@ -169,31 +169,44 @@ of mutation, any lower bound must be greater than zero.
 
 \paragraph{Node argument mutation}
 Mutates a hyperparameter of a random node --- chooses a new value from the list
-of possible values. Has many possible extensions which are more described in
-section \ref{future} (future work).
+of possible values. This method has many possible extensions which are more
+described in section \ref{future} (future work).
 
 \subsection{Fitness and selection}
 
-The fitness has two objectives --- evaluation score and evaluation time. The
-enviromental selection is done via NSGA-II and the parental selection is a
-tournament selection based on individual dominance and crowding distance.
-Details about method implementations are provided in section \ref{sec:eval}.
+The fitness has two objectives --- evaluation score and logarithmized
+evaluation time. The enviromental selection is done via NSGA-II and the 
+parental selection is a tournament selection based on individual dominance and 
+crowding distance. Details about method implementations are provided in 
+section \ref{sec:eval}.
 
 \section{Evaluation and performance estimation} \label{sec:eval}
 In this section we elaborate the evaluation process. First we present the
 pipelines and used methods in more detail. Then we present a performance
 estimation method which was used to decrease the running time.
 
-\subsection{Used machine learning methods}
+\subsection{Used machine learning methods} \label{tab03:methods}
 
 \subsection{Scoring and sampling}
-Fitness evaluation is the major performance\ldots
-% zabira nejvic casu, je hlavni polozkou, nevim jak to napsat
-The long running time is one of the drawbacks of evolution-based systems. On
-large datasets, the evolution time may be too long even for a small number of
-populations of small size. As such, it is necessary to decrease the evaluation
-time of a single individual. We use one of the performance estimation methods
-mentioned in section \ref{sec:modelarch} --- evaluation on smaller subsets of
-data.
+Long running time is one of the drawbacks of evolution-based systems. On
+large datasets, the duration time may be too long even for a small number of
+populations of small size. As such, it is necessary to decrease the fitness
+evaluation time of a single individual. We use one of the performance
+estimation methods mentioned in section \ref{sec:modelarch} --- evaluation on
+smaller subsets of data.
 
+For fitness evaluations, we generate samples of the original datasets (in case
+of classification, the samples are stratified). The samples were either
+generated per generation or per every fitness evaluation, while the latter
+has proved to be more effective. A possible explanation is that if we generate 
+only one sample per generation, we cannot ensure that it is representative 
+enough. Thus, the individuals which score particularly well on this sample may 
+not generalize well. The second approach suffers from this problem as well, but 
+since we generate a sample per evaluation, every individual has a fair chance 
+of getting a good sample. Possible improvements of this approach are presented 
+in section \ref{future}.
+
+As the samples are typically much smaller than the whole dataset, a simple
+train-test evaluation does not generalize sufficiently. The pipeline score
+is thus computed as a (stratified) k-fold cross-validation on the sample.
 \section{Implementation}
