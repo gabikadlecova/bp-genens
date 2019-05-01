@@ -9,19 +9,23 @@ pipeline evaluation process.
 
 \begin{algorithm}
 \DontPrintSemicolon 
-\caption{Pipeline optimization process\label{alg:genens}}
+\caption{Pipeline optimization --- overview\label{alg:genens}}
   \KwData{dataset $d$, configuration $c$}
   \KwResult{optimized pipeline}
+  \SetKwFunction{Impute}{impute}
   \;
-  $cleanup(d)$
-  \;
-  get pareto front from $dev\_gp(d, c)$
+  \Impute{$d$} \;
+  $P(n) \longleftarrow$ run developmental GP optimization \;
+  $f \longleftarrow$ get Pareto front from $P(n)$
+  \;\;
+  \KwRet{f}
+  
 \end{algorithm}
 
 
 \begin{algorithm}
 \DontPrintSemicolon 
-\caption{devGP opt}
+\caption{Pipeline optimization --- developmental GP}
   \KwData{c}
   \KwResult{p}
   \SetNoFillComment
@@ -29,18 +33,29 @@ pipeline evaluation process.
   \SetKwFunction{Mut}{mutation}
   \SetKwFunction{Mutnode}{node\_mutation}
   \SetKwFunction{Mutarg}{arg\_mutation}
+  \SetKwFunction{Eval}{evaluate}
+  \SetKwFunction{Compile}{compile}
   \;
+ 
+  \Fn{\Eval}{
+        $pipe \longleftarrow$ \Compile($ind$) \;
+        $score, time \longleftarrow$ evaluate $pipe$ on a sample\;
+        $ind.fitness \longleftarrow (score, \log\mleft(time\mright))$
+  }
+  \;
+  \tcc{run developmental GP}  
   $P(0) \longleftarrow$ initialize population of GP trees
-
-  \While{ngen}{
+ 
+  \While{$n < max\_gen$}{
       \tcc{evaluate individuals}
-      \For{ind in P(n)} {
-         $pipe \longleftarrow compile(ind)$ \;
-         $ind.fitness \longleftarrow evaluate(pipe)$ on a sample
+      \For{$ind$ in $P(n)$} {
+         \Eval{$ind$}
+      
+         
       }
       \;
-      \tcc{}
-      \For{i in \Range{$k/2$}} {
+      \tcc{reproduction}
+      \For{$i$ in \Range{$k/2$}} {
          $i_1, i_2 \longleftarrow$ tournament selection from $P(n)$
 
          \If{$p_{cx}$} {
@@ -64,7 +79,7 @@ pipeline evaluation process.
       $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$
   }
   \;
-  return $P(c)$  
+  \KwRet{$P(c)$} 
 \end{algorithm}
 
 

@@ -347,22 +347,24 @@ termination after no improvement is observed.
   \KwData{population size $k$, stopping condition $c$, 
           crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
+  \SetKwFunction{Cx}{crossover}
+  \SetKwFunction{Mut}{mutation}
   \;
   $P(0) \longleftarrow$ population of size $k$
 
   \While{$c$ is not met}{
       \For{individual $ind$} {
-         compute fitness $f(ind)$
+         $f(ind) \longleftarrow$ compute fitness
       }
       \For{i in \Range{$k/2$}} {
          $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
 
          \If{$p_{cx}$} {
-            $crossover(i_1, i_2)$ \label{crossover}
+            \Cx{$i_1, i_2$} \label{crossover}
          }
          
          \If{$p_{mut}$ for $k=1,2$} {
-            $mutation(i_k)$ \label{mutation}
+            \Mut{$i_k$} \label{mutation}
          }
          \;
          add $i_1, i_2$ to offspring population $P_o(n)$
