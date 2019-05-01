@@ -347,6 +347,7 @@ termination after no improvement is observed.
   \KwData{population size $k$, stopping condition $c$, 
           crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
   \KwResult{evolved individuals}
+  \SetNoFillComment
   \SetKwFunction{Cx}{crossover}
   \SetKwFunction{Mut}{mutation}
   \;
@@ -356,6 +357,8 @@ termination after no improvement is observed.
       \For{individual $ind$} {
          $f(ind) \longleftarrow$ compute fitness
       }
+      \;
+      \tcc{reproduction}
       \For{i in \Range{$k/2$}} {
          $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
 
@@ -373,7 +376,7 @@ termination after no improvement is observed.
       $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)$ \label{envir:sel}
   }
   \;
-  return $P(c)$  
+  \KwRet{$P(c)$}  
 \end{algorithm}
 
 The advantage of genetic algorithms is such that there are potentially 

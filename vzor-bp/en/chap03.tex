@@ -2,32 +2,54 @@
 
 In our solution we design an AutoML system for workflow optimization based on
 developmental genetic programming. Compared to existing systems it supports 
-arbitrary-sized pipelines as well as complex ensemble structures. We first
-present in what way we use the genetic programming, then we describe the
-pipeline evaluation process.
-
+arbitrary-sized pipelines as well as complex ensemble structures. An overview
+of the process is shown in algorithm \ref{alg:genens}. In section
+\ref{genens:devGP} we describe how we apply the developmental GP to this
+problem (line \ref{line:devGP}). Evaluation of pipelines (line \ref{line:compile})
+and implementation details are presented in section \ref{genens:eval}.
 
 \begin{algorithm}
 \DontPrintSemicolon 
-\caption{Pipeline optimization --- overview\label{alg:genens}}
+\caption{Pipeline optimization --- main\label{alg:genens}}
   \KwData{dataset $d$, configuration $c$}
-  \KwResult{optimized pipeline}
-  \SetKwFunction{Impute}{impute}
+  \KwResult{optimized pipelines}
+  \SetKwFunction{Compile}{Compile}
   \;
-  \Impute{$d$} \;
-  $P(n) \longleftarrow$ run developmental GP optimization \;
-  $f \longleftarrow$ get Pareto front from $P(n)$
+  $individuals \longleftarrow$ run developmental GP optimization on $d$ with $c$ \label{line:devGP} \;
+  $pipelines \longleftarrow$ \Compile{$individuals$} \label{line:compile}
   \;\;
-  \KwRet{f}
+  \KwRet{pipelines}
   
 \end{algorithm}
 
+% POHLED ZVRCHU shrnout vse, detaily dole
+
+
+% problem
+% reseni generuji dle dev GP
+
+% algo
+
+% indiv. preloz do sklearn pipeliny, evaluuj ji na datech
+
+
+% ROzepsanej GP algo do casti 3.1
+% odkaz z textu do algu
+% sem nekam dat crossval!!! - procedura 'vyhodnot jedince'
+
+\section{Evolutionary optimization of pipelines} \label{genens:devGP}
+The algorithm corresponds to the schema of a general genetic algorithm
+\ref{alg:EA}. In this section we describe the necessary components of the
+algorithm.
+
 
 \begin{algorithm}
 \DontPrintSemicolon 
-\caption{Pipeline optimization --- developmental GP}
-  \KwData{c}
-  \KwResult{p}
+\caption{Pipeline optimization --- developmental GP \label{alg:devgp}}
+  \KwData{population size $k$, maximum number of generations $max\_gen$,
+  crossover probability $p_{cx}$,
+  mutation probabilities $p_{mut}$, $p_{mut\_node}$, $p_{mut\_args}$ }
+  \KwResult{evolved tree individuals}
   \SetNoFillComment
   \SetKwFunction{Cx}{crossover}
   \SetKwFunction{Mut}{mutation}
@@ -45,8 +67,9 @@ pipeline evaluation process.
   \;
   \tcc{run developmental GP}  
   $P(0) \longleftarrow$ initialize population of GP trees
- 
+  \;\;
   \While{$n < max\_gen$}{
+      \;
       \tcc{evaluate individuals}
       \For{$ind$ in $P(n)$} {
          \Eval{$ind$}
@@ -79,29 +102,9 @@ pipeline evaluation process.
       $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$
   }
   \;
-  \KwRet{$P(c)$} 
+  \KwRet{Pareto front of $P(c)$} 
 \end{algorithm}
 
-
-% POHLED ZVRCHU shrnout vse, detaily dole
-
-
-% problem
-% reseni generuji dle dev GP
-
-% algo
-
-% indiv. preloz do sklearn pipeliny, evaluuj ji na datech
-
-
-% ROzepsanej GP algo do casti 3.1
-% odkaz z textu do algu
-% sem nekam dat crossval!!! - procedura 'vyhodnot jedince'
-
-\section{Evolutionary optimization of pipelines}
-The algorithm corresponds to the schema of a general genetic algorithm
-\ref{alg:EA}. In this section we describe the necessary components of the
-algorithm.
 
 \subsection{Individual encoding}
 The individual encoding is one of the most important parts of this system. With
@@ -225,7 +228,7 @@ a global arity limit to avoid bloat of the trees.
 Every node has a list of possible values per hyperparameter associated with
 it. During selection, the actual values are randomly selected from every list.
 The validity is not verified in this phase, instead it is handled in the
-evaluation phase \ref{sec:eval}.
+evaluation phase \ref{genens:eval}.
 
 \subsection{Genetic operators}
 In our system we use one type of crossover and three different types of
@@ -258,9 +261,9 @@ The fitness has two objectives --- evaluation score and logarithmized
 evaluation time. The enviromental selection is done via NSGA-II and the 
 parental selection is a tournament selection based on individual dominance and 
 crowding distance. Details about method implementations are provided in 
-section \ref{sec:eval}.
+section \ref{genens:eval}.
 
-\section{Evaluation and performance estimation} \label{sec:eval}
+\section{Evaluation and performance estimation} \label{genens:eval}
 In this section we elaborate the evaluation process. First we present the
 pipelines and used methods in more detail. Then we present a performance
 estimation method which was used to decrease the running time.
@@ -474,7 +477,7 @@ score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
 \begin{table}[b!]
 
 \centering
-\caption{c}
+\caption{Used ensembles with hyperparameters}
 
 \begin{tabular}{>{\itshape}l l}
 
