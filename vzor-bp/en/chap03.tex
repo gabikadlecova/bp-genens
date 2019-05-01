@@ -1,21 +1,87 @@
 \chapter{Our solution} \label{our:solution}
 
-
-% uvod, co je v kapitole, nejdriv...
-% obecne algorithmus bez rozzepsaneho gpcka
-
-% Prvni cats - GPcko (zakodovani, init, operat., fitness jak se pocita (ale vic dole),...
-% Druha - Sklearn strana, eval, samples,...
-
-% Posledni- implementace, deap,...
-
-% experimenty 4
-
 In our solution we design an AutoML system for workflow optimization based on
 developmental genetic programming. Compared to existing systems it supports 
 arbitrary-sized pipelines as well as complex ensemble structures. We first
 present in what way we use the genetic programming, then we describe the
 pipeline evaluation process.
+
+
+\begin{algorithm}
+\DontPrintSemicolon 
+\caption{Pipeline optimization process\label{alg:genens}}
+  \KwData{dataset $d$, configuration $c$}
+  \KwResult{optimized pipeline}
+  \;
+  $cleanup(d)$
+  \;
+  get pareto front from $dev\_gp(d, c)$
+\end{algorithm}
+
+
+\begin{algorithm}
+\DontPrintSemicolon 
+\caption{devGP opt}
+  \KwData{c}
+  \KwResult{p}
+  \SetNoFillComment
+  \SetKwFunction{Cx}{crossover}
+  \SetKwFunction{Mut}{mutation}
+  \SetKwFunction{Mutnode}{node\_mutation}
+  \SetKwFunction{Mutarg}{arg\_mutation}
+  \;
+  $P(0) \longleftarrow$ initialize population of GP trees
+
+  \While{ngen}{
+      \tcc{evaluate individuals}
+      \For{ind in P(n)} {
+         $pipe \longleftarrow compile(ind)$ \;
+         $ind.fitness \longleftarrow evaluate(pipe)$ on a sample
+      }
+      \;
+      \tcc{}
+      \For{i in \Range{$k/2$}} {
+         $i_1, i_2 \longleftarrow$ tournament selection from $P(n)$
+
+         \If{$p_{cx}$} {
+            \Cx{$i_1$, $i_2$} \tcc*[r]{subtree crossover}
+         }
+         \;
+         \If{$p_{mut}$ for $k=1,2$} {
+            \Mut{$i_k$} \tcc*[r]{subtree mutation}
+         }
+         \If{$p_{mut\_node}$ for $k=1,2$} {
+            \Mutnode{$i_k$} \tcc*[r]{node mutation}
+         }
+         \If{$p_{mut\_args}$ for $k=1,2$} {
+            \Mutarg{$i_k$} \tcc*[r]{hyperparameter mutation}
+         }
+         
+         \;
+         add $i_1, i_2$ to offspring population $P_o(n)$
+      }
+      \;
+      $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$
+  }
+  \;
+  return $P(c)$  
+\end{algorithm}
+
+
+% POHLED ZVRCHU shrnout vse, detaily dole
+
+
+% problem
+% reseni generuji dle dev GP
+
+% algo
+
+% indiv. preloz do sklearn pipeliny, evaluuj ji na datech
+
+
+% ROzepsanej GP algo do casti 3.1
+% odkaz z textu do algu
+% sem nekam dat crossval!!! - procedura 'vyhodnot jedince'
 
 \section{Evolutionary optimization of pipelines}
 The algorithm corresponds to the schema of a general genetic algorithm
@@ -66,10 +132,10 @@ it is possible to add a definion of similar nodes, e.g. a different ensemble
 flavour like stacking. The nodes that are specific for a given estimator
 correspond to the list of methods in section \ref{tab03:methods}.
 
-% TODO should I describe node types?
 \begin{table}[b!]
 
 \centering
+\caption{Nodes representing modifying operations}\label{tab03:nodes}
 \begin{tabular}{l c c p{0.38\textwidth}}
 \toprule
 \mc{\textbf{Node}\textsuperscript{1}} & \mc{\textbf{In type}\textsuperscript{2}} &
@@ -99,7 +165,6 @@ and preprocessor present}} \\
 can have output type $ens$ and $data$ resp.}} 
 
 \end{tabular}
-\caption{Nodes representing modifying operations}\label{tab03:nodes}
 
 \end{table}
 
@@ -187,6 +252,243 @@ estimation method which was used to decrease the running time.
 
 \subsection{Used machine learning methods} \label{tab03:methods}
 
+{\footnotesize
+\begin{longtable}{l l}
+
+\caption{Used classifiers with hyperparameters}\\
+	
+\toprule
+\multicolumn{2}{c}{\textbf{KNeighbors}} \\
+\midrule
+
+n\_neighbors & [1, 2, 5] \\
+algorithm & ['auto', 'ball\_tree', 'kd\_tree', 'brute'] \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{LinearSVC }} \\
+\midrule
+
+loss & [hinge,squared\_hinge] \\
+penalty & [l1,l2] \\
+C & [0.1,0.5,1.0,2,5,10,15] \\
+tol & [0.0001,0.001,0.01] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{SVC }} \\
+\midrule
+
+C & [0.1,0.5,1.0,2,5,10,15] \\
+gamma & [scale,0.0001,0.001,0.01,0.1,0.5] \\
+tol & [0.0001,0.001,0.01] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{logR }} \\
+\midrule
+
+penalty & [l1,l2] \\
+C & [0.1,0.5,1.0,2,5,10,15] \\
+tol & [0.0001,0.001,0.01] \\
+solver & [newton-cg,lbfgs,liblinear,sag,saga] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{Perceptron }} \\
+\midrule
+
+penalty & [None,l2,l1,elasticnet] \\
+n\_iter & [1,2,5,10,100] \\
+alpha & [0.0001,0.001,0.01] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{SGD }} \\
+\midrule
+
+penalty & [none,l2,l1,elasticnet] \\
+loss & [hinge,log,modified\_huber,squared\_hinge,perceptron] \\
+max\_iter & [10,100,200] \\
+tol & [0.0001,0.001,0.01] \\
+alpha & [0.0001,0.001,0.01] \\
+l1\_ratio & [0,0.15,0.5,1] \\
+epsilon & [0.01,0.05,0.1,0.5] \\
+learning\_rate & [constant,optimal] \\
+eta0 & [0.01,0.1,0.5] \\
+power\_t & [0.1,0.5,1,2] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{PAC }} \\
+\midrule
+
+loss & [hinge,squared\_hinge] \\
+C & [0.1,0.5,1.0,2,5,10,15] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{LDA }} \\*
+\midrule
+
+solver & [lsqr,eigen] \\
+shrinkage & [None,auto,0.1,0.5,1.0] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{QDA }} \\
+\midrule
+
+reg\_param & [0.0,0.1,0.5,1] \\
+tol & [0.0001,0.001,0.01] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{MLP }} \\
+\midrule
+
+activation & [identity,logistic,relu] \\
+solver & [lbfgs,sgd,adam] \\
+alpha & [0.0001,0.001,0.01] \\
+learning\_rate & [constant,invscaling,adaptive] \\
+tol & [0.0001,0.001,0.01] \\
+max\_iter & [10,100,200] \\
+learning\_rate\_init & [0.0001,0.001,0.01] \\
+power\_t & [0.1,0.5,1,2] \\
+momentum & [0.1,0.5,0.9] \\
+hidden\_layer\_sizes & [(100,),(50,),(20,),(10,)] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{DT }} \\
+\midrule
+
+criterion & [gini,entropy] \\
+max\_features & [0.05,0.1,0.25,0.5,0.75,1] \\
+max\_depth & [1,2,5,10,15,25,50,100] \\
+min\_samples\_split & [2,5,10,20] \\
+min\_samples\_leaf & [1,2,5,10,20] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{gaussianNB  }} \\* 
+\midrule\nopagebreak
+\multicolumn{2}{c}{\textit{-}} \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{gradBoosting }} \\
+\midrule
+
+loss & [deviance,exponential] \\
+n\_estimators & [20,50,100,200] \\
+subsample & [0.3,0.5,0.75,1.0] \\
+
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{randomForest }} \\
+\midrule
+
+n\_estimators & [10,50,100,150,200] \\
+
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{extraTrees }} \\
+\midrule
+
+n\_estimators & [10,50,100,150,200] \\
+  
+
+\bottomrule
+
+\end{longtable}
+}
+
+{\footnotesize
+\begin{longtable}{l l}
+
+\caption{Used preprocessors with hyperparameters}\\
+
+\midrule
+\multicolumn{2}{c}{\textbf{NMF }} \\
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+solver & [cd,mu] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{FA }} \\
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{FastICA }} \\
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{PCA }} \\
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+whiten & [False,True] \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{kBest }} \\
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
+ 
+\midrule
+\multicolumn{2}{c}{\textbf{MaxAbsScaler  }} \\
+\midrule
+\multicolumn{2}{c}{\textit{-}} \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{MinMaxScaler  }} \\
+\midrule
+\multicolumn{2}{c}{\textit{-}} \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{Normalizer  }} \\
+\midrule
+\multicolumn{2}{c}{\textit{-}} \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{StandardScaler  }} \\
+\midrule
+\multicolumn{2}{c}{\textit{-}} \\
+
+\bottomrule
+
+\end{longtable}
+}
+
+{ \footnotesize
+\begin{table}[b!]
+
+\centering
+\caption{c}
+
+\begin{tabular}{>{\itshape}l l}
+
+\toprule
+\multicolumn{2}{c}{\textbf{ada}} \\
+\toprule
+
+n\_estimators & [5, 10, 50, 100, 200] \\
+algorithm & [SAMME, SAMME.R] \\
+
+\toprule
+\multicolumn{2}{c}{\textbf{bagging}} \\
+\toprule
+
+n\_estimators & [5, 10, 50, 100, 200] \\
+
+\toprule
+\multicolumn{2}{c}{\textbf{voting}} \\
+\toprule
+
+voting & [hard]\\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+}
+
 \subsection{Scoring and sampling}
 Long running time is one of the drawbacks of evolution-based systems. On
 large datasets, the duration time may be too long even for a small number of
@@ -209,4 +511,36 @@ in section \ref{future}.
 As the samples are typically much smaller than the whole dataset, a simple
 train-test evaluation does not generalize sufficiently. The pipeline score
 is thus computed as a (stratified) k-fold cross-validation on the sample.
+The predictive accuracy is the default score, but other metrics may be used
+as well.
 \section{Implementation}
+% deap, variable arity, sklearn
+
+% sem hyperparam genensu (cx pb,...)
+
+
+
+
+% o chap 4
+% exper.
+
+% exp - evaluace - per gen, per ind, cele  10x 10 fold cv (train test?)
+%    --- schovat kappu
+
+% V patek rozmyslet experiment
+% probs & wilt + small, big dataset
+
+% popsat ten velky, jako posledni experiment
+% porovnani ja vs max z openml
+% popsat...
+% boxplot,...
+% cil je jestli to funguje...
+% presne nastaveni. Vsechno. Na githubu mit to nstaveni, zkopirovat configy
+
+% zeptat na obrazky, az to vygeneruju
+
+% patek Conclus, Intro
+
+
+% a ve ctvrtek neni prednaska
+% Cil, nastaveni, vysledky tabulka obrazek jedinec; koment, co je videt, ukazali jsme co jsme chteli?
