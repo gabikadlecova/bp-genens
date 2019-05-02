@@ -287,52 +287,51 @@ if a hyperparameter is not present, it will be always set to its default value.
 
 {\footnotesize
 \begin{longtable}{l l}
-
 \caption{Used classifiers with hyperparameters} \label{tab:clf} \\
-	
+
 \toprule
-\multicolumn{2}{c}{\textbf{KNeighborsClassifier}} \\
+\multicolumn{2}{c}{\textbf{KNeighborsClassifier}} \\*
 \midrule
 
 n\_neighbors & [1, 2, 5] \\
 algorithm & ['auto', 'ball\_tree', 'kd\_tree', 'brute'] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{LinearSVC}} \\
+\multicolumn{2}{c}{\textbf{LinearSVC}} \\*
 \midrule
 
 loss & [hinge,squared\_hinge] \\
 penalty & [l1,l2] \\
 C & [0.1,0.5,1.0,2,5,10,15] \\
 tol & [0.0001,0.001,0.01] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{SVC}} \\
+\multicolumn{2}{c}{\textbf{SVC}} \\*
 \midrule
 
 C & [0.1,0.5,1.0,2,5,10,15] \\
 gamma & [scale,0.0001,0.001,0.01,0.1,0.5] \\
 tol & [0.0001,0.001,0.01] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{LogisticRegression}} \\
+\multicolumn{2}{c}{\textbf{LogisticRegression}} \\*
 \midrule
 
 penalty & [l1,l2] \\
 C & [0.1,0.5,1.0,2,5,10,15] \\
 tol & [0.0001,0.001,0.01] \\
 solver & [newton-cg,lbfgs,liblinear,sag,saga] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{Perceptron}} \\
+\multicolumn{2}{c}{\textbf{Perceptron}} \\*
 \midrule
 
 penalty & [None,l2,l1,elasticnet] \\
 n\_iter & [1,2,5,10,100] \\
 alpha & [0.0001,0.001,0.01] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{SGDClassifier}} \\
+\multicolumn{2}{c}{\textbf{SGDClassifier}} \\*
 \midrule
 
 penalty & [none,l2,l1,elasticnet] \\
@@ -345,30 +344,30 @@ epsilon & [0.01,0.05,0.1,0.5] \\
 learning\_rate & [constant,optimal] \\
 eta0 & [0.01,0.1,0.5] \\
 power\_t & [0.1,0.5,1,2] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{PassiveAggressiveClassifier}} \\
+\multicolumn{2}{c}{\textbf{PassiveAggressiveClassifier}} \\*
 \midrule
 
 loss & [hinge,squared\_hinge] \\
 C & [0.1,0.5,1.0,2,5,10,15] \\
- 
+
 \midrule
 \multicolumn{2}{c}{\textbf{LinearDiscriminantAnalysis}} \\*
 \midrule
 
 solver & [lsqr,eigen] \\
-shrinkage & [None,auto,0.1,0.5,1.0] \\
- 
+shrinkage & [None,auto,0.1,0.5,1.0] \\\noalign{\penalty-5000}
+
 \midrule
-\multicolumn{2}{c}{\textbf{QuadraticDiscriminantAnalysis}} \\
+\multicolumn{2}{c}{\textbf{QuadraticDiscriminantAnalysis}} \\*
 \midrule
 
 reg\_param & [0.0,0.1,0.5,1] \\
 tol & [0.0001,0.001,0.01] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{MLPClassifier}} \\
+\multicolumn{2}{c}{\textbf{MLPClassifier}} \\*
 \midrule
 
 activation & [identity,logistic,relu] \\
@@ -381,9 +380,9 @@ learning\_rate\_init & [0.0001,0.001,0.01] \\
 power\_t & [0.1,0.5,1,2] \\
 momentum & [0.1,0.5,0.9] \\
 hidden\_layer\_sizes & [(100,),(50,),(20,),(10,)] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{DecisionTreeClassifier}} \\
+\multicolumn{2}{c}{\textbf{DecisionTreeClassifier}} \\*
 \midrule
 
 criterion & [gini,entropy] \\
@@ -391,34 +390,34 @@ max\_features & [0.05,0.1,0.25,0.5,0.75,1] \\
 max\_depth & [1,2,5,10,15,25,50,100] \\
 min\_samples\_split & [2,5,10,20] \\
 min\_samples\_leaf & [1,2,5,10,20] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{GaussianNB}} \\* 
-\midrule\nopagebreak
+\multicolumn{2}{c}{\textbf{GaussianNB}} \\*
+\midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{GradientBoostingClassifier}} \\
+\multicolumn{2}{c}{\textbf{GradientBoostingClassifier}} \\*
 \midrule
 
 loss & [deviance,exponential] \\
 n\_estimators & [20,50,100,200] \\
 subsample & [0.3,0.5,0.75,1.0] \\
 
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{RandomForestClassifier}} \\
+\multicolumn{2}{c}{\textbf{RandomForestClassifier}} \\*
 \midrule
 
 n\_estimators & [10,50,100,150,200] \\
 
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{ExtraTreesClassifier}} \\
+\multicolumn{2}{c}{\textbf{ExtraTreesClassifier}} \\*
 \midrule
 
 n\_estimators & [10,50,100,150,200] \\
-  
+
 
 \bottomrule
 
@@ -431,59 +430,62 @@ n\_estimators & [10,50,100,150,200] \\
 \caption{Used preprocessors with hyperparameters} \label{tab:prepro} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{NMF}} \\
+\multicolumn{2}{c}{\textbf{NMF}} \\*
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 solver & [cd,mu] \\
- 
-\midrule
-\multicolumn{2}{c}{\textbf{FactorAnalysis}} \\
-\midrule
 
-feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
- 
 \midrule
-\multicolumn{2}{c}{\textbf{FastICA}} \\
+\multicolumn{2}{c}{\textbf{FactorAnalysis}} \\*
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{PCA}} \\
+\multicolumn{2}{c}{\textbf{FastICA}} \\*
+\midrule
+
+feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
+
+\midrule
+\multicolumn{2}{c}{\textbf{PCA}} \\*
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 whiten & [False,True] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{SelectKBest}} \\
+\multicolumn{2}{c}{\textbf{SelectKBest}} \\*
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
- 
+
 \midrule
-\multicolumn{2}{c}{\textbf{MaxAbsScaler}} \\
+\multicolumn{2}{c}{\textbf{MaxAbsScaler}} \\*
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{MinMaxScaler}} \\
+\multicolumn{2}{c}{\textbf{MinMaxScaler}} \\*
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{Normalizer}} \\
+\multicolumn{2}{c}{\textbf{Normalizer}} \\*
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{StandardScaler}} \\
+\multicolumn{2}{c}{\textbf{StandardScaler}} \\*
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
-\bottomrule
+\bottomrule \\[-8pt]
+\multicolumn{2}{p{0.8\linewidth}}{Note: \emph{feat\_frac} is an artificial
+feature which represents a fraction of total feature count; it is converted
+to \emph{n\_components} or \emph{k} respectively}
 
 \end{longtable}
 }
@@ -498,21 +500,21 @@ score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
 \caption{Used ensembles with hyperparameters} \label{tab:ens} \\
 
 \toprule
-\multicolumn{2}{c}{\textbf{AdaBoostClassifier}} \\
-\toprule
+\multicolumn{2}{c}{\textbf{AdaBoostClassifier}} \\*
+\midrule
 
 n\_estimators & [5, 10, 50, 100, 200] \\
 algorithm & [SAMME, SAMME.R] \\
 
-\toprule
-\multicolumn{2}{c}{\textbf{BaggingClassifier}} \\
-\toprule
+\midrule
+\multicolumn{2}{c}{\textbf{BaggingClassifier}} \\*
+\midrule
 
 n\_estimators & [5, 10, 50, 100, 200] \\
 
-\toprule
-\multicolumn{2}{c}{\textbf{VotingClassifier}} \\
-\toprule
+\midrule
+\multicolumn{2}{c}{\textbf{VotingClassifier}} \\*
+\midrule
 
 voting & [hard]\\
 
@@ -522,7 +524,7 @@ voting & [hard]\\
 }
 %\end{table}
 
-
+ 
 \subsection{Scoring and sampling}
 The score is computed by running the pipeline on the dataset using the
 scikit-learn scorer interface. The default score is predictive accuracy,
@@ -551,6 +553,26 @@ Possible improvements of this approach are presented in section \ref{future}.
 As the samples are typically much smaller than the whole dataset, the score
 is computed as a (stratified) k-fold cross-validation on a sample.
 \section{Implementation}
+The source code of our system is available in a public GitHub repository
+\citep{git_genens}. % or link??
+For the machine-learning side of the implementation we used scikit-learn
+(\cite{scikit-learn}).
+
+We extended the Pipeline class in order to enable usage
+of pipelines as base-learners (some ensembles require \texttt{predict\_proba}
+which is not available on standard pipelines). A meta-transformer was also
+added to provide conversion between \texttt{feat\_frac} and 
+\texttt{n\_components} or \texttt{k} hyperparameters respectively (as reflected
+in table \ref{tab:prepro}).
+
+The components of the genetic algorithm were managed by the tools provided by
+the library DEAP \citep{DEAP_JMLR2012}. However, although DEAP supports genetic
+programming, the primitives cannot be created with variable arity, hence we
+reimplemented the concept.
+For parallelization of fitness evaluations we used the library Joblib
+\citep{joblib}.
+% TODO link or cite? No paper associated with it
+
 % deap, variable arity, sklearn
 
 % sem hyperparam genensu (cx pb,...)
