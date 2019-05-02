@@ -1,4 +1,5 @@
 \chapter{Our solution} \label{our:solution}
+% TODO insert \nopagebreak after \midrule s
 
 In our solution we design an AutoML system for workflow optimization based on
 developmental genetic programming. Compared to existing systems it supports 
@@ -15,7 +16,7 @@ and implementation details are presented in section \ref{genens:eval}.
   \KwResult{optimized pipelines}
   \SetKwFunction{Compile}{Compile}
   \;
-  $individuals \longleftarrow$ run developmental GP optimization on $d$ with $c$ \label{line:devGP} \;
+  $individuals \longleftarrow$ run developmental GP on $d$ with $c$ \label{line:devGP} \;
   $pipelines \longleftarrow$ \Compile{$individuals$} \label{line:compile}
   \;\;
   \KwRet{pipelines}
@@ -38,10 +39,15 @@ and implementation details are presented in section \ref{genens:eval}.
 % sem nekam dat crossval!!! - procedura 'vyhodnot jedince'
 
 \section{Evolutionary optimization of pipelines} \label{genens:devGP}
-The algorithm corresponds to the schema of a general genetic algorithm
-\ref{alg:EA}. In this section we describe the necessary components of the
-algorithm.
-
+In this section, we describe the necessary components of the genetic algorithm.
+The process corresponds to the schema of a general genetic algorithm
+\ref{alg:EA}. A more detailed schema is presented in algorithm \ref{alg:devgp}.
+Individuals of this particular EA are pipelines encoded as trees via
+developmental GP; the encoding is summarized in section \ref{sec:encoding}.
+The initialization procedure (line \ref{alg:genens:init}) is explained in
+section \ref{sec:init}. All reproduction operators
+(line \ref{alg:genens:repro}) are presented in section \ref{sec:repro}.
+Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
 
 \begin{algorithm}
 \DontPrintSemicolon 
@@ -59,14 +65,14 @@ algorithm.
   \SetKwFunction{Compile}{compile}
   \;
  
-  \Fn{\Eval}{
+  \Fn{\Eval}{ \label{alg:genens:eval}
         $pipe \longleftarrow$ \Compile($ind$) \;
         $score, time \longleftarrow$ evaluate $pipe$ on a sample\;
         $ind.fitness \longleftarrow (score, \log\mleft(time\mright))$
   }
   \;
   \tcc{run developmental GP}  
-  $P(0) \longleftarrow$ initialize population of GP trees
+  $P(0) \longleftarrow$ initialize population of GP trees \label{alg:genens:init}
   \;\;
   \While{$n < max\_gen$}{
       \;
@@ -77,7 +83,7 @@ algorithm.
          
       }
       \;
-      \tcc{reproduction}
+      \tcc{reproduction} \label{alg:genens:repro}
       \For{$i$ in \Range{$k/2$}} {
          $i_1, i_2 \longleftarrow$ tournament selection from $P(n)$
 
@@ -106,18 +112,18 @@ algorithm.
 \end{algorithm}
 
 
-\subsection{Individual encoding}
-The individual encoding is one of the most important parts of this system. With
-ensembles and complex feature preprocessing methods like stacking or feature
-union, most of the pipelines become in fact directed acyclic graphs (figure 
-\ref{pic02:pipeline}). Therefore, we cannot directly use the simple tree-based
-encoding. Instead we use the developmental GP with cellular encoding described
-in section \ref{devGP}.
+\subsection{Individual encoding} \label{sec:encoding}
 \begin{figure}[ht]\centering
 \includegraphics[width=0.7\textwidth]{../img/pipeline-pdfa.pdf}
 \caption{Schema of an example pipeline}
 \label{pic02:pipeline}
 \end{figure}
+
+The individual encoding is one of the most important parts of this system. With
+ensembles and complex feature preprocessing methods like stacking or feature
+union, most of the pipelines become in fact directed acyclic graphs (figure~\ref{pic02:pipeline}). Therefore, we cannot directly use the simple tree-based
+encoding. Instead we use the developmental GP with cellular encoding described
+in section~\ref{devGP}.
 
 In our case, the embryo is an empty pipeline. To create a complex pipeline, we
 modify it by inserting steps into it.
@@ -186,7 +192,7 @@ can have output type $ens$ and $data$ resp.}}
 
 \end{table}
 
-\subsection{Initialization}
+\subsection{Initialization} \label{sec:init}
 As the initial population we grow $n$ trees where every tree has a random
 height between 1 and overall maximum height. The tree is grown from root, which
 is either a 'cPipe` or 'cPred` node (table \ref{tab03:nodes}). Then, nodes are
@@ -230,7 +236,7 @@ it. During selection, the actual values are randomly selected from every list.
 The validity is not verified in this phase, instead it is handled in the
 evaluation phase \ref{genens:eval}.
 
-\subsection{Genetic operators}
+\subsection{Genetic operators} \label{sec:repro}
 In our system we use one type of crossover and three different types of
 mutation. The crossover is the standard strongly typed subtree-swap operation.
 The mutation operators will be described in more detail.
@@ -255,7 +261,7 @@ Mutates a hyperparameter of a random node --- chooses a new value from the list
 of possible values. This method has many possible extensions which are more
 described in section \ref{future} (future work).
 
-\subsection{Fitness and selection}
+\subsection{Fitness and selection} \label{sec:fitsel}
 
 The fitness has two objectives --- evaluation score and logarithmized
 evaluation time. The enviromental selection is done via NSGA-II and the 
@@ -473,12 +479,12 @@ score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
 \end{longtable}
 }
 
-{ \footnotesize
+
 \begin{table}[b!]
 
 \centering
 \caption{Used ensembles with hyperparameters}
-
+{ \footnotesize
 \begin{tabular}{>{\itshape}l l}
 
 \toprule
@@ -503,9 +509,9 @@ voting & [hard]\\
 \bottomrule
 
 \end{tabular}
-
-\end{table}
 }
+\end{table}
+
 
 \subsection{Scoring and sampling}
 Long running time is one of the drawbacks of evolution-based systems. On
