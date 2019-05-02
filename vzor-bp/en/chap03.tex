@@ -270,8 +270,8 @@ time-consuming.
 
 \section{Evaluation and performance estimation} \label{genens:eval}
 In this section we elaborate on the evaluation process. First we present the
-pipelines and used methods in more detail. Then we present a performance
-estimation method which was used to decrease the running time.
+pipelines and used methods in more detail. Then we present the evaluation and
+a performance estimation method which was used to decrease the running time.
 
 \subsection{Used machine learning methods} \label{tab03:methods}
 We use the scikit-learn implementation of pipelines. An arbitrary pipeline
@@ -524,29 +524,32 @@ voting & [hard]\\
 
 
 \subsection{Scoring and sampling}
-Long running time is one of the drawbacks of evolution-based systems. On
-large datasets, the duration time may be too long even for a small number of
-populations of small size. As such, it is necessary to decrease the fitness
-evaluation time of a single individual. We use one of the performance
-estimation methods mentioned in section \ref{sec:modelarch} --- evaluation on
-smaller subsets of data.
+The score is computed by running the pipeline on the dataset using the
+scikit-learn scorer interface. The default score is predictive accuracy,
+but other metrics are supported as well. There are multiple evaluation
+strategies to choose from --- the default strategy is k-fold cross-validation,
+but it is also possible to specify a separate validation set for scoring.
+% TODO cite scorer
 
-For fitness evaluations, we generate samples of the original datasets (in case
-of classification, the samples are stratified). The samples were either
-generated per generation or per every fitness evaluation, while the latter
-has proved to be more effective. A possible explanation is that if we generate 
-only one sample per generation, we cannot ensure that it is representative 
-enough. Thus, the individuals which score particularly well on this sample may 
-not generalize well. The second approach suffers from this problem as well, but 
-since we generate a sample per evaluation, every individual has a fair chance 
-of getting a good sample. Possible improvements of this approach are presented 
-in section \ref{future}.
+If the number of examples is small enough, it is possible to use the whole
+dataset for evaluation. On larger datasets though, the duration time may be
+too long even for a small number of fitness evaluations.
+As such, it is necessary to decrease the evaluation time of a single pipeline.
+We use one of the performance estimation methods mentioned in section
+\ref{sec:modelarch} --- evaluation on smaller subsets of data.
 
-As the samples are typically much smaller than the whole dataset, a simple
-train-test evaluation does not generalize sufficiently. The pipeline score
-is thus computed as a (stratified) k-fold cross-validation on the sample.
-The predictive accuracy is the default score, but other metrics may be used
-as well.
+The strategy is as follows: we generate stratified random samples of the
+original dataset. The samples are either generated per generation or per
+every fitness evaluation, while the latter has proved to be more effective. A
+possible explanation is that if we generate only one sample per generation,
+we cannot ensure that it is representative enough. Thus, the individuals which
+score particularly well on this sample may not generalize well. The second
+approach suffers from this problem as well, but since we generate a sample
+per evaluation, every individual has a fair chance of getting a good sample.
+Possible improvements of this approach are presented in section \ref{future}.
+
+As the samples are typically much smaller than the whole dataset, the score
+is computed as a (stratified) k-fold cross-validation on a sample.
 \section{Implementation}
 % deap, variable arity, sklearn
 
