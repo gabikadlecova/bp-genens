@@ -38,9 +38,13 @@ developmental GP; the encoding is summarized in section \ref{sec:encoding}.
 The initialization procedure (line \ref{alg:genens:init}) is explained in
 section \ref{sec:init}. All reproduction operators
 (line \ref{alg:genens:repro}) are presented in section \ref{sec:repro}.
-Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
+Finally, the selection and fitness are specified in section \ref{sec:fitsel}
+(lines \ref{alg:genens:genvalid} and \ref{alg:genens:nsga}).
+
 
 \begin{algorithm}
+{\small
+
 \DontPrintSemicolon 
 \caption{Pipeline optimization --- developmental GP \label{alg:devgp}}
   \KwData{population size $k$, maximum number of generations $max\_gen$,
@@ -54,6 +58,7 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
   \SetKwFunction{Mutarg}{arg\_mutation}
   \SetKwFunction{Eval}{evaluate}
   \SetKwFunction{Compile}{compile}
+  \SetKwFunction{GenValid}{generate\_valid}
   \;
  
   \Fn{\Eval}{ \label{alg:genens:eval}
@@ -62,16 +67,24 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
         $ind.fitness \longleftarrow (score, \log\mleft(time\mright))$
   }
   \;
+  \Fn{\GenValid}{
+  		\While{$score$ is not valid}{
+           $ind \longleftarrow$ initialize a new individual\;
+           $score \longleftarrow$ \Eval{ind}
+        }
+  }  
+  \;  
   \tcc{run developmental GP}  
   $P(0) \longleftarrow$ initialize population of GP trees \label{alg:genens:init}
   \;\;
   \While{$n < max\_gen$}{
       \;
       \tcc{compute fitness of population}
-      \For{$ind$ in $P(n)$} {
-         \Eval{$ind$}
-      
-         
+      \For{$ind$ in $P(n)$} {  \label{alg:genens:genvalid}
+         \Eval{$ind$}\;
+         \If{fitness is not valid}{
+             \GenValid{$ind$}
+         }
       }
       \;
       \tcc{reproduction} \label{alg:genens:repro}
@@ -93,13 +106,20 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
          }
          
          \;
-         add $i_1, i_2$ to offspring population $P_o(n)$
+         \If{\Eval{$i_k$} for $k=1,2$}{
+             add $i_k$ to offspring population $P_o(n)$
+         }
+         \Else{
+             \GenValid{$i_k$} and add to $P_o(n)$
+         }
       }
       \;
-      $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$
+      $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$ \label{alg:genens:nsga} \;
   }
   \;
   \KwRet{Pareto front of $P(c)$} 
+
+}
 \end{algorithm}
 
 
@@ -267,6 +287,11 @@ parental selection is a tournament selection based on individual dominance and
 crowding distance. This approach allows us to prefer simpler yet
 well-performing pipelines, as complex ensemble methods are typically
 time-consuming. 
+
+It may happen that some pipeline fails to run, for example due to an
+unsupported hyperparameter combination. In that case, the individual is
+discarded and a new one is generated. If the next individual is not valid
+either, the process is repeated until a valid individual is generated.
 
 \section{Evaluation and performance estimation} \label{genens:eval}
 In this section we elaborate on the evaluation process. First we present the
@@ -573,10 +598,19 @@ For parallelization of fitness evaluations we used the library Joblib
 \citep{joblib}.
 % TODO link or cite? No paper associated with it
 
-% deap, variable arity, sklearn
+\subsection{Configurability}
+The system can be customised by following configuration hyperparameters:
 
-% sem hyperparam genensu (cx pb,...)
-
+\begin{itemize}
+\item population size
+\item number of generations
+\item maximum tree height
+\item maximum arity (global for all nodes)
+\item timeout per individual evaluation (results in invalid score)
+\item evaluation strategy
+\item recombination probabilities from algorithm \ref{alg:devgp}
+\item custom scorer (according to scikit-learn API)
+\end{itemize}
 
 
 
@@ -601,5 +635,4 @@ For parallelization of fitness evaluations we used the library Joblib
 % patek Conclus, Intro
 
 
-% a ve ctvrtek neni prednaska
 % Cil, nastaveni, vysledky tabulka obrazek jedinec; koment, co je videt, ukazali jsme co jsme chteli?
