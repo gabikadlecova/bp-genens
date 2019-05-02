@@ -7,7 +7,8 @@ arbitrary-sized pipelines as well as complex ensemble structures. An overview
 of the process is shown in algorithm \ref{alg:genens}. In section
 \ref{genens:devGP} we describe how we apply the developmental GP to this
 problem (line \ref{line:devGP}). Evaluation of pipelines (line \ref{line:compile})
-and implementation details are presented in section \ref{genens:eval}.
+and implementation details as well as relation to scikit-learn
+(\cite{scikit-learn}) are presented in section \ref{genens:eval}.
 
 \begin{algorithm}
 \DontPrintSemicolon 
@@ -25,18 +26,8 @@ and implementation details are presented in section \ref{genens:eval}.
 
 % POHLED ZVRCHU shrnout vse, detaily dole
 
-
-% problem
-% reseni generuji dle dev GP
-
-% algo
-
 % indiv. preloz do sklearn pipeliny, evaluuj ji na datech
 
-
-% ROzepsanej GP algo do casti 3.1
-% odkaz z textu do algu
-% sem nekam dat crossval!!! - procedura 'vyhodnot jedince'
 
 \section{Evolutionary optimization of pipelines} \label{genens:devGP}
 In this section, we describe the necessary components of the genetic algorithm.
@@ -67,7 +58,7 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
  
   \Fn{\Eval}{ \label{alg:genens:eval}
         $pipe \longleftarrow$ \Compile($ind$) \;
-        $score, time \longleftarrow$ evaluate $pipe$ on a sample\;
+        $score, time \longleftarrow$ cross-validate $pipe$ on a sample\;
         $ind.fitness \longleftarrow (score, \log\mleft(time\mright))$
   }
   \;
@@ -76,7 +67,7 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}.
   \;\;
   \While{$n < max\_gen$}{
       \;
-      \tcc{evaluate individuals}
+      \tcc{compute fitness of population}
       \For{$ind$ in $P(n)$} {
          \Eval{$ind$}
       
@@ -148,13 +139,16 @@ of a MinMaxScaler and Stochastic gradient descent classifier. The specific
 hyperparameter of every pipeline step are stored aside the nodes and are not
 depicted in the figures.
 
-Table \ref{tab03:nodes} lists the nodes used in the current implementation of
+\label{sec:decoding}
+Table \ref{tab03:nodes} lists all nodes used in the current implementation of
 our system. Input type is defined as a cartesian product of types, output type
 is a single type; terminals have only the output type defined. Output types of
 child nodes must match the input type of parent node. The list is extensible,
 it is possible to add a definion of similar nodes, e.g. a different ensemble
 flavour like stacking. The nodes that are specific for a given estimator
-correspond to the list of methods in section \ref{tab03:methods}.
+correspond to the list of methods in section \ref{tab03:methods}. To decode
+the pipeline, the tree is traversed from root to leaves while applying the
+operations associated with the nodes.
 
 \begin{table}[b!]
 
@@ -262,34 +256,49 @@ of possible values. This method has many possible extensions which are more
 described in section \ref{future} (future work).
 
 \subsection{Fitness and selection} \label{sec:fitsel}
+To compute the fitness, the individuals are decoded into scikit-learn 
+pipelines as described in section \ref{sec:decoding} (individual encoding).
+The specific machine learning methods which are used in the pipelines along
+with evaluation details are listed in the following section.
 
-The fitness has two objectives --- evaluation score and logarithmized
+The fitness has two objectives~---~evaluation score and logarithmized
 evaluation time. The enviromental selection is done via NSGA-II and the 
 parental selection is a tournament selection based on individual dominance and 
-crowding distance. Details about method implementations are provided in 
-section \ref{genens:eval}.
+crowding distance. This approach allows us to prefer simpler yet
+well-performing pipelines, as complex ensemble methods are typically
+time-consuming. 
 
 \section{Evaluation and performance estimation} \label{genens:eval}
-In this section we elaborate the evaluation process. First we present the
+In this section we elaborate on the evaluation process. First we present the
 pipelines and used methods in more detail. Then we present a performance
 estimation method which was used to decrease the running time.
 
 \subsection{Used machine learning methods} \label{tab03:methods}
+We use the scikit-learn implementation of pipelines. An arbitrary pipeline
+consists of multiple transformer steps and one predictor step, which is either
+an ensemble or a base-learner. Any machine learning method that complies to the
+scikit-learn API can act as a pipeline step \citep{sklearn_api}. Regression is
+supported by the system as well, but in this work we focus only on
+classification problems. Tables \ref{tab:clf}, \ref{tab:prepro} and
+\ref{tab:ens} show all machine learning methods present in the default
+configuration. Every method has a list of hyperparameter values associated
+with it. These are optimized during the process of evolution;
+if a hyperparameter is not present, it will be always set to its default value.
 
 {\footnotesize
 \begin{longtable}{l l}
 
-\caption{Used classifiers with hyperparameters}\\
+\caption{Used classifiers with hyperparameters} \label{tab:clf} \\
 	
 \toprule
-\multicolumn{2}{c}{\textbf{KNeighbors}} \\
+\multicolumn{2}{c}{\textbf{KNeighborsClassifier}} \\
 \midrule
 
 n\_neighbors & [1, 2, 5] \\
 algorithm & ['auto', 'ball\_tree', 'kd\_tree', 'brute'] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{LinearSVC }} \\
+\multicolumn{2}{c}{\textbf{LinearSVC}} \\
 \midrule
 
 loss & [hinge,squared\_hinge] \\
@@ -298,7 +307,7 @@ C & [0.1,0.5,1.0,2,5,10,15] \\
 tol & [0.0001,0.001,0.01] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{SVC }} \\
+\multicolumn{2}{c}{\textbf{SVC}} \\
 \midrule
 
 C & [0.1,0.5,1.0,2,5,10,15] \\
@@ -306,7 +315,7 @@ gamma & [scale,0.0001,0.001,0.01,0.1,0.5] \\
 tol & [0.0001,0.001,0.01] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{logR }} \\
+\multicolumn{2}{c}{\textbf{LogisticRegression}} \\
 \midrule
 
 penalty & [l1,l2] \\
@@ -315,7 +324,7 @@ tol & [0.0001,0.001,0.01] \\
 solver & [newton-cg,lbfgs,liblinear,sag,saga] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{Perceptron }} \\
+\multicolumn{2}{c}{\textbf{Perceptron}} \\
 \midrule
 
 penalty & [None,l2,l1,elasticnet] \\
@@ -323,7 +332,7 @@ n\_iter & [1,2,5,10,100] \\
 alpha & [0.0001,0.001,0.01] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{SGD }} \\
+\multicolumn{2}{c}{\textbf{SGDClassifier}} \\
 \midrule
 
 penalty & [none,l2,l1,elasticnet] \\
@@ -338,28 +347,28 @@ eta0 & [0.01,0.1,0.5] \\
 power\_t & [0.1,0.5,1,2] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{PAC }} \\
+\multicolumn{2}{c}{\textbf{PassiveAggressiveClassifier}} \\
 \midrule
 
 loss & [hinge,squared\_hinge] \\
 C & [0.1,0.5,1.0,2,5,10,15] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{LDA }} \\*
+\multicolumn{2}{c}{\textbf{LinearDiscriminantAnalysis}} \\*
 \midrule
 
 solver & [lsqr,eigen] \\
 shrinkage & [None,auto,0.1,0.5,1.0] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{QDA }} \\
+\multicolumn{2}{c}{\textbf{QuadraticDiscriminantAnalysis}} \\
 \midrule
 
 reg\_param & [0.0,0.1,0.5,1] \\
 tol & [0.0001,0.001,0.01] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{MLP }} \\
+\multicolumn{2}{c}{\textbf{MLPClassifier}} \\
 \midrule
 
 activation & [identity,logistic,relu] \\
@@ -374,7 +383,7 @@ momentum & [0.1,0.5,0.9] \\
 hidden\_layer\_sizes & [(100,),(50,),(20,),(10,)] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{DT }} \\
+\multicolumn{2}{c}{\textbf{DecisionTreeClassifier}} \\
 \midrule
 
 criterion & [gini,entropy] \\
@@ -384,12 +393,12 @@ min\_samples\_split & [2,5,10,20] \\
 min\_samples\_leaf & [1,2,5,10,20] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{gaussianNB  }} \\* 
+\multicolumn{2}{c}{\textbf{GaussianNB}} \\* 
 \midrule\nopagebreak
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{gradBoosting }} \\
+\multicolumn{2}{c}{\textbf{GradientBoostingClassifier}} \\
 \midrule
 
 loss & [deviance,exponential] \\
@@ -398,14 +407,14 @@ subsample & [0.3,0.5,0.75,1.0] \\
 
  
 \midrule
-\multicolumn{2}{c}{\textbf{randomForest }} \\
+\multicolumn{2}{c}{\textbf{RandomForestClassifier}} \\
 \midrule
 
 n\_estimators & [10,50,100,150,200] \\
 
  
 \midrule
-\multicolumn{2}{c}{\textbf{extraTrees }} \\
+\multicolumn{2}{c}{\textbf{ExtraTreesClassifier}} \\
 \midrule
 
 n\_estimators & [10,50,100,150,200] \\
@@ -419,58 +428,58 @@ n\_estimators & [10,50,100,150,200] \\
 {\footnotesize
 \begin{longtable}{l l}
 
-\caption{Used preprocessors with hyperparameters}\\
+\caption{Used preprocessors with hyperparameters} \label{tab:prepro} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{NMF }} \\
+\multicolumn{2}{c}{\textbf{NMF}} \\
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 solver & [cd,mu] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{FA }} \\
+\multicolumn{2}{c}{\textbf{FactorAnalysis}} \\
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{FastICA }} \\
+\multicolumn{2}{c}{\textbf{FastICA}} \\
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{PCA }} \\
+\multicolumn{2}{c}{\textbf{PCA}} \\
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 whiten & [False,True] \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{kBest }} \\
+\multicolumn{2}{c}{\textbf{SelectKBest}} \\
 \midrule
 
 feat\_frac & [0.01,0.05,0.1,0.25,0.5,0.75,1] \\
 score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
  
 \midrule
-\multicolumn{2}{c}{\textbf{MaxAbsScaler  }} \\
+\multicolumn{2}{c}{\textbf{MaxAbsScaler}} \\
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{MinMaxScaler  }} \\
+\multicolumn{2}{c}{\textbf{MinMaxScaler}} \\
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{Normalizer  }} \\
+\multicolumn{2}{c}{\textbf{Normalizer}} \\
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
 \midrule
-\multicolumn{2}{c}{\textbf{StandardScaler  }} \\
+\multicolumn{2}{c}{\textbf{StandardScaler}} \\
 \midrule
 \multicolumn{2}{c}{\textit{-}} \\
 
@@ -480,37 +489,38 @@ score\_func & [feature\_selection.chi2,feature\_selection.f\_classif] \\
 }
 
 
-\begin{table}[b!]
+%\begin{table}
 
-\centering
-\caption{Used ensembles with hyperparameters}
+
 { \footnotesize
-\begin{tabular}{>{\itshape}l l}
+\begin{longtable}{>{\itshape}l l}
+
+\caption{Used ensembles with hyperparameters} \label{tab:ens} \\
 
 \toprule
-\multicolumn{2}{c}{\textbf{ada}} \\
+\multicolumn{2}{c}{\textbf{AdaBoostClassifier}} \\
 \toprule
 
 n\_estimators & [5, 10, 50, 100, 200] \\
 algorithm & [SAMME, SAMME.R] \\
 
 \toprule
-\multicolumn{2}{c}{\textbf{bagging}} \\
+\multicolumn{2}{c}{\textbf{BaggingClassifier}} \\
 \toprule
 
 n\_estimators & [5, 10, 50, 100, 200] \\
 
 \toprule
-\multicolumn{2}{c}{\textbf{voting}} \\
+\multicolumn{2}{c}{\textbf{VotingClassifier}} \\
 \toprule
 
 voting & [hard]\\
 
 \bottomrule
 
-\end{tabular}
+\end{longtable}
 }
-\end{table}
+%\end{table}
 
 
 \subsection{Scoring and sampling}
