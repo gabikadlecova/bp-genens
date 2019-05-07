@@ -550,7 +550,7 @@ voting & [hard]\\
 %\end{table}
 
  
-\subsection{Scoring and sampling}
+\subsection{Scoring and sampling} \label{sec:scoresample}
 The score is computed by running the pipeline on the dataset using the
 scikit-learn scorer interface. The default score is predictive accuracy,
 but other metrics are supported as well. There are multiple evaluation
@@ -597,6 +597,8 @@ reimplemented the concept.
 For parallelization of fitness evaluations we used the library Joblib
 \citep{joblib}.
 % TODO link or cite? No paper associated with it
+
+% TODO timeouts cite lib (+ check if any other libraries like that)
 
 \subsection{Configurability}
 The system can be customised by following configuration hyperparameters:
