@@ -91,7 +91,6 @@ such, it is not possible to say that the \emph{full} method is significantly
 better than the sampling. In addition to that, its result scores had a great
 variance in both cases.
 
-% TODO maybe one pyplot with 3 figures
 \begin{figure}[ht]\centering
 \includegraphics[width=0.9\textwidth]{../img/magic-out.png}
 \caption{Comparison of strategies on the magic dataset}
@@ -109,6 +108,35 @@ variance in both cases.
 \caption{Comparison of strategies on the wine-quality-white dataset}
 \label{pic04:winequality}
 \end{figure}
+
+% goal - test relationship between per gen and per ind
+
+% Take maximum
+
+% test comparison + describe
+
+% boxplots for comparison (seaborn)
+%   - winequality
+%   - wilt
+%   - magic
+
+% scipt that gets the maximums and makes the plot(s)
+
+
+\section{Combinations of genetic operators} \label{sec:exp:genop}
+
+
+\section{OpenML-CC18 benchmarking suite}
+% OpenML-CC18
+% benchmark description
+The OpenML-CC18 suite is a set of classification tasks created for the purpose
+of practical benchmarking. It contains 72 datasets available at OpenML
+(\citep{openmlcc18}), where
+every dataset is associated with one task --- a 10-fold cross-validation. The
+datasets included in the suite have been frequently used in recently published
+benchmarks and also satisfy several criteria, like a limit on instance count.
+The full list of criteria can be found in the OpenML documentation
+\cite{openmlcc18docs}.
 
 \begin{sidewaysfigure}[ht]
     \includegraphics[width=\textwidth]{../img/openml-boxplot0.png}
@@ -145,26 +173,3 @@ variance in both cases.
     runs uploaded to OpenML.}
     \label{fig:OpenML:boxplot:3}
 \end{sidewaysfigure}
-
-% goal - test relationship between per gen and per ind
-
-% Take maximum
-
-% test comparison + describe
-
-% boxplots for comparison (seaborn)
-%   - winequality
-%   - wilt
-%   - magic
-
-% scipt that gets the maximums and makes the plot(s)
-
-
-\section{Combinations of genetic operators} \label{sec:exp:genop}
-
-
-\section{OpenML-CC18 benchmarking suite}
-% OpenML-CC18
-% benchmark description
-
-% TODO pyplot fliers=None vs not
