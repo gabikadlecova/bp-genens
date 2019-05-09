@@ -132,7 +132,7 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
 
 The individual encoding is one of the most important parts of this system. With
 ensembles and complex feature preprocessing methods like stacking or feature
-union, most of the pipelines become in fact directed acyclic graphs (figure~\ref{pic02:pipeline}). Therefore, we cannot directly use the simple tree-based
+union, most of the pipelines become in fact directed acyclic graphs (Figure~\ref{pic02:pipeline}). Therefore, we cannot directly use the simple tree-based
 encoding. Instead we use the developmental GP with cellular encoding described
 in section~\ref{devGP}.
 
@@ -147,7 +147,7 @@ modify it by inserting steps into it.
     \label{pic:pipeencoding}%
 \end{figure}
 
-The process can be demonstrated on figure
+The process can be demonstrated on Figure
 \ref{pic:pipeencoding}. The root of the tree represents the embryo which will
 be modified by subsequent operations. In this case, the left subtree modifies
 the ensemble structure whereas the right subtree modifies the feature
@@ -209,7 +209,7 @@ can have output type $ens$ and $data$ resp.}}
 \subsection{Initialization} \label{sec:init}
 As the initial population we grow $n$ trees where every tree has a random
 height between 1 and overall maximum height. The tree is grown from root, which
-is either a `cPipe' or `cPred' node (table \ref{tab03:nodes}). Then, nodes are
+is either a `cPipe' or `cPred' node (Table \ref{tab03:nodes}). Then, nodes are
 inserted into the tree according to the input type of the parent. Before the
 height limit is reached (during the \emph{growing phase}), both functions and
 terminals are inserted into the tree. Then, only terminals are inserted to
@@ -218,7 +218,7 @@ keep the limit.
 As terminals are inserted in the growing phase as well, the tree may become
 smaller than the height limit. However, if the tree were built using the full
 method, it would introduce a lot of feature preprocessing methods for taller
-trees. Therefore, all node types listed in table \ref{tab03:nodes} may be used
+trees. Therefore, all node types listed in Table \ref{tab03:nodes} may be used
 during the growing phase. Moreover, we define special terminal nodes which are
 used only in the last level (\hyperref[tab03:nodes]{footnote 2}). It is
 necessary to include them, as otherwise it would be impossible to finish the
@@ -588,7 +588,7 @@ of pipelines as base-learners (some ensembles require \texttt{predict\_proba}
 which is not available on standard pipelines). A meta-transformer was also
 added to provide conversion between \texttt{feat\_frac} and 
 \texttt{n\_components} or \texttt{k} hyperparameters respectively (as reflected
-in table \ref{tab:prepro}).
+in Table \ref{tab:prepro}).
 
 The components of the genetic algorithm were managed by the tools provided by
 the library DEAP \citep{DEAP_JMLR2012}. However, although DEAP supports genetic

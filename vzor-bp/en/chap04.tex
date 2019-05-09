@@ -8,11 +8,14 @@ suite.
 % TODO cite
 
 \section{Sampling strategies} \label{sec:exp:sample}
-In section \ref{sec:scoresample} we presented two different sampling strategies
---- either a sample of the original dataset is generated for every individual
-evaluation (\emph{per-ind}), or only once per generation (\emph{per-gen}) and
-is shared by all individuals. The goal of this experiment was to test whether
-one approach is better.
+In section \ref{sec:scoresample} we presented two different performance
+estimation strategies aimed at reducing the evaluation time. Both of the methods
+are based on sampling of the full dataset, but the generation of the samples
+differs --- either a sample of the original dataset is generated for every
+individual evaluation (\emph{per-ind}), or only once per generation
+(\emph{per-gen}) and is shared by all individuals. The goal of this experiment
+was to test whether one approach is better and, if possible, to compare it with
+evaluation on the complete dataset (the \emph{full} strategy).
 
 The strategies were tested on three different datasets:
 \begin{itemize}
@@ -26,33 +29,84 @@ wines has been graded by three experts according to sensory properties, the
 target value is a median of these grades. The task is to predict the target
 grading (1--7), which may be either a classification or a regression task.
 \citep{CORTEZ2009547}
-\item MagicTelescope --- Large dataset (19020 instances, 12 features), the task
+\item MagicTelescope (magic) --- Large dataset (19020 instances, 12 features), the task
 is to determine whether the data produced by the Cherenkov gamma telescope
 describes a `signal' or only `background data'. \citep{BOCK2004511}
 \end{itemize}
 
-Sample size was chosen proportionally to the dataset size to reduce the running
-time --- $\frac{1}{4}$ of all instances in case of the medium-sized datasets
-and $\frac{1}{20}$ of the MagicTelescope dataset. The evaluation method
-was 10 times 10-fold cross-validation per strategy.
+\paragraph{Setting}
+
+% TODO weights?
+\begin{table}[b!]
+
+\centering
+\caption{System hyperparameters for the sampling experiment}\label{tab04:exp1:setting}
+\begin{tabular}{l c}
+\toprule
+\textbf{\upshape Hyperparameter} & \textbf{Value} \\
+\midrule
+population size & 200 \\
+maximum gen. & 15 \\
+crossover pb. & 0.5 \\
+subtree mutation pb. & 0.3 \\
+hyperparam. mutation pb. & 0.6 \\
+node mutation pb. & 0.3 \\
+maximum tree height & 5 \\
+timeout per method  & 7 minutes \\
+group weights & \textit{default} \\
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+
+Sample size was chosen proportionally to the dataset size to sufficiently
+reduce the running time --- $\frac{1}{4}$ of all instances in case of the
+medium-sized datasets and $\frac{1}{20}$ for the magic dataset. During the
+evolution, the individual fitness was computed as 5-fold cross-validation on
+the samples or on the full dataset respectively. The final evaluation method of
+resulting optimized pipelines was 10 times 10-fold cross-validation on the full
+dataset.
+
+Hyperparameter settings of the system are presented in Table
+\ref{tab04:exp1:setting}. For the wilt dataset we used Cohen's kappa
+as the scoring method. Cohen's kappa is a statistic used to measure agreement
+of the classifier with the `ground truth', with values ranging from -1.0 to 1.0.
+Value of -1.0 corresponds to complete disagreement, 1.0 to complete agreement
+and 0.0 is equivalent to random guessing. The reason why this more specific
+statistic was used is that due to wilt being an unbalanced dataset, the
+cross-validation accuracy score is close to 1.0 and differences between
+run results may not be apparent.
+
+\paragraph{Results}
+In all of the experiments we found no statistically significant difference
+between \emph{per-gen} and \emph{per-ind} methods. However, not counting
+the outliers, \emph{per-ind} method had a greater variance in all three cases.
+
+The \emph{full} strategy has been shown to be significantly better on the
+wine-quality-white dataset. On the wilt dataset, although most of the scores
+resulting from the \emph{full} method were better than results of the methods
+using sampling, the $95\%$ confidence intervals of all strategies overlap. As
+such, it is not possible to say that the \emph{full} method is significantly
+better than the sampling. In addition to that, its result scores had a great
+variance in both cases.
 
 % TODO maybe one pyplot with 3 figures
-% TODO check if it still is pdf/a :-) :-) :-)
 \begin{figure}[ht]\centering
-\includegraphics[width=0.7\textwidth]{../img/magic-out.png}
-\caption{magic}
+\includegraphics[width=0.9\textwidth]{../img/magic-out.png}
+\caption{Comparison of strategies on the magic dataset}
 \label{pic04:magic}
 \end{figure}
 
 \begin{figure}[ht]\centering
-\includegraphics[width=0.7\textwidth]{../img/wilt-out.png}
-\caption{wilt}
+\includegraphics[width=0.9\textwidth]{../img/wilt-out.png}
+\caption{Comparison of strategies on the wilt dataset}
 \label{pic04:wilt}
 \end{figure}
 
 \begin{figure}[ht]\centering
-\includegraphics[width=0.7\textwidth]{../img/winequality-out.png}
-\caption{wine-quality-white}
+\includegraphics[width=0.9\textwidth]{../img/winequality-out.png}
+\caption{Comparison of strategies on the wine-quality-white dataset}
 \label{pic04:winequality}
 \end{figure}
 
