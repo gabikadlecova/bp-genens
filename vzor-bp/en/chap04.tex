@@ -37,7 +37,7 @@ describes a `signal' or only `background data'. \citep{BOCK2004511}
 \paragraph{Setting}
 
 % TODO weights?
-\begin{table}[h!]
+\begin{table}[ht]
 
 \centering
 \caption{System hyperparameters for the sampling experiment}\label{tab04:exp1:setting}
@@ -59,8 +59,6 @@ group weights & \textit{default} \\
 \end{tabular}
 
 \end{table}
-
-
 
 Sample size was chosen proportionally to the dataset size to sufficiently
 reduce the running time --- $\frac{1}{4}$ of all instances in case of the
@@ -113,14 +111,14 @@ the first and the third quartile respectively.
 % TODO whiskers, quartiles redundant, maybe? Reader knows boxplot definition? 
 
 In all of the experiments we found no statistically significant difference
-between \emph{per-gen} and \emph{per-ind} methods. However, not counting
-the outliers, \emph{per-ind} method had a greater variance in all three cases.
+between per-gen and per-ind methods. However, not counting
+the outliers, per-ind method had a greater variance in all three cases.
 
-The \emph{full} strategy has been shown to be significantly better on the
+The full strategy has been shown to be significantly better on the
 wine-quality-white dataset. On the wilt dataset, although most of the scores
-resulting from the \emph{full} method were better than results of the methods
+resulting from the full method were better than results of the methods
 using sampling, the 95\% confidence intervals of all strategies overlap. As
-such, it is not possible to say that the \emph{full} method is significantly
+such, it is not possible to say that the full method is significantly
 better than the sampling. In addition to that, its result scores had a great
 variance in both cases.
 
@@ -139,6 +137,40 @@ variance in both cases.
 
 
 \section{Combinations of genetic operators} \label{sec:exp:genop}
+
+
+\paragraph{Setting}
+Sample size for the wilt dataset was the same as in section
+\ref{sec:exp:sample}, the evaluation strategy was per-gen. We did not use any
+sampling with the climate dataset, as it is small enough. For fitness
+computation we used the 5-Fold cross-validation. Final evaluation and data
+collection was the same as in the previous experiment.
+
+\begin{table}[ht]
+
+\centering
+\caption{System hyperparameters for the sampling experiment}\label{tab04:exp2:setting}
+\begin{tabular}{l c}
+\toprule
+\textbf{\upshape Hyperparameter} & \textbf{Value} \\
+\midrule
+population size & 200 \\
+maximum gen. & 15 \\
+crossover pb. & 0.5 \\
+subtree mutation pb. & 0.3 \\
+hyperparam. mutation pb. & 0.6 \\
+node mutation pb. & 0.3 \\
+maximum tree height & 5 \\
+timeout per method  & 7 minutes \\
+group weights & \textit{default} \\
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+
+
+\paragraph{Results}
 
 
 \section{OpenML-CC18 benchmarking suite}
@@ -164,7 +196,7 @@ from section \ref{sec:exp:sample} and \ref{sec:exp:genop}.
 
 Table \ref{tab04:exp3:setting} lists hyperparameter settings for all of the
 benchmark runs. Although we showed in section \ref{sec:exp:sample}
-that the \emph{per-ind} method had a greater variance, it was used here as this
+that the per-ind method had a greater variance, it was used here as this
 experiment preceded the sample experiment. For fitness computation, we used
 5-fold cross-validation on a sample. Final evaluation was 10-fold
 cross-validation on the full dataset as specified by the task definition.
