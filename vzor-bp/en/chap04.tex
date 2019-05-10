@@ -65,12 +65,12 @@ reduce the running time --- $\frac{1}{4}$ of all instances in case of the
 medium-sized datasets and $\frac{1}{20}$ for the magic dataset. During the
 evolution, the individual fitness was computed as 5-fold cross-validation on
 the samples or on the full dataset respectively. The final evaluation method of
-resulting optimized pipelines was 10 times 10-fold cross-validation on the full
-dataset.
+resulting optimized pipelines was 10 times 10-fold cross-validation on
+the full dataset.
 
 Hyperparameter settings of the system are presented in Table
 \ref{tab04:exp1:setting}. For the wilt dataset we used Cohen's kappa
-as the scoring method. Cohen's kappa is a statistic used to measure agreement
+as the scoring method \citep{doi:10.1177/001316446002000104}. Cohen's kappa is a statistic used to measure agreement
 of the classifier with the `ground truth', with values ranging from -1.0 to 1.0.
 Value of -1.0 corresponds to complete disagreement, 1.0 to complete agreement
 and 0.0 is equivalent to random guessing. The reason why this more specific
@@ -79,6 +79,18 @@ cross-validation accuracy score is close to 1.0 and differences between
 run results may not be apparent.
 
 \paragraph{Results}
+For each run we have chosen 5 pipelines with the highest score
+from the Pareto front, or the full Pareto front if it had been shorter than 5
+pipelines. These pipelines were again evaluated using the 10-fold
+cross-validation. Finally, the maximum of the scores was chosen. Figures
+\ref{pic04:magic}, \ref{pic04:wilt} and \ref{pic04:winequality} visualize the
+distribution of the 10 scores per strategy. The middle line represents the
+median, while notches of the boxplot determine the 95\% confidence interval
+of the median. The whiskers determine the minimum and maximum values
+respectively (without outliers). The lower and upper edges of the box represent
+the first and the third quartile respectively.
+% TODO whiskers, quartiles redundant, maybe? Reader knows boxplot definition? 
+
 In all of the experiments we found no statistically significant difference
 between \emph{per-gen} and \emph{per-ind} methods. However, not counting
 the outliers, \emph{per-ind} method had a greater variance in all three cases.
@@ -86,25 +98,25 @@ the outliers, \emph{per-ind} method had a greater variance in all three cases.
 The \emph{full} strategy has been shown to be significantly better on the
 wine-quality-white dataset. On the wilt dataset, although most of the scores
 resulting from the \emph{full} method were better than results of the methods
-using sampling, the $95\%$ confidence intervals of all strategies overlap. As
+using sampling, the 95\% confidence intervals of all strategies overlap. As
 such, it is not possible to say that the \emph{full} method is significantly
 better than the sampling. In addition to that, its result scores had a great
 variance in both cases.
 
 \begin{figure}[ht]\centering
-\includegraphics[width=0.9\textwidth]{../img/magic-out.png}
+\includegraphics[width=0.8\textwidth]{../img/magic-out.png}
 \caption{Comparison of strategies on the magic dataset}
 \label{pic04:magic}
 \end{figure}
 
 \begin{figure}[ht]\centering
-\includegraphics[width=0.9\textwidth]{../img/wilt-out.png}
+\includegraphics[width=0.8\textwidth]{../img/wilt-out.png}
 \caption{Comparison of strategies on the wilt dataset}
 \label{pic04:wilt}
 \end{figure}
 
 \begin{figure}[ht]\centering
-\includegraphics[width=0.9\textwidth]{../img/winequality-out.png}
+\includegraphics[width=0.8\textwidth]{../img/winequality-out.png}
 \caption{Comparison of strategies on the wine-quality-white dataset}
 \label{pic04:winequality}
 \end{figure}
@@ -131,19 +143,99 @@ variance in both cases.
 % benchmark description
 The OpenML-CC18 suite is a set of classification tasks created for the purpose
 of practical benchmarking. It contains 72 datasets available at OpenML
-(\citep{openmlcc18}), where
+\citep{openmlcc18}, where
 every dataset is associated with one task --- a 10-fold cross-validation. The
 datasets included in the suite have been frequently used in recently published
 benchmarks and also satisfy several criteria, like a limit on instance count.
 The full list of criteria can be found in the OpenML documentation
-\cite{openmlcc18docs}.
+\citep{openmlcc18docs}.
+
+\paragraph{Setting}
+In order to reduce the overall running time, sample size has been chosen
+according to dataset size, as can be seen in Table \ref{tab04:exp3:size}.
+The sizes were chosen in a heuristic manner by examining duration of runs
+from section \ref{sec:exp:sample} and \ref{sec:exp:genop}.
+
+Table \ref{tab04:exp3:setting} lists hyperparameter settings for all of the
+benchmark runs. Although we showed in section \ref{sec:exp:sample}
+that the \emph{per-ind} method had a greater variance, it was used here as this
+experiment preceded the sample experiment. For fitness computation, we used
+5-fold cross-validation on a sample. Final evaluation was 10-fold
+cross-validation on the full dataset as specified by the task definition.
+
+\paragraph{Results}
+Figures \ref{fig:OpenML:boxplot:0}, \ref{fig:OpenML:boxplot:1},
+\ref{fig:OpenML:boxplot:2} and \ref{fig:OpenML:boxplot:3} show the results
+of our runs compared with results of runs uploaded to OpenML. For every dataset
+we have done only one run due to time limitations. For each run we have
+evaluated top 3 pipelines from the Pareto front and selected the maximum score.
+Data from runs uploaded to OpenML were extracted using the OpenML python API.
+
+The boxplots represent the distribution of predictive accuracies from all runs
+on a particular dataset, while the red circle marks the score of our run.
+It should be noted that the number of runs varies
+greatly between different datasets; some datasets are associated with more
+than $100,000$ runs, while others only with hundreds of runs or even less. Thus,
+the appearance of some boxplots may be skewed. Full statistics can be found on
+the OpenML web page or using the OpenML API \citep{openmlcc18, openmlcc18docs}.
+
+\begin{table}[b!]
+
+\centering
+\caption{Sample size in relation to the dataset size (OpenML-CC18 experiment)}\label{tab04:exp3:size}
+\begin{tabular}{l c}
+\toprule
+\textbf{Row count limit} & \textbf{Sample size} \\
+\midrule
+1000\textsuperscript{1} & 0.5 \\
+5000 & 0.25 \\
+10000 & 0.1 \\
+20000 & 0.05 \\
+large\textsuperscript{2} & 0.02 \\
+large & 0.01 \\
+\bottomrule
+
+\multicolumn{2}{l}{\footnotesize
+\textsuperscript{1}\textit{Datasets of small number of both features and
+instances were not sampled}} \\
+\multicolumn{2}{l}{\footnotesize
+\textsuperscript{2}\textit{Large datasets with less than 10 features}} 
+
+\end{tabular}
+
+\end{table}
+
+\begin{table}[b!]
+
+\centering
+\caption{System hyperparameters for the OpenML-CC18 experiment}\label{tab04:exp3:setting}
+\begin{tabular}{l c}
+\toprule
+\textbf{\upshape Hyperparameter} & \textbf{Value} \\
+\midrule
+population size & 200 \\
+maximum gen. & 15 \\
+crossover pb. & 0.5 \\
+subtree mutation pb. & 0.3 \\
+hyperparam. mutation pb. & 0.6 \\
+node mutation pb. & 0.3 \\
+maximum tree height & 5 \\
+timeout per method  & 7 minutes \\
+evaluation strategy & per-ind \\
+evaluation metric & predictive accuracy \\
+group weights & \textit{default} \\
+\bottomrule
+
+\end{tabular}
+
+\end{table}
 
 \begin{sidewaysfigure}[ht]
     \includegraphics[width=\textwidth]{../img/openml-boxplot0.png}
     \caption[OpenML-CC18 benchmark result comparison (Figure 1 out of 4)]{
     OpenML-CC18 benchmark result comparison (Figure 1 out of 4).
     Boxplots visualize distributions of predictive accuracies of all
-    runs uploaded to OpenML.}
+    runs uploaded to OpenML. Red circles mark our accuracy score on datasets.}
     \label{fig:OpenML:boxplot:0}
 \end{sidewaysfigure}
 
@@ -152,7 +244,7 @@ The full list of criteria can be found in the OpenML documentation
     \caption[OpenML-CC18 benchmark result comparison (Figure 2 out of 4)]{
 	OpenML-CC18 benchmark result comparison (Figure 2 out of 4).    
     Boxplots visualize distributions of predictive accuracies of all
-    runs uploaded to OpenML.}
+    runs uploaded to OpenML. Red circles mark our accuracy score on datasets.}
     \label{fig:OpenML:boxplot:1}
 \end{sidewaysfigure}
 
@@ -161,7 +253,7 @@ The full list of criteria can be found in the OpenML documentation
     \caption[OpenML-CC18 benchmark result comparison (Figure 3 out of 4)]{
 	OpenML-CC18 benchmark result comparison (Figure 3 out of 4).    
     Boxplots visualize distributions of predictive accuracies of all
-    runs uploaded to OpenML.}
+    runs uploaded to OpenML. Red circles mark our accuracy score on datasets.}
     \label{fig:OpenML:boxplot:2}
 \end{sidewaysfigure}
 
@@ -170,6 +262,6 @@ The full list of criteria can be found in the OpenML documentation
     \caption[OpenML-CC18 benchmark result comparison (Figure 4 out of 4)]{
     OpenML-CC18 benchmark result comparison (Figure 4 out of 4).
     Boxplots visualize distributions of predictive accuracies of all
-    runs uploaded to OpenML.}
+    runs uploaded to OpenML. Red circles mark our accuracy score on datasets.}
     \label{fig:OpenML:boxplot:3}
 \end{sidewaysfigure}
