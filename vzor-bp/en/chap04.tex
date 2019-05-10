@@ -137,17 +137,47 @@ variance in both cases.
 
 
 \section{Combinations of genetic operators} \label{sec:exp:genop}
+The goal of this experiment was to test whether the absence of some genetic
+operators influences the result score. The motivation is that if we observe a
+significant difference in results, we can focus on improving a particular
+genetic operator or alter the default probability settings.
 
+We used two datasets with different properties. The first of them is wilt ---
+a medium sized unbalanced dataset described in \ref{sec:exp:sample}. The second
+is \emph{climate-model-simulation-crashes} (climate), a small dataset
+(540 instances, 21 features), where the task is to predict whether a particular
+climate model simulation crashes due to numerical or other reasons.
+\citep{gmd-6-1157-2013}
 
 \paragraph{Setting}
+As described in section \ref{sec:repro}, there is one crossover operator and
+three mutation operators --- node swap, subtree mutation and hyperparameter
+mutation. In every sub-experiment one of the operators is turned off and the
+rest keeps its default probabilities. We also included two additional
+settings - one with all probabilities turned off and one with probabilities
+set to default values.
+
+
+Table \ref{tab04:exp2:setting} lists hyperparameter settings of the system.
 Sample size for the wilt dataset was the same as in section
 \ref{sec:exp:sample}, the evaluation strategy was per-gen. We did not use any
-sampling with the climate dataset, as it is small enough. For fitness
-computation we used the 5-Fold cross-validation. Final evaluation and data
-collection was the same as in the previous experiment.
+sampling with the climate dataset, as it has only a small number of features.
+For fitness computation we used the 5-Fold cross-validation. Final evaluation
+and data collection was the same as in the previous experiment.
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/wilt-mut-redo.png}
+\caption{Test of genetic operators on the wilt dataset}
+\label{pic04:mut-wilt}
+\end{figure}
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/climate-mut-redo.png}
+\caption{Test of genetic operators on the climate dataset}
+\label{pic04:mut-climate}
+\end{figure}
 
 \begin{table}[ht]
-
 \centering
 \caption{System hyperparameters for the sampling experiment}\label{tab04:exp2:setting}
 \begin{tabular}{l c}
