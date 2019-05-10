@@ -37,7 +37,7 @@ describes a `signal' or only `background data'. \citep{BOCK2004511}
 \paragraph{Setting}
 
 % TODO weights?
-\begin{table}[b!]
+\begin{table}[h!]
 
 \centering
 \caption{System hyperparameters for the sampling experiment}\label{tab04:exp1:setting}
@@ -60,6 +60,8 @@ group weights & \textit{default} \\
 
 \end{table}
 
+
+
 Sample size was chosen proportionally to the dataset size to sufficiently
 reduce the running time --- $\frac{1}{4}$ of all instances in case of the
 medium-sized datasets and $\frac{1}{20}$ for the magic dataset. During the
@@ -79,6 +81,25 @@ cross-validation accuracy score is close to 1.0 and differences between
 run results may not be apparent.
 
 \paragraph{Results}
+
+\begin{figure}[b!]\centering
+\includegraphics[width=0.8\textwidth]{../img/magic-out.png}
+\caption{Comparison of strategies on the magic dataset}
+\label{pic04:magic}
+\end{figure}
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/wilt-out.png}
+\caption{Comparison of strategies on the wilt dataset}
+\label{pic04:wilt}
+\end{figure}
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/winequality-out.png}
+\caption{Comparison of strategies on the wine-quality-white dataset}
+\label{pic04:winequality}
+\end{figure}
+
 For each run we have chosen 5 pipelines with the highest score
 from the Pareto front, or the full Pareto front if it had been shorter than 5
 pipelines. These pipelines were again evaluated using the 10-fold
@@ -102,24 +123,6 @@ using sampling, the 95\% confidence intervals of all strategies overlap. As
 such, it is not possible to say that the \emph{full} method is significantly
 better than the sampling. In addition to that, its result scores had a great
 variance in both cases.
-
-\begin{figure}[ht]\centering
-\includegraphics[width=0.8\textwidth]{../img/magic-out.png}
-\caption{Comparison of strategies on the magic dataset}
-\label{pic04:magic}
-\end{figure}
-
-\begin{figure}[ht]\centering
-\includegraphics[width=0.8\textwidth]{../img/wilt-out.png}
-\caption{Comparison of strategies on the wilt dataset}
-\label{pic04:wilt}
-\end{figure}
-
-\begin{figure}[ht]\centering
-\includegraphics[width=0.8\textwidth]{../img/winequality-out.png}
-\caption{Comparison of strategies on the wine-quality-white dataset}
-\label{pic04:winequality}
-\end{figure}
 
 % goal - test relationship between per gen and per ind
 
@@ -166,50 +169,7 @@ experiment preceded the sample experiment. For fitness computation, we used
 5-fold cross-validation on a sample. Final evaluation was 10-fold
 cross-validation on the full dataset as specified by the task definition.
 
-\paragraph{Results}
-Figures \ref{fig:OpenML:boxplot:0}, \ref{fig:OpenML:boxplot:1},
-\ref{fig:OpenML:boxplot:2} and \ref{fig:OpenML:boxplot:3} show the results
-of our runs compared with results of runs uploaded to OpenML. For every dataset
-we have done only one run due to time limitations. For each run we have
-evaluated top 3 pipelines from the Pareto front and selected the maximum score.
-Data from runs uploaded to OpenML were extracted using the OpenML python API.
-
-The boxplots represent the distribution of predictive accuracies from all runs
-on a particular dataset, while the red circle marks the score of our run.
-It should be noted that the number of runs varies
-greatly between different datasets; some datasets are associated with more
-than $100,000$ runs, while others only with hundreds of runs or even less. Thus,
-the appearance of some boxplots may be skewed. Full statistics can be found on
-the OpenML web page or using the OpenML API \citep{openmlcc18, openmlcc18docs}.
-
-As can be seen from the plots, on most of the benchmark datasets our systems
-found a pipeline which scored above the upper quartile or only slightly below
-it. In some cases the score was equal or very close to the overall maximum. On
-the \emph{madelon} dataset we found a pipeline which performed better than the
-maximum. This was however caused by the fact that our system contains the
-kNearestNeighborClassifier (as seen in Table \ref{tab03:methods}), which was
-particularly suitable for this task but OpenML did not contain any run of this
-method on \emph{madelon}.
-
-The datasets which were problematic for our system were notably the
-jungle\_chess\_2pcs\_raw\_endgame\_complete dataset (jungle\_chess for short),
-and CIFAR-10. The jungle\_chess dataset is associated with only
-about $3,700$ runs on only few flows. Most of the flow pipelines contained a
-SVC, which performed particularly well on this dataset. Thus, our system did
-not find the optimal SVC hyperparameter configuration (or a better pipeline),
-but we cannot determine the relation to other yet to be tested flows.
-In case of the CIFAR-10 dataset, most of the runs were from flows representing
-keras models. \citep{chollet2015keras} Moreover, there were only 76 runs
-uploaded to the OpenML. As such, it is not possible to compare our model with
-other traditional methods (not using deep learning).
-
-Our system also performed less well on small datasets and image-recognition
-tasks. The former may have happened due to overfitting, the latter because of
-the absence of tuned more complex models. Both of this problems are to be
-targeted in possible extensions of our system.
-
-% TODO maybe violin plot?
-\begin{table}[b!]
+\begin{table}[b]
 
 \centering
 \caption{Sample size in relation to the dataset size (OpenML-CC18 experiment)}\label{tab04:exp3:size}
@@ -235,7 +195,7 @@ instances were not sampled}} \\
 
 \end{table}
 
-\begin{table}[b!]
+\begin{table}[t]
 
 \centering
 \caption{System hyperparameters for the OpenML-CC18 experiment}\label{tab04:exp3:setting}
@@ -259,6 +219,51 @@ group weights & \textit{default} \\
 \end{tabular}
 
 \end{table}
+
+\paragraph{Results}
+Figures \ref{fig:OpenML:boxplot:0}, \ref{fig:OpenML:boxplot:1},
+\ref{fig:OpenML:boxplot:2} and \ref{fig:OpenML:boxplot:3} show the results
+of our runs compared with results of runs uploaded to OpenML. For every dataset
+we have done only one run due to time limitations. For each run we have
+evaluated top 3 pipelines from the Pareto front and selected the maximum score.
+Data from runs uploaded to OpenML were extracted using the OpenML python API.
+
+The boxplots represent the distribution of predictive accuracies from all runs
+on a particular dataset, while the red circle marks the score of our run.
+It should be noted that the number of runs varies
+greatly between different datasets; some datasets are associated with more
+than $100,000$ runs, while others only with hundreds of runs or even less. Thus,
+the appearance of some boxplots may be skewed. Full statistics can be found on
+the OpenML web page or using the OpenML API \citep{openmlcc18, openmlcc18docs}.
+
+As can be seen from the plots, on most of the benchmark datasets our systems
+found a pipeline which scored above the upper quartile or only slightly below
+it. In some cases the score was equal or very close to the overall maximum. On
+the \emph{madelon} dataset we found a pipeline which performed better than the
+maximum. This was however caused by the fact that our system contains the
+kNearestNeighborClassifier (as seen in Table \ref{tab03:methods}), which was
+particularly suitable for this task but OpenML did not contain any run of this
+method on madelon.
+
+The datasets which were problematic for our system were notably the
+\emph{jungle\_chess} \footnote{Full dataset name, as in OpenML:
+\emph{jungle\_chess\_2pcs\_raw\_endgame\_complete}} dataset, 
+and \emph{CIFAR-10}. The jungle\_chess dataset is associated with only
+about $3,700$ runs on only few flows. Most of the flow pipelines contained a
+SVC, which performed particularly well on this dataset. Thus, our system did
+not find the optimal SVC hyperparameter configuration (or a better pipeline),
+but we cannot determine the relation to other yet to be tested flows.
+In case of the CIFAR-10 dataset, most of the runs were from flows representing
+keras models. \citep{chollet2015keras} Moreover, there were only 76 runs
+uploaded to the OpenML. As such, it is not possible to compare our model with
+other traditional methods (not using deep learning).
+
+Our system also performed less well on small datasets and image-recognition
+tasks. The former may have happened due to overfitting, the latter because of
+the absence of tuned more complex models. Both of this problems are to be
+targeted in possible extensions of our system.
+
+% TODO maybe violin plot?
 
 \begin{sidewaysfigure}[ht]
     \includegraphics[width=\textwidth]{../img/openml-boxplot0.png}
