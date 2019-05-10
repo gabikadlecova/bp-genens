@@ -148,7 +148,10 @@ every dataset is associated with one task --- a 10-fold cross-validation. The
 datasets included in the suite have been frequently used in recently published
 benchmarks and also satisfy several criteria, like a limit on instance count.
 The full list of criteria can be found in the OpenML documentation
-\citep{openmlcc18docs}.
+\citep{openmlcc18docs}. A task is moreover associated with several runs, where
+each run contains data about the used model along with its hyperparameters and
+resulting evaluations. A model without specified hyperparameters is called
+`flow' in the OpenML API.
 
 \paragraph{Setting}
 In order to reduce the overall running time, sample size has been chosen
@@ -179,6 +182,33 @@ than $100,000$ runs, while others only with hundreds of runs or even less. Thus,
 the appearance of some boxplots may be skewed. Full statistics can be found on
 the OpenML web page or using the OpenML API \citep{openmlcc18, openmlcc18docs}.
 
+As can be seen from the plots, on most of the benchmark datasets our systems
+found a pipeline which scored above the upper quartile or only slightly below
+it. In some cases the score was equal or very close to the overall maximum. On
+the \emph{madelon} dataset we found a pipeline which performed better than the
+maximum. This was however caused by the fact that our system contains the
+kNearestNeighborClassifier (as seen in Table \ref{tab03:methods}), which was
+particularly suitable for this task but OpenML did not contain any run of this
+method on \emph{madelon}.
+
+The datasets which were problematic for our system were notably the
+jungle\_chess\_2pcs\_raw\_endgame\_complete dataset (jungle\_chess for short),
+and CIFAR-10. The jungle\_chess dataset is associated with only
+about $3,700$ runs on only few flows. Most of the flow pipelines contained a
+SVC, which performed particularly well on this dataset. Thus, our system did
+not find the optimal SVC hyperparameter configuration (or a better pipeline),
+but we cannot determine the relation to other yet to be tested flows.
+In case of the CIFAR-10 dataset, most of the runs were from flows representing
+keras models. \citep{chollet2015keras} Moreover, there were only 76 runs
+uploaded to the OpenML. As such, it is not possible to compare our model with
+other traditional methods (not using deep learning).
+
+Our system also performed less well on small datasets and image-recognition
+tasks. The former may have happened due to overfitting, the latter because of
+the absence of tuned more complex models. Both of this problems are to be
+targeted in possible extensions of our system.
+
+% TODO maybe violin plot?
 \begin{table}[b!]
 
 \centering
