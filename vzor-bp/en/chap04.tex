@@ -18,6 +18,7 @@ was to test whether one approach is better and, if possible, to compare it with
 evaluation on the complete dataset (the \emph{full} strategy).
 
 The strategies were tested on three different datasets:
+
 \begin{itemize}
 \item wilt --- Medium size dataset (4839 instances, 6 features), the task is to
 detect diseased trees in image segments. There are two target classes: `w' (diseased
@@ -29,9 +30,9 @@ wines has been graded by three experts according to sensory properties, the
 target value is a median of these grades. The task is to predict the target
 grading (1--7), which may be either a classification or a regression task.
 \citep{CORTEZ2009547}
-\item MagicTelescope (magic) --- Large dataset (19020 instances, 12 features), the task
-is to determine whether the data produced by the Cherenkov gamma telescope
-describes a `signal' or only `background data'. \citep{BOCK2004511}
+\item MagicTelescope (magic) --- Large dataset (19020 instances, 12 features)
+the task is to determine whether the data produced by the Cherenkov gamma
+telescope describes a `signal' or only `background data'. \citep{BOCK2004511}
 \end{itemize}
 
 \paragraph{Setting}
@@ -80,6 +81,55 @@ run results may not be apparent.
 
 \paragraph{Results}
 
+% Stats exp 1
+\begin{table}[ht]
+\centering
+\caption{Boxplot statistics of the sample experiment(magic)}\label{tab04:exp1:magboxstats}
+
+\begin{tabular}{lrrcr}
+\toprule
+{} &  minimum &  median &  confidence interval &  maximum \\
+\midrule
+per\_gen &   0.8645 &  0.8792 & $(0.8773,0.8811)$ &    0.882 \\
+per\_ind &   0.8720 &  0.8795 & $(0.8772,0.8819)$ &    0.882 \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Boxplot statistics of the sample experiment (wilt)}\label{tab04:exp1:wboxstats}
+
+\begin{tabular}{lrrcr}
+\toprule
+{} &  minimum & median & confidence interval &  maximum \\
+\midrule
+full     &   0.8695 &  0.8798 &   $(0.8736,0.8861)$ &   0.8908 \\
+per\_gen &   0.8684 &  0.8730 &   $(0.8699,0.8760)$ &   0.8878 \\
+per\_ind &   0.8661 &  0.8736 &   $(0.8708,0.8764)$ &   0.8877 \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Boxplot statistics of the sample experiment (wine-quality-white)}\label{tab04:exp1:wineboxstats}
+
+\begin{tabular}{lrrcr}
+\toprule
+{} &  minimum &  median & confidence interval &  maximum \\
+\midrule
+full     &   0.5524 &  0.7059 &   $(0.6491,0.7627)$ &   0.7097 \\
+per\_gen &   0.5295 &  0.5391 &   $(0.5372,0.5409)$ &   0.5518 \\
+per\_ind &   0.5340 &  0.5380 &   $(0.5343,0.5417)$ &   0.5454 \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+% Boxplots exp 1
 \begin{figure}[b!]\centering
 \includegraphics[width=0.8\textwidth]{../img/magic-out.png}
 \caption{Comparison of strategies on the magic dataset}
@@ -103,11 +153,13 @@ from the Pareto front, or the full Pareto front if it had been shorter than 5
 pipelines. These pipelines were again evaluated using the 10-fold
 cross-validation. Finally, the maximum of the scores was chosen. Figures
 \ref{pic04:magic}, \ref{pic04:wilt} and \ref{pic04:winequality} visualize the
-distribution of the 10 scores per strategy. The middle line represents the
-median, while notches of the boxplot determine the 95\% confidence interval
-of the median. The whiskers determine the minimum and maximum values
-respectively (without outliers). The lower and upper edges of the box represent
-the first and the third quartile respectively.
+distribution of the 10 scores per strategy, with relevant statistics of the
+boxplots listed in Tables \ref{tab04:exp1:magboxstats},
+\ref{tab04:exp1:wboxstats}, \ref{tab04:exp1:wineboxstats}. The middle line
+represents the median, while notches of the boxplot determine the 95\%
+confidence interval of the median. The whiskers determine the minimum and
+maximum values respectively (without outliers). The lower and upper edges of
+the box represent the first and the third quartile respectively.
 % TODO whiskers, quartiles redundant, maybe? Reader knows boxplot definition? 
 
 In all of the experiments we found no statistically significant difference
@@ -142,44 +194,41 @@ operators influences the result score. The motivation is that if we observe a
 significant difference in results, we can focus on improving a particular
 genetic operator or alter the default probability settings.
 
-We used two datasets with different properties. The first of them is wilt ---
-a medium sized unbalanced dataset described in \ref{sec:exp:sample}. The second
-is \emph{climate-model-simulation-crashes} (climate), a small dataset
-(540 instances, 21 features), where the task is to predict whether a particular
+We used two datasets with different properties:
+\begin{itemize}
+\item wilt --- Medium sized dataset, see section \ref{sec:exp:sample}
+\item climate-model-simulation-crashes (climate) --- Small dataset (540
+instances, 21 features), the task is to predict whether a particular
 climate model simulation crashes due to numerical or other reasons.
 \citep{gmd-6-1157-2013}
+\end{itemize}
 
 \paragraph{Setting}
+
 As described in section \ref{sec:repro}, there is one crossover operator and
 three mutation operators --- node swap, subtree mutation and hyperparameter
-mutation. In every sub-experiment one of the operators is turned off and the
-rest keeps its default probabilities. We also included two additional
-settings - one with all probabilities turned off and one with probabilities
-set to default values.
-
-
-Table \ref{tab04:exp2:setting} lists hyperparameter settings of the system.
+mutation. There will be following sub-experiments:
+\begin{itemize}
+\setlength\itemsep{0.3em}
+\item \textbf{all} --- all genetic operators included
+\item \textbf{no-arg} --- hyperparameter mutation turned off
+\item \textbf{no-cx} --- crossover turned off
+\item \textbf{no-node} --- node mutation turned off
+\item \textbf{no-subtree} --- subtree crossover turned off
+\item \textbf{nothing} -- all genetic operators turned off
+\end{itemize}
+In every sub-experiment all operators that are not excluded keep their default
+probabilities. The probabilities and other system hyperparameter
+settings are listed in Table \ref{tab04:exp2:setting}.
 Sample size for the wilt dataset was the same as in section
 \ref{sec:exp:sample}, the evaluation strategy was per-gen. We did not use any
 sampling with the climate dataset, as it has only a small number of features.
-For fitness computation we used the 5-Fold cross-validation. Final evaluation
+For fitness computation we used the 5-fold cross-validation. Final evaluation
 and data collection was the same as in the previous experiment.
-
-\begin{figure}[pt]\centering
-\includegraphics[width=0.8\textwidth]{../img/wilt-mut-redo.png}
-\caption{Test of genetic operators on the wilt dataset}
-\label{pic04:mut-wilt}
-\end{figure}
-
-\begin{figure}[pt]\centering
-\includegraphics[width=0.8\textwidth]{../img/climate-mut-redo.png}
-\caption{Test of genetic operators on the climate dataset}
-\label{pic04:mut-climate}
-\end{figure}
 
 \begin{table}[ht]
 \centering
-\caption{System hyperparameters for the sampling experiment}\label{tab04:exp2:setting}
+\caption{System hyperparameters for the genetic operator experiment}\label{tab04:exp2:setting}
 \begin{tabular}{l c}
 \toprule
 \textbf{\upshape Hyperparameter} & \textbf{Value} \\
@@ -199,13 +248,79 @@ group weights & \textit{default} \\
 
 \end{table}
 
-
 \paragraph{Results}
+The results of this experiment are depicted in Figures \ref{pic04:mut-wilt} and
+\ref{pic04:mut-climate}, with boxplot statistics listed in Tables
+\ref{tab04:exp2:wboxstats} and \ref{tab04:exp2:cboxstats}.
 
+In case of the wilt dataset, only `no-arg' did not introduce any improvement
+when compared to results from `nothing'. This probably means that the
+hyperparameter mutation is essential on this dataset --- in fact, the best
+pipelines usually contained a SVC, which relies heavily on hyperparameter
+optimization. \citep{Feurer:2015:ERA:2969442.2969547}
+
+\textit{TBD why is `no-node' better than the others?}
+
+The confidence intervals of medians of `nothing' and other methods, except
+`no-node' on climate dataset, overlap. A possible explanation may be that
+there still is a chance that a good individual is found during the
+initialization, thus producing a better final score. The conclusion is that the
+genetic operators and corresponding probabilities need to be tuned to reliably
+produce better pipelines than those generated in the first generation.
+
+\begin{table}[ht]
+\centering
+\caption{Boxplot statistics of the genetic operators experiment (wilt)}\label{tab04:exp2:wboxstats}
+\begin{tabular}{lrrcr}
+\toprule
+{} &  minimum &  median &  confidence interval &  maximum \\
+\midrule
+all        &   0.8658 &  0.8749 &   $(0.8711,0.8786)$ &   0.8820 \\
+no-arg     &   0.8526 &  0.8694 &   $(0.8684,0.8703)$ &   0.8794 \\
+no-cx      &   0.8499 &  0.8748 &   $(0.8715,0.8781)$ &   0.8875 \\
+no-node    &   0.8664 &  0.8747 &   $(0.8721,0.8772)$ &   0.8864 \\
+no-subtree &   0.8675 &  0.8738 &   $(0.8706,0.8770)$ &   0.8850 \\
+nothing    &   0.8434 &  0.8659 &   $(0.8585,0.8734)$ &   0.8787 \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Boxplot statistics of the genetic operators experiment (climate)}\label{tab04:exp2:cboxstats}
+\begin{tabular}{lrrcr}
+\toprule
+{} &  minimum & median &  confidence interval &  maximum \\
+\midrule
+all        &   0.9112 &  0.9167 &   $(0.9135, 0.9200)$ &   0.9280 \\
+no-arg     &   0.9149 &  0.9159 &   $(0.9140, 0.9177)$ &   0.9296 \\
+no-cx      &   0.9111 &  0.9168 &   $(0.9152, 0.9184)$ &   0.9242 \\
+no-node    &   0.9149 &  0.9223 &   $(0.9199, 0.9247)$ &   0.9259 \\
+no-subtree &   0.9112 &  0.9177 &   $(0.9155, 0.9200)$ &   0.9316 \\
+nothing    &   0.9055 &  0.9149 &   $(0.9133, 0.9165)$ &   0.9185 \\
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/wilt-mut-redo.png}
+\caption{Test of genetic operators on the wilt dataset}
+\label{pic04:mut-wilt}
+\end{figure}
+
+\begin{figure}[pt]\centering
+\includegraphics[width=0.8\textwidth]{../img/climate-mut-redo.png}
+\caption{Test of genetic operators on the climate dataset}
+\label{pic04:mut-climate}
+\end{figure}
 
 \section{OpenML-CC18 benchmarking suite}
 % OpenML-CC18
 % benchmark description
+
+%\citep{OpenML2013}
 The OpenML-CC18 suite is a set of classification tasks created for the purpose
 of practical benchmarking. It contains 72 datasets available at OpenML
 \citep{openmlcc18}, where
