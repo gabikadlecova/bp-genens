@@ -345,18 +345,33 @@ nothing    &   0.9055 &  0.9149 &   $(0.9133, 0.9165)$ &   0.9185 & 0:04 \\
 % OpenML-CC18
 % benchmark description
 
-%\citep{OpenML2013}
-The OpenML-CC18 suite is a set of classification tasks created for the purpose
-of practical benchmarking. It contains 72 datasets available at OpenML
-\citep{openmlcc18}, where
-every dataset is associated with one task --- a 10-fold cross-validation. The
-datasets included in the suite have been frequently used in recently published
-benchmarks and also satisfy several criteria, like a limit on instance count.
-The full list of criteria can be found in the OpenML documentation
-\citep{openmlcc18docs}. A task is moreover associated with several runs, where
-each run contains data about the used model along with its hyperparameters and
-resulting evaluations. A model without specified hyperparameters is called
-`flow' in the OpenML API.
+OpenML is a machine learning environment designed for sharing of machine
+learning problem data \citep{OpenML2013}. It provides a variety of datasets
+along with tasks and metadata of past runs. The data is accessible via APIs
+available for several programming languages, notably Python or R
+\citep{openmlcc18docs}. OpenML classifies the components of solving a
+machine learning problem into following categories:
+\begin{itemize}
+\item Datasets --- The datasets are stored along with description and other
+metadata.
+\item Tasks --- A task is associated with a particular dataset. An example of a
+task is 10 times 10-fold cross-validation on the dataset.
+\item Flows --- A flow describes a specific machine learning algorithm.
+\item Runs --- A run is a record of a flow with specified hyperparameters
+applied to a task.
+\end{itemize}
+There are also several concept in development, like a study, which is a
+collection of data from above-mentioned categories.
+
+In this experiment we have used a study named OpenML-CC18 \citep{openmlcc18}.
+This collection is a set of classification tasks created for the purpose
+of practical benchmarking. It contains 72 datasets which have been frequently
+used in recently published benchmarks and also satisfy several criteria, like
+a limit on instance count or reasonable task difficulty. The full list of
+criteria can be found in the OpenML documentation \citep{openmlcc18docs}.
+Every dataset is associated with one task --- a 10-fold cross-validation. 
+Majority of the tasks has already a great number of runs recorded along it,
+therefore the suite can be used as reference data for our runs.
 
 \paragraph{Setting}
 In order to reduce the overall running time, sample size has been chosen
@@ -428,7 +443,8 @@ Figures \ref{fig:OpenML:boxplot:0}, \ref{fig:OpenML:boxplot:1},
 of our runs compared with results of runs uploaded to OpenML. For every dataset
 we have done only one run due to time limitations. For each run we have
 evaluated top 3 pipelines from the Pareto front and selected the maximum score.
-Data from runs uploaded to OpenML were extracted using the OpenML python API.
+Data from runs uploaded to OpenML were extracted using the OpenML python API
+\citep{openmlcc18api}.
 
 The boxplots represent the distribution of predictive accuracies from all runs
 on a particular dataset, while the red circle marks the score of our run.
@@ -442,10 +458,7 @@ As can be seen from the plots, on most of the benchmark datasets our systems
 found a pipeline which scored above the upper quartile or only slightly below
 it. In some cases the score was equal or very close to the overall maximum. On
 the \emph{madelon} dataset we found a pipeline which performed better than the
-maximum. This was however caused by the fact that our system contains the
-kNearestNeighborClassifier (as seen in Table \ref{tab03:methods}), which was
-particularly suitable for this task but OpenML did not contain any run of this
-method on madelon.
+maximum run score recorded in OpenML.
 
 The datasets which were problematic for our system were notably the
 \emph{jungle\_chess} \footnote{Full dataset name, as in OpenML:
@@ -455,15 +468,18 @@ about $3,700$ runs on only few flows. Most of the flow pipelines contained a
 SVC, which performed particularly well on this dataset. Thus, our system did
 not find the optimal SVC hyperparameter configuration (or a better pipeline),
 but we cannot determine the relation to other yet to be tested flows.
-In case of the CIFAR-10 dataset, most of the runs were from flows representing
-keras models \citep{chollet2015keras}. Moreover, there were only 76 runs
-uploaded to the OpenML. As such, it is not possible to compare our model with
-other traditional methods (not using deep learning).
 
-Our system also performed less well on small datasets and image-recognition
-tasks. The former may have happened due to overfitting, the latter because of
-the absence of tuned more complex models. Both of this problems are to be
-targeted in possible extensions of our system.
+In case of the CIFAR-10 dataset, there were only 76 runs. Moreover, most of the
+runs were from flows representing keras models \citep{chollet2015keras}. These
+are deep neural networks with a very large hyperparameter configuration space
+and several layers, which is beyond the scope of our system as we use only
+traditional methods.
+
+Our system also performed less well on some small datasets. Usually, a more
+complex model was one of the individuals with the biggest fitness, but the
+resulting score was lower than the score of some simpler models. This may have
+happened due to overfitting and should be solved in following versions of our
+system by employing a more elaborate evaluation method.
 
 % TODO maybe violin plot?
 
