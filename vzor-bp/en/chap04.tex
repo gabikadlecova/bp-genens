@@ -1,11 +1,22 @@
 \chapter{Experiments} \label{experiments}
-We have carried out three experiments. The goal of the first two experiments was
-to test some specific hyperparameter settings of our system. First, we compared
-different sampling strategies (section \ref{sec:exp:sample}), then we
-experimented with the usage of genetic operators (section \ref{sec:exp:genop}).
-The last experiment encompasses runs of our system on the OpenML-CC18 benchmarking
-suite.
-% TODO cite
+In this chapter, we present results of three experiments which we carried out
+in order to estimate the performance of our system and to explore different
+hyperparameter settings. The outcomes of these experiments can determine the
+direction of future research on our system and enable us to compare
+it with reference data.
+
+The first two experiments were aimed at discovering relations between
+particular hyperparameter settings. In the first experiment
+(section \ref{sec:exp:sample}) we compare the two
+sampling strategies which were presented in section \ref{sec:scoresample}.
+The second experiment focuses on genetic operators; we tried to determine
+whether the result changes if we turn one of these operators off
+(section \ref{sec:exp:genop}). 
+
+The goal of the last experiment was to evaluate our system on benchmark
+datasets and compare the results with reference data
+(section \ref{sec:exp:openml}). We used the OpenML-CC18 benchmarking suite for
+this purpose. \citep{openmlcc18}
 
 \section{Sampling strategies} \label{sec:exp:sample}
 In section \ref{sec:scoresample} we presented two different performance
@@ -316,7 +327,7 @@ nothing    &   0.9055 &  0.9149 &   $(0.9133, 0.9165)$ &   0.9185 \\
 \label{pic04:mut-climate}
 \end{figure}
 
-\section{OpenML-CC18 benchmarking suite}
+\section{OpenML-CC18 benchmarking suite} \label{sec:exp:openml}
 % OpenML-CC18
 % benchmark description
 
