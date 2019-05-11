@@ -16,11 +16,11 @@ whether the result changes if we turn one of these operators off
 The goal of the last experiment was to evaluate our system on benchmark
 datasets and compare the results with reference data
 (section \ref{sec:exp:openml}). We used the OpenML-CC18 benchmarking suite for
-this purpose. \citep{openmlcc18}
+this purpose \citep{openmlcc18}.
 
 \section{Sampling strategies} \label{sec:exp:sample}
 In section \ref{sec:scoresample} we presented two different performance
-estimation strategies aimed at reducing the evaluation time. Both of the methods
+estimation strategies aimed at reducing the evaluation time. Both methods
 are based on sampling of the full dataset, but the generation of the samples
 differs --- either a sample of the original dataset is generated for every
 individual evaluation (\emph{per-ind}), or only once per generation
@@ -33,17 +33,18 @@ The strategies were tested on three different datasets:
 \begin{itemize}
 \item wilt --- Medium size dataset (4839 instances, 6 features), the task is to
 detect diseased trees in image segments. There are two target classes: `w' (diseased
-trees) and `n' (all other land cover), only few instances of the `w' class
-are present (261) \citep{doi:10.1080/01431161.2013.810825}.
+trees) and `n' (all other land cover). The dataset is heavily unbalanced; only
+few instances of the `w' class are present (261)
+\citep{doi:10.1080/01431161.2013.810825}.
 \item wine-quality-white --- Medium size dataset (4898 instances, 12 features),
 the features represent properties of a particular Portuguese wine. Each of the
 wines has been graded by three experts according to sensory properties, the
 target value is a median of these grades. The task is to predict the target
 grading (1--7), which may be either a classification or a regression task.
-\citep{CORTEZ2009547}
+We solve it as a classification task \citep{CORTEZ2009547}.
 \item MagicTelescope (magic) --- Large dataset (19020 instances, 12 features)
 the task is to determine whether the data produced by the Cherenkov gamma
-telescope describes a `signal' or only `background data'. \citep{BOCK2004511}
+telescope describes a `signal' or only `background data' \citep{BOCK2004511}.
 \end{itemize}
 
 \paragraph{Setting}
@@ -72,7 +73,7 @@ group weights & \textit{default} \\
 
 \end{table}
 
-Sample size was chosen proportionally to the dataset size to sufficiently
+The sample size was chosen proportionally to the dataset size to sufficiently
 reduce the running time --- $\frac{1}{4}$ of all instances in case of the
 medium-sized datasets and $\frac{1}{20}$ for the magic dataset. During the
 evolution, the individual fitness was computed as 5-fold cross-validation on
@@ -178,10 +179,10 @@ boxplots are listed in Tables \ref{tab04:exp1:magboxstats},
 \ref{tab04:exp1:wboxstats}, \ref{tab04:exp1:wineboxstats}, along with median of
 evaluation times.
 
-We have chosen the median instead of mean evaluation time, as the experiments
-were run on multiple machines with different hardware components. Thus, the
-evaluation time is only illustrative. A more precise analysis would be a part
-of future works.
+We have chosen the median evaluation time instead of mean evaluation time,
+as the experiments were run on multiple machines with different hardware
+components. Thus, the evaluation time is only illustrative. A more precise
+analysis would be a part of future works.
 
 Middle line of the boxplot represents the median, while notches determine the
 95\% confidence interval of the median. The whiskers determine the minimum and
@@ -201,18 +202,9 @@ such, it is not possible to say that the full method is significantly
 better than the sampling. In addition to that, its result scores had a great
 variance in both cases.
 
-% goal - test relationship between per gen and per ind
-
-% Take maximum
-
-% test comparison + describe
-
-% boxplots for comparison (seaborn)
-%   - winequality
-%   - wilt
-%   - magic
-
-% scipt that gets the maximums and makes the plot(s)
+On small datasets or when the longer duration is not overly limiting, the full
+method should be preferred. In other cases the per-gen method with a reasonable
+sample size is a good compromise.
 
 
 \section{Combinations of genetic operators} \label{sec:exp:genop}
@@ -226,8 +218,8 @@ We used two datasets with different properties:
 \item wilt --- Medium sized dataset, see section \ref{sec:exp:sample}
 \item climate-model-simulation-crashes (climate) --- Small dataset (540
 instances, 21 features), the task is to predict whether a particular
-climate model simulation crashes due to numerical or other reasons.
-\citep{gmd-6-1157-2013}
+climate model simulation crashes due to numerical or other reasons
+\citep{gmd-6-1157-2013}.
 \end{itemize}
 
 \paragraph{Setting}
@@ -284,7 +276,7 @@ In case of the wilt dataset, only `no-arg' did not introduce any improvement
 when compared to results from `nothing'. This probably means that the
 hyperparameter mutation is essential on this dataset --- in fact, the best
 pipelines usually contained a SVC, which relies heavily on hyperparameter
-optimization. \citep{Feurer:2015:ERA:2969442.2969547}
+optimization \citep{Feurer:2015:ERA:2969442.2969547}.
 
 \textit{TBD why is `no-node' better than the others?}
 
@@ -464,7 +456,7 @@ SVC, which performed particularly well on this dataset. Thus, our system did
 not find the optimal SVC hyperparameter configuration (or a better pipeline),
 but we cannot determine the relation to other yet to be tested flows.
 In case of the CIFAR-10 dataset, most of the runs were from flows representing
-keras models. \citep{chollet2015keras} Moreover, there were only 76 runs
+keras models \citep{chollet2015keras}. Moreover, there were only 76 runs
 uploaded to the OpenML. As such, it is not possible to compare our model with
 other traditional methods (not using deep learning).
 
