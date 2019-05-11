@@ -97,13 +97,16 @@ run results may not be apparent.
 \centering
 \caption{Boxplot statistics of the sample experiment(magic)}\label{tab04:exp1:magboxstats}
 
-\begin{tabular}{lrrcr}
+\begin{tabular}{lrrrr|c}
 \toprule
-{} &  minimum &  median &  confidence interval &  maximum \\
+{} &  minimum &  median &  confidence interval &  maximum & eval.\,time\textsuperscript{1} \\
 \midrule
-per\_gen &   0.8645 &  0.8792 & $(0.8773,0.8811)$ &    0.882 \\
-per\_ind &   0.8720 &  0.8795 & $(0.8772,0.8819)$ &    0.882 \\
+per\_gen &   0.8645 &  0.8792 & $(0.8773,0.8811)$ &    0.882 & 0:46 \\
+per\_ind &   0.8720 &  0.8795 & $(0.8772,0.8819)$ &    0.882 & 0:54 \\
 \bottomrule
+
+\multicolumn{6}{l}{\footnotesize\textsuperscript{1}\itshape Median of evaluation times of runs}
+
 \end{tabular}
 
 \end{table}
@@ -112,14 +115,17 @@ per\_ind &   0.8720 &  0.8795 & $(0.8772,0.8819)$ &    0.882 \\
 \centering
 \caption{Boxplot statistics of the sample experiment (wilt)}\label{tab04:exp1:wboxstats}
 
-\begin{tabular}{lrrcr}
+\begin{tabular}{lrrrr|c}
 \toprule
-{} &  minimum & median & confidence interval &  maximum \\
+{} &  minimum & median & confidence interval &  maximum & eval.\,time\textsuperscript{1} \\
 \midrule
-full     &   0.8695 &  0.8798 &   $(0.8736,0.8861)$ &   0.8908 \\
-per\_gen &   0.8684 &  0.8730 &   $(0.8699,0.8760)$ &   0.8878 \\
-per\_ind &   0.8661 &  0.8736 &   $(0.8708,0.8764)$ &   0.8877 \\
+full     &   0.8695 &  0.8798 &   $(0.8736,0.8861)$ &   0.8908 & 2:02 \\
+per\_gen &   0.8684 &  0.8730 &   $(0.8699,0.8760)$ &   0.8878 & 1:00 \\
+per\_ind &   0.8661 &  0.8736 &   $(0.8708,0.8764)$ &   0.8877 & 0:47 \\
 \bottomrule
+
+\multicolumn{6}{l}{\footnotesize\textsuperscript{1}\itshape Median of evaluation times of runs}
+
 \end{tabular}
 
 \end{table}
@@ -128,14 +134,17 @@ per\_ind &   0.8661 &  0.8736 &   $(0.8708,0.8764)$ &   0.8877 \\
 \centering
 \caption{Boxplot statistics of the sample experiment (wine-quality-white)}\label{tab04:exp1:wineboxstats}
 
-\begin{tabular}{lrrcr}
+\begin{tabular}{lrrrr|c}
 \toprule
-{} &  minimum &  median & confidence interval &  maximum \\
+{} &  minimum &  median & confidence interval &  maximum & eval.\,time\textsuperscript{1} \\
 \midrule
-full     &   0.5524 &  0.7059 &   $(0.6491,0.7627)$ &   0.7097 \\
-per\_gen &   0.5295 &  0.5391 &   $(0.5372,0.5409)$ &   0.5518 \\
-per\_ind &   0.5340 &  0.5380 &   $(0.5343,0.5417)$ &   0.5454 \\
+full     &   0.5524 &  0.7059 &   $(0.6491,0.7627)$ &   0.7097 & 6:06 \\
+per\_gen &   0.5295 &  0.5391 &   $(0.5372,0.5409)$ &   0.5518 & 3:19 \\
+per\_ind &   0.5340 &  0.5380 &   $(0.5343,0.5417)$ &   0.5454 & 2:23 \\
 \bottomrule
+
+\multicolumn{6}{l}{\footnotesize\textsuperscript{1}\itshape Median of evaluation times of runs}
+
 \end{tabular}
 
 \end{table}
@@ -164,11 +173,18 @@ from the Pareto front, or the full Pareto front if it had been shorter than 5
 pipelines. These pipelines were again evaluated using the 10-fold
 cross-validation. Finally, the maximum of the scores was chosen. Figures
 \ref{pic04:magic}, \ref{pic04:wilt} and \ref{pic04:winequality} visualize the
-distribution of the 10 scores per strategy, with relevant statistics of the
-boxplots listed in Tables \ref{tab04:exp1:magboxstats},
-\ref{tab04:exp1:wboxstats}, \ref{tab04:exp1:wineboxstats}. The middle line
-represents the median, while notches of the boxplot determine the 95\%
-confidence interval of the median. The whiskers determine the minimum and
+distribution of the 10 scores per strategy. Relevant statistics of the
+boxplots are listed in Tables \ref{tab04:exp1:magboxstats},
+\ref{tab04:exp1:wboxstats}, \ref{tab04:exp1:wineboxstats}, along with median of
+evaluation times.
+
+We have chosen the median instead of mean evaluation time, as the experiments
+were run on multiple machines with different hardware components. Thus, the
+evaluation time is only illustrative. A more precise analysis would be a part
+of future works.
+
+Middle line of the boxplot represents the median, while notches determine the
+95\% confidence interval of the median. The whiskers determine the minimum and
 maximum values respectively (without outliers). The lower and upper edges of
 the box represent the first and the third quartile respectively.
 % TODO whiskers, quartiles redundant, maybe? Reader knows boxplot definition? 
@@ -261,8 +277,8 @@ group weights & \textit{default} \\
 
 \paragraph{Results}
 The results of this experiment are depicted in Figures \ref{pic04:mut-wilt} and
-\ref{pic04:mut-climate}, with boxplot statistics listed in Tables
-\ref{tab04:exp2:wboxstats} and \ref{tab04:exp2:cboxstats}.
+\ref{pic04:mut-climate}, with boxplot statistics and median evaluation time
+listed in Tables \ref{tab04:exp2:wboxstats} and \ref{tab04:exp2:cboxstats}.
 
 In case of the wilt dataset, only `no-arg' did not introduce any improvement
 when compared to results from `nothing'. This probably means that the
@@ -282,17 +298,20 @@ produce better pipelines than those generated in the first generation.
 \begin{table}[ht]
 \centering
 \caption{Boxplot statistics of the genetic operators experiment (wilt)}\label{tab04:exp2:wboxstats}
-\begin{tabular}{lrrcr}
+\begin{tabular}{lrrrr|c}
 \toprule
-{} &  minimum &  median &  confidence interval &  maximum \\
+{} &  minimum &  median &  confidence interval &  maximum & eval.\,time\textsuperscript{1} \\
 \midrule
-all        &   0.8658 &  0.8749 &   $(0.8711,0.8786)$ &   0.8820 \\
-no-arg     &   0.8526 &  0.8694 &   $(0.8684,0.8703)$ &   0.8794 \\
-no-cx      &   0.8499 &  0.8748 &   $(0.8715,0.8781)$ &   0.8875 \\
-no-node    &   0.8664 &  0.8747 &   $(0.8721,0.8772)$ &   0.8864 \\
-no-subtree &   0.8675 &  0.8738 &   $(0.8706,0.8770)$ &   0.8850 \\
-nothing    &   0.8434 &  0.8659 &   $(0.8585,0.8734)$ &   0.8787 \\
+all        &   0.8658 &  0.8749 &   $(0.8711,0.8786)$ &   0.8820 & 0:33 \\
+no-arg     &   0.8526 &  0.8694 &   $(0.8684,0.8703)$ &   0.8794 & 0:52 \\
+no-cx      &   0.8499 &  0.8748 &   $(0.8715,0.8781)$ &   0.8875 & 0:42 \\
+no-node    &   0.8664 &  0.8747 &   $(0.8721,0.8772)$ &   0.8864 & 0:45 \\
+no-subtree &   0.8675 &  0.8738 &   $(0.8706,0.8770)$ &   0.8850 & 1:05 \\
+nothing    &   0.8434 &  0.8659 &   $(0.8585,0.8734)$ &   0.8787 & 0:07 \\
 \bottomrule
+
+\multicolumn{6}{l}{\footnotesize\textsuperscript{1}\itshape Median of evaluation times of runs}
+
 \end{tabular}
 
 \end{table}
@@ -300,17 +319,20 @@ nothing    &   0.8434 &  0.8659 &   $(0.8585,0.8734)$ &   0.8787 \\
 \begin{table}[ht]
 \centering
 \caption{Boxplot statistics of the genetic operators experiment (climate)}\label{tab04:exp2:cboxstats}
-\begin{tabular}{lrrcr}
+\begin{tabular}{lrrrr|c}
 \toprule
-{} &  minimum & median &  confidence interval &  maximum \\
+{} &  minimum & median &  confidence interval &  maximum  & eval.\,time\textsuperscript{1} \\
 \midrule
-all        &   0.9112 &  0.9167 &   $(0.9135, 0.9200)$ &   0.9280 \\
-no-arg     &   0.9149 &  0.9159 &   $(0.9140, 0.9177)$ &   0.9296 \\
-no-cx      &   0.9111 &  0.9168 &   $(0.9152, 0.9184)$ &   0.9242 \\
-no-node    &   0.9149 &  0.9223 &   $(0.9199, 0.9247)$ &   0.9259 \\
-no-subtree &   0.9112 &  0.9177 &   $(0.9155, 0.9200)$ &   0.9316 \\
-nothing    &   0.9055 &  0.9149 &   $(0.9133, 0.9165)$ &   0.9185 \\
+all        &   0.9112 &  0.9167 &   $(0.9135, 0.9200)$ &   0.9280 & 1:53 \\
+no-arg     &   0.9149 &  0.9159 &   $(0.9140, 0.9177)$ &   0.9296 & 0:41 \\
+no-cx      &   0.9111 &  0.9168 &   $(0.9152, 0.9184)$ &   0.9242 & 1:46 \\
+no-node    &   0.9149 &  0.9223 &   $(0.9199, 0.9247)$ &   0.9259 & 0:46 \\
+no-subtree &   0.9112 &  0.9177 &   $(0.9155, 0.9200)$ &   0.9316 & 0:36 \\
+nothing    &   0.9055 &  0.9149 &   $(0.9133, 0.9165)$ &   0.9185 & 0:04 \\
 \bottomrule
+
+\multicolumn{6}{l}{\footnotesize\textsuperscript{1}\itshape Median of evaluation times of runs}
+
 \end{tabular}
 
 \end{table}
@@ -357,7 +379,7 @@ experiment preceded the sample experiment. For fitness computation, we used
 5-fold cross-validation on a sample. Final evaluation was 10-fold
 cross-validation on the full dataset as specified by the task definition.
 
-\begin{table}[b]
+\begin{table}[h]
 
 \centering
 \caption{Sample size in relation to the dataset size (OpenML-CC18 experiment)}\label{tab04:exp3:size}
@@ -383,7 +405,7 @@ instances were not sampled}} \\
 
 \end{table}
 
-\begin{table}[t]
+\begin{table}[h]
 
 \centering
 \caption{System hyperparameters for the OpenML-CC18 experiment}\label{tab04:exp3:setting}
