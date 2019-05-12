@@ -179,12 +179,18 @@ error. \citep[335]{Flach:2012:MLA:2490546}
 
 \section{AutoML} \label{sec:automl}
 When using machine learning in practice, it is not always evident which model
-is suitable for a particular problem. Moreover, there is a vast number of model
-and parameter combinations to choose from, not to mention model ensembles.
-Furthermore, it is necessary to preprocess the data and construct features
-for the learning process. All these aforementioned tasks require human 
-expertise and are typically time-consuming. AutoML aims to automatize the
-process and make machine learning available to non-experts.
+is suitable for a particular problem. As a consequence of the `no free lunch'
+theorem \citep{585893}, it is not possible for a single ML algorithm to
+outperform all other methods for an arbitrary problem instance. As such, model
+selection and hyperparameter choice must be performed in order to obtain a 
+satisfactory result. Along with this, it is necessary to use more complex
+models for some ML problems. For example, we may use some of the ensemble
+methods which reduce bias or variance (section \ref{ensemble}). Also, the data
+typically requires some preprocessing before it can be passed to a ML
+algorithm, hence the model becomes even more complex. All these aforementioned
+tasks require human  expertise and are usually time-consuming. The automated
+machine learning --- AutoML --- aims to automatize the process and make
+machine learning available even to non-experts \citep{Zller2019SurveyOA}.
 % TODO internet source - AutoML page
 
 There seems to be no generally accepted definition of AutoML as for now.
@@ -234,21 +240,22 @@ of a general AutoML framework refer to \cite{DBLP:journals/corr/abs-1810-13306}.
 
 \subsection{Hyperparameter optimization}
 Automated hyperparameter optimization (HPO) is the most basic, but nevertheless
-very important task of AutoML. As has already been mentioned, there is no
-silver-bullet method that would solve all machine learning problems.
-Furthermore, every method depends on some hyperparameters that greatly
-influence its performance. Combining this, we get a large search space of
-possible models. This problem is called]
-\emph{combined algorithm selection and hyperparameter optimization problem}
-(CASH) and a formal definition can be found in
+very important task of AutoML. In the simple case, HPO is the task of finding
+a hyperparameter setting of a machine learning algorithm that performs
+the best on a given dataset. If we optimize multiple models at once, we obtain
+an extended version of this problem --- combined algorithm selection and
+hyperparameter optimization problem, or CASH for short. The task is then to
+select the best combination of model and hyperparameter setting
 \citep{DBLP:journals/corr/abs-1208-3719}.
 
-There are several limitations which complicate the search through this space.
-For large models (for example in deep learning) and large dataset, the
-learning process and evaluation take a lot of time. Moreover, the
-configuration space may be quite complex, with many continuous hyperparameters
-which also depend on each other. It is also necessary to avoid overfitting,
-which is not always obvious as the training set may not be large enough.
+By combining multiple hyperparameter spaces, we optain a very large search
+space of possible models. There are several limitations which complicate the
+search through this space. For large models (for example in deep learning)
+and large datasets, the learning process and evaluation take a lot of time.
+Moreover, the configuration space may be quite complex, with many continuous
+hyperparameters or some which depend on each other. It is also necessary to
+avoid overfitting, which is not always obvious as the training set may not be
+large enough.
 
 Some examples of frameworks which try to solve the HPO are mentioned in section
 \ref{ch2:related}. Various approaches are presented in the book written by
@@ -256,7 +263,7 @@ Some examples of frameworks which try to solve the HPO are mentioned in section
 
 \subsection{Creating model architecture} \label{sec:modelarch}
 The creation of model architecture is a problem related to the HPO. It is an
-important part of the design of a neural networks, which is currently a very
+important part of the design of neural networks, which is currently a very
 popular area of research. It also needs to be considered in traditional machine
 learning when employing model ensembles. The problem may be solved at the same
 time as HPO, which however introduces even more complexity in the search space.
