@@ -264,9 +264,11 @@ Some examples of frameworks which try to solve the HPO are mentioned in section
 \subsection{Creating model architecture} \label{sec:modelarch}
 The creation of model architecture is a problem related to the HPO. It is an
 important part of the design of neural networks, which is currently a very
-popular area of research. It also needs to be considered in traditional machine
-learning when employing model ensembles. The problem may be solved at the same
-time as HPO, which however introduces even more complexity in the search space.
+popular area of research --- neural architecture search (NAS). It also needs
+to be considered in traditional machine learning when employing model ensembles
+or several feature preprocessing methos.
+The problem may be solved at the same time as HPO, which however introduces
+even more complexity in the search space.
 
 There are many difficulties that have to be solved when designing automated
 architecture search methods. With increasing size of the search space 
@@ -276,9 +278,13 @@ but at the cost of a considerably longer running time. Also, evaluation cost of
 a single model may be very high, preventing the AutoML system from being usable
 in practice.
 
-The \hyperref[metalearning]{metalearning} could be very useful in the process,
-enabling to start with promising models instead of spending time on poor ones
-\citep{DBLP:journals/corr/abs-1810-03548}.
+The \hyperref[metalearning]{metalearning}, which uses \emph{metaknowledge}
+about previous results of machine learning algorithms (as described in the
+following section), can be very useful in the process. It enables us to
+select models which performed well on similar datasets, thus starting with
+promising models instead of spending time on poor ones. This approach
+significantly speeds up the optimization process and possibly improves the
+result \citep{DBLP:journals/corr/abs-1810-03548}.
 Another option is to estimate the performance of the architecture. There are
 various approaches. For example, we can evaluate the model on smaller subsets of
 data, which however introduces some bias in the estimate. Another option is to
@@ -288,31 +294,26 @@ curve. More on this topic is described in a recent survey by
 
 \subsection{Metalearning} \label{metalearning}
 The metalearning, also known as `learning to learn' is a field closely related
-to AutoML. The subjects of study of this method are universal properties of 
-data and the learning process itself. It is often employed in the design of
-pipelines or in neural architecture search, as it can significantly
-improve the performance and running time
-\citep{DBLP:journals/corr/abs-1810-03548}.
+to AutoML. The subjects of study of this approach are universal properties of 
+data and the learning process itself. Just as in case of the traditional
+learning --- or also \emph{base-learning} --- metalearning improves with
+experience. The difference lies in the learning process. While base-learning
+comprises of a single run on a specific task, metalearning may include a
+several runs or many different tasks. 
 
-Just as in case of the traditional learning --- or also \emph{base-learning}
---- metalearning improves with experience. The difference lies in the learning
-process. While base-learning comprises of a single run on a specific task,
-metalearning may include a several runs or many different tasks. 
-
-In the research area of model recommendation, which is one of the applications
-of metalearning, the training data is most
-frequently a history of previous runs. A suitable model is then chosen by
-examining which models were successful on similar tasks.
-Therefore, we need to accumulate some \emph{metadata}. Another problem
-is that the input data may differ significantly and as such, the tasks usually
-cannot be compared directly. Thus, it is necessary to create so-called
-\emph{metafeatures} which can be extracted even from substantially different
-data.
+One of the applications of metalearning is model recommendation. The input
+data is most frequently a history of previous runs. First, we need to
+accumulate some \emph{metadata} to learn from. Mostly, the metadata contains
+algorithm performance from past runs and \emph{metafeatures}, which are
+artificial features based on characteristics of input datasets. Using the
+\emph{metaknowledge} learned from the metadata, we can choose an algorithm that
+performed well on datasets whose metafeatures are similar to those of our
+dataset.
 
 There are many other concepts used in metalearning; some are presented in more
-detail in following chapters, others can be found in a the book
-\citep{Brazdil:2008:MAD:1507541} or in a recent survey
-\citep{DBLP:journals/corr/abs-1810-03548}.
+detail in following chapters, others can be found in the book by
+\cite{Brazdil:2008:MAD:1507541} or in a recent survey by
+\cite{DBLP:journals/corr/abs-1810-03548}.
 
 \section{Evolutionary computing} \label{ea}
 Evolutionary computing is a heuristic optimization method inspired by 
