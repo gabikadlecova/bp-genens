@@ -41,12 +41,11 @@ actions as to maximize a reward. The training data is in this case a history of
 previous actions and corresponding rewards \citep[p.~3]{Bishop:2006:PRM:1162264}.
 
 In the following sections we elaborate on some important concepts of machine
-learning. We will focus on supervised learning and on classification in
-particular.
+learning. We will focus on supervised learning.
 
 \subsection{Performance of machine learning models}
-In this section we describe the general terms related to evaluation and
-performance estimation of machine learning models. We first present a formal 
+In this section we describe the general terms related to performance evaluation 
+of machine learning models. We first present a formal 
 definition of supervised learning \citep{Russell:2009:AIM:1671238,
 Mitchell:1997:ML:541177}.
 
@@ -152,8 +151,8 @@ methods.
 effective ensemble method. First, $n$ samples are independently taken from 
 the original dataset with replacement. This is referred to as 
 \emph{bootstrapping}. Then, we use the samples to train an ensemble of $n$
-different models. It can be then used to generate predictions, which can be
-then \emph{aggregated} by voting or averaging.
+different models. It can be used to generate predictions, which are
+then \emph{aggregated} by voting or averaging into a final prediction.
 
 This method takes advantage of the statistical stability described at the
 beginning of this section. As the examples are drawn with replacement, there
@@ -193,28 +192,28 @@ According to \cite{DBLP:journals/corr/abs-1810-13306},
 \textquote{\textit{AutoML attempts to construct machine learning programs
 \ldots without human assistance and within limited computational budgets.}}
 Informally, AutoML encompasses methods that automatize a part of a machine
-learning workflow. Examples of existing methods are presented in chapter
+learning workflow. Examples of existing AutoML systems are presented in chapter
 \ref{ch2:related}.
 
 \subsection{Machine learning workflows}
 A machine learning workflow is the process of solving a particular machine
 learning problem. In literature, it is also labelled as a `machine learning
 pipeline' \cite{DBLP:journals/corr/abs-1810-13306}. However, in the context
-of AutoML it may not be a suitable term, as a pipeline is a linear acyclic
-graph and some parts of the flow may by cyclic, as can be seen
-in Figure \ref{pic01:workflow}. The term \emph{pipeline} is also used for
-models which comprise several feature preprocessing methods and/or model
-ensembles. % cite sklearn? for the pipeline
+of AutoML it may not be a suitable term, as a pipeline is a set of methods
+logically arranged into a directed acyclic graph (DAG), but the workflow itself
+is an iterative process, as can be seen in Figure \ref{pic01:workflow}.
+The term \emph{pipeline} generally denotes complex model structures which
+comprise several feature preprocessing methods and/or model
+ensembles.
 
-The process can be decomposed into well-defined steps, which are depicted in
-Figure \ref{pic01:workflow}. The first two steps can be performed
-by an expert from an unrelated field, whereas the rest is the task of a machine
-learning scientist. The feature engineering comprises of initial data cleaning,
-feature extraction and feature selection. % Should I describe this more?
+A workflow can be decomposed into well-defined steps, which are depicted in
+Figure \ref{pic01:workflow}. The formulation of the problem and data collection
+is usually performed by an expert from an unrelated field, whereas the rest is
+the task of a machine learning scientist. The feature engineering comprises
+of initial data cleaning and feature extraction.
 After that, a suitable machine learning model must be selected along with
-suitable hyperparameters; the latter is performed in the optimization step.
-Finally, the resulting model is evaluated, most often on a set of previously
-unseen \emph{validation data}.
+suitable hyperparameters. Finally, the resulting model is evaluated, most
+often on a set of previously unseen \emph{validation data}.
 
 \begin{figure}[ht]\centering
 \includegraphics[width=\textwidth]{../img/workflow-pdfa.pdf}
