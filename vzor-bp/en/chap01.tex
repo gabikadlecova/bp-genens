@@ -2,44 +2,78 @@
 
 In this section we present the theoretical background of this work. We first
 define the general concept of machine learning, then describe a modern area
-of machine learning research --- AutoML. Finally, we dedicate two chapters to
-the heuristic optimization method --- evolutionary computation and its subfield,
-genetic programming.
+of machine learning research --- the automatic machine learning, or AutoML.
+Finally, we dedicate two sections to the heuristic optimization method ---
+evolutionary computation and its subfield, genetic programming.
 
 \section{Machine learning}
-The field of machine learning encompasses a broad range of algorithms and
-statistical methods for data processing. In his book on machine learning,
-Flach provides the following general definition:
+The field of machine learning, shortly ML, encompasses a broad range of
+algorithms and statistical methods for data processing. In his book on machine
+learning, Flach provides the following general definition:
 
 \blockquote{Machine learning is the systematic study of algorithms and systems
-that improve their knowledge or performance with experience.
-(\cite{Flach:2012:MLA:2490546})} % page number? (3) TODO
+that improve their knowledge or performance with experience
+\citep{Flach:2012:MLA:2490546}.}
+
 
 The knowledge of a system is gained through learning from \emph{experience}.
 This procedure is referred to as the \emph{training} phase. In this process, 
-the algorithm adjusts its parameters according to the nature of training data.
+the ML system adjusts its parameters according to the nature of training data.
 The result of the process is a prediction function which depends on learned
 parameters. By applying this function on previously unseen data, denominated 
 as the \emph{testing} data, we obtain the output of the algorithm. The 
-result is then evaluated to determine the performance of the method. 
-(\cite{Bishop:2006:PRM:1162264}) The character of the learning process
+result is then evaluated to determine the performance of the method 
+\citep[p.~2]{Bishop:2006:PRM:1162264}. The character of the learning process
 varies with different machine learning problems. There are three main classes 
 of tasks: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement} 
 learning.
 
 In case of supervised learning, the training data is a set of labelled examples
+(also called instances)
 and the task is to predict labels of previously unseen data. The field is 
 further subdivided into two groups. If the labels are elements of a finite 
 number of discrete categories, the problem is called \emph{classification}. 
 The continuous case is then called \emph{regression}.
-% This is Bishop as well... TODO cite pages
 In contrast to supervised learning, in unsupervised learning the training data 
-is unlabelled. The key task is therefore to divide the data into groups of 
-similar examples. The task of reinforcement learning is to find suitable actions as to maximize 
-a reward. The training data is typically some history of previous actions 
-and corresponding rewards.
+is unlabelled. The key task is then to divide the data into groups of 
+similar examples. The task of reinforcement learning is to find suitable
+actions as to maximize a reward. The training data is in this case a history of
+previous actions and corresponding rewards \citep[p.~3]{Bishop:2006:PRM:1162264}.
 
-It is important to note that good performance on training data does not ensure 
+In the following sections we elaborate on some important concepts of machine
+learning. We will focus on supervised learning and on classification in
+particular.
+
+\subsection{Performance of machine learning models}
+In this section we describe the general terms related to evaluation and
+performance estimation of machine learning models. We first present a formal 
+definition of supervised learning \citep{Russell:2009:AIM:1671238,
+Mitchell:1997:ML:541177}.
+
+\begin{definition}[Supervised learning]
+Let $X\subset\tilde{X}$ be a set of examples (or also \emph{feature vector})
+from an unknown space and $y\subset\tilde{y}$ a set of corresponding labels.
+Moreover, let $f: \tilde{X} \rightarrow \tilde{y}$ be an unknown function that
+satisfies $f(X) = y$.
+Then the task of \emph{supervised learning} is to find a hypothesis function
+$h$ which approximates the function $f$ by \emph{learning} from the training
+set $(X,y)$.
+
+\end{definition}
+
+Suppose we have a model which learned a particular hypothesis $h$ and we want
+to determine whether it approximates $f$ well. In other words, we want to
+measure the difference between the output of the model and the real value of
+the target --- the \emph{error} of the model. There are several types of
+metrics that can be used as error functions. In case of classification, the
+simplest metric is the \emph{error rate} which is defined as the proportion of
+incorrectly classified instances --- examples $x$ for which $h(x)\neq y$.
+A related term is the \emph{predictive accuracy}, which is defined as the
+proportion of correctly classified examples
+\citep[p.~54]{Flach:2012:MLA:2490546}.
+
+The performance of a model is thus tied with a small error rate. However, it is
+important to note that good performance on training data does not ensure 
 just as good performance on new data. Sometimes the model performs 
 exceptionally well on training data, but fares much worse on testing data. 
 This behaviour is called \emph{overfitting} and usually occurs when 
@@ -47,17 +81,33 @@ unnecessarily subtle details of the data are learned. The opposite concept
 is called \emph{generalisation}, which is the ability to perform well on 
 different types of testing data.
 
-A related term is the so-called `\emph{bias-variance dilemma}'. A 
-low-complexity model will not overfit, but a lot of errors will be made, thus 
-introducing a certain bias from the correct output. On the other hand, by 
-increasing the number of model parameters, it will highly depend on training 
-data. Then, with small changes in data there will be a high variance in 
-output. A balance can rarely be achieved in practice, hence it is often 
-necessary to choose the side that is less harmful to the task. Another option
-is to use some of the ensemble methods described in \ref{ensemble}. For
+A related term is so-called \emph{bias-variance dilemma}, which is a phenomenon
+closely related to model selection. The bias and variance of a model are
+defined as follows \citep[p.59,~356]{CaseBerg:01}
+
+\begin{definition}[Bias and variance]
+Bias of a model is the value $E(h_t(X)) - y$, where $h_t$ is a
+hypothesis learned from a particular training set $t$ and $X$ and $y$ is the
+set used for evaluation. Variance of a model is defined as $E[(h_t(X) - y)^2]$.
+\end{definition}
+
+Practically, a model with few parameters will make some errors even with
+sufficient training data, thus introducing a bias from the correct output.
+On the other hand, by  increasing the number of model parameters, it will
+highly depend on training data. Then, with small changes in data there will be
+a high variance in the output. A model with both small bias and small variance
+can rarely be found, hence it is often necessary to choose the side that is
+less harmful to the particular task. Another option
+is to use some of the ensemble methods described in section \ref{ensemble}. For
 example, \hyperref[bagging]{bagging} is a method of variance reduction, while
-\hyperref[boosting]{boosting} noticeably reduces the bias. More on this topic
-can be found in Flach's book. (\citet[p.~93--94,~338]{Flach:2012:MLA:2490546})
+\hyperref[boosting]{boosting} noticeably reduces the bias
+\citep[p.~93--94,~338]{Flach:2012:MLA:2490546}.
+
+The task of finding a model which performs well on a particular problem
+instance is by no means straightforward. In practice, it is usually solved by
+iterative selection of model settings. As described in section \ref{sec:automl},
+there are systems which automatize a part of the process. Nevertheless, even
+these methods must take into account the problems presented in this section.
 
 \subsection{Model ensembles} \label{ensemble}
 Model ensembles are powerful learning techniques that combine simpler models 
@@ -85,13 +135,14 @@ of \citep{Flach:2012:MLA:2490546} and \citep{Mitchell:1997:ML:541177}.
 
 The assumption of strong learnability may appear to be quite strict when 
 compared to the weak learnability, as the model must output a correct 
-hypothesis on almost all example sets. However, Shapire proved that a model 
+hypothesis on almost all example sets. However,
+\cite{Schapire:1990:SWL:83637.83645} proved that a model 
 is weakly learnable if and only if it is strongly learnable. 
-\citep{Schapire:1990:SWL:83637.83645} This was proven in a constructive manner
+ This was proven in a constructive manner
 by iteratively correcting the errors of the hypotheses, thus \emph{boosting} 
 the model. The boosting method has directly inspired one of the most successful
 ensemble methods --- the award winning AdaBoost.
-\cite{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}
+\citep{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}
 
 In the following sections, we will present some of the most used ensemble 
 methods.
@@ -127,7 +178,7 @@ improving. The resulting prediction is again an average of all model
 predictions, but with putting more weight on models with a lower training
 error. \citep[335]{Flach:2012:MLA:2490546}
 
-\section{AutoML}
+\section{AutoML} \label{sec:automl}
 When using machine learning in practice, it is not always evident which model
 is suitable for a particular problem. Moreover, there is a vast number of model
 and parameter combinations to choose from, not to mention model ensembles.
