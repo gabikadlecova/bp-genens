@@ -334,17 +334,38 @@ which we optimize. A new individual can be created by randomly combining or
 altering genomes of existing individuals. The `natural selection' is realized
 according to the \emph{fitness} of the individual, which is determined by the
 quality of the corresponding solution. The whole process can be understood as
-a stochastic search through the space of all possible solutions
+a stochastic search through the space of all possible genomes
 (\cite{Engelbrecht:2007:CII:1557464}).
 
 % Maybe a better section name
 \subsection{Evolutionary algorithms in detail}
-As can be seen in algorithm \ref{alg:EA}, a genetic algorithm should 
-define a suitable \emph{selection} method, \emph{mutation} and/or 
-\emph{crossover} operators and a \emph{fitness function}.
-The algorithm terminates when some \emph{stopping condition} is met. 
+A general schema of an \emph{evolutionary algorithm} (also called a
+\emph{genetic algorithm}) is presented in algorithm \ref{alg:EA}. Every genetic
+algorithm should define a suitable \emph{selection} method, \emph{mutation}
+and/or \emph{crossover} operators and a \emph{fitness function}.
+The algorithm terminates when some \emph{stopping condition} is met. These
+concepts will be described in more detail.
 
-\paragraph{Selection}
+\paragraph{Fitness and objective functions}
+The goal of an optimization process is to maximize or minimize a certain
+objective function. In other words, we try to find a solution for which the
+objective value is extremal.
+
+In case of evolutionary algorithms, we optimize a \emph{fitness} function,
+which determines the quality of an individual. It is an essential component of
+evolutionary algorithms, as it also determines the chance of an individual
+surviving and reproducing. To compute the fitness, we decode the genome of
+the individual to obtain the encoded solution. The result is then computed by
+applying the objective function on the solution. As such, the fitness function
+and the objective function are optimized simultaneously. Most frequently the
+value of both of the functions is the same.
+
+In the simple case, the fitness is tied only with one objective. To operate
+with multi-objective fitness, some adjustments must be made, which is presented
+in section \ref{moo}.
+
+
+\paragraph{Selection} \label{p}
 The selection may be divided into two steps. The first is the 
 \emph{parent selection}, also called \emph{mating selection}
 (line \ref{parent:sel}), and the second is called
@@ -369,8 +390,9 @@ into account the age of the individuals. As such, it is possible to include
 or not to include the parents along with the offspring. A popular option is to 
 directly choose a small number of the most successful individuals. This method 
 is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
-An example of an elitist selection algorithm is NSGA-II, which
-is described in section \ref{nsgaii}.
+A widely used elitist selection algorithm is NSGA-II, which is used for
+multiobjective fitness functions and is described in more detail in section
+\ref{nsgaii}.
 
 \paragraph{Crossover and mutation}
 The crossover and mutation (also called reproduction operators
@@ -399,7 +421,7 @@ elitism.
 
 \paragraph{Stopping criteria}
 Some commonly used stopping criteria, as listed by Engelbrecht, are for example 
-a limit on the number of generations, a objective function threshold or
+a limit on the number of generations, an objective function threshold, or
 termination after no improvement is observed.
 (\citep{Engelbrecht:2007:CII:1557464})
 
