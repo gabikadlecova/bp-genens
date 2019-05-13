@@ -30,8 +30,8 @@ and implementation details as well as relation to scikit-learn
 
 
 \section{Evolutionary optimization of pipelines} \label{genens:devGP}
-In this section, we describe the necessary components of the genetic algorithm.
-The process corresponds to the schema of a general genetic algorithm
+In this section, we describe the necessary components of the evolutionary algorithm.
+The process corresponds to the schema of a general evolutionary algorithm
 \ref{alg:EA}. A more detailed schema is presented in algorithm \ref{alg:devgp}.
 Individuals of this particular EA are pipelines encoded as trees via
 developmental GP; the encoding is summarized in section \ref{sec:encoding}.
@@ -579,9 +579,9 @@ As the samples are typically much smaller than the whole dataset, the score
 is computed as a (stratified) k-fold cross-validation on a sample.
 \section{Implementation}
 The source code of our system is available in a public GitHub repository
-\citep{git_genens}. % or link??
+\citep{git_genens}.
 For the machine-learning side of the implementation we used scikit-learn
-(\cite{scikit-learn}).
+\citep{scikit-learn}.
 
 We extended the Pipeline class in order to enable usage
 of pipelines as base-learners (some ensembles require \texttt{predict\_proba}
@@ -590,13 +590,12 @@ added to provide conversion between \texttt{feat\_frac} and
 \texttt{n\_components} or \texttt{k} hyperparameters respectively (as reflected
 in Table \ref{tab:prepro}).
 
-The components of the genetic algorithm were managed by the tools provided by
+The components of the evolutionary algorithm were managed by the tools provided by
 the library DEAP \citep{DEAP_JMLR2012}. However, although DEAP supports genetic
 programming, the primitives cannot be created with variable arity, hence we
 reimplemented the concept.
 For parallelization of fitness evaluations we used the library Joblib
 \citep{joblib}.
-% TODO link or cite? No paper associated with it
 
 % TODO timeouts cite lib (+ check if any other libraries like that)
 

@@ -82,7 +82,7 @@ different types of testing data.
 
 A related term is so-called \emph{bias-variance dilemma}, which is a phenomenon
 closely related to model selection. The bias and variance of a model are
-defined as follows \citep[p.59,~356]{CaseBerg:01}
+defined as follows \citep[p.59,~356]{CaseBerg:01}.
 
 \begin{definition}[Bias and variance]
 Bias of a model is the value $E(h_t(X)) - y$, where $h_t$ is a
@@ -117,9 +117,7 @@ The rationale behind ensembles is also of theoretical character, namely from
 statistics and from computational learning theory. In statistics, a general
 idea is to average measurements to get more stable and reliable results.
 Here, the models are trained on data samples or feature subsets and the results
-are then combined into a final hypothesis.
-% Flach TODO cite
-
+are then combined into a final hypothesis \citep[p.~330]{Flach:2012:MLA:2490546}.
 The computational learning theory defines the term \emph{learnability},
 which describes whether a model outputs a correct hypothesis by learning on
 random sets of instances from a unknown distribution. A \emph{strong learner}
@@ -140,8 +138,8 @@ is weakly learnable if and only if it is strongly learnable.
  This was proven in a constructive manner
 by iteratively correcting the errors of the hypotheses, thus \emph{boosting} 
 the model. The boosting method has directly inspired one of the most successful
-ensemble methods --- the award winning AdaBoost.
-\citep{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}
+ensemble methods --- the award winning AdaBoost
+\citep{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}.
 
 In the following sections, we will present some of the most used ensemble 
 methods.
@@ -157,7 +155,7 @@ then \emph{aggregated} by voting or averaging into a final prediction.
 This method takes advantage of the statistical stability described at the
 beginning of this section. As the examples are drawn with replacement, there
 will be some instances missing in every sample. Thus, we introduce diversity
-between the ensemble models. \citep[331]{Flach:2012:MLA:2490546}
+between the ensemble models \citep[331]{Flach:2012:MLA:2490546}.
 
 \phantomsection
 \paragraph{Boosting} \label{boosting}
@@ -175,7 +173,7 @@ The algorithm stops after a fixed number of iterations or when the weighted
 training error increases over $0.5$ --- which is when the algorithm stops
 improving. The resulting prediction is again an average of all model
 predictions, but with putting more weight on models with a lower training
-error. \citep[335]{Flach:2012:MLA:2490546}
+error \citep[335]{Flach:2012:MLA:2490546}.
 
 \section{AutoML} \label{sec:automl}
 When using machine learning in practice, it is not always evident which model
@@ -339,8 +337,8 @@ a stochastic search through the space of all possible genomes
 
 % Maybe a better section name
 \subsection{Evolutionary algorithms in detail}
-A general schema of an \emph{evolutionary algorithm} (also called a
-\emph{genetic algorithm}) is presented in algorithm \ref{alg:EA}. Every genetic
+A general schema of an \emph{evolutionary algorithm} is presented in algorithm
+\ref{alg:EA}. Every evolutionary algorithm
 algorithm should define a suitable \emph{selection} method, \emph{mutation}
 and/or \emph{crossover} operators and a \emph{fitness function}.
 The algorithm terminates when some \emph{stopping condition} is met. These
@@ -445,6 +443,7 @@ termination after no improvement is observed.
       \;
       \tcc{reproduction}
       \For{i in \Range{$k/2$}} {
+      \tcc{parent selection}
          $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
 
          \If{$p_{cx}$} {
@@ -458,13 +457,14 @@ termination after no improvement is observed.
          add $i_1, i_2$ to offspring population $P_o(n)$
       }
       \;
-      $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)$ \label{envir:sel}
+      \tcc{environmental selection}
+      $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)\cup P(n)$ \label{envir:sel}
   }
   \;
   \KwRet{$P(c)$}  
 \end{algorithm}
 
-The advantage of genetic algorithms is such that there are potentially 
+The advantage of evolutionary algorithms is such that there are potentially 
 many different solutions present in every population. With well defined 
 selection and fitness, the algorithm performs a multi-directional search. 
 In comparison with other directed search methods, this proves to be a more 
@@ -541,13 +541,13 @@ The process is repeated with front numbers increasing until no unassigned
 individuals remain. Every front then obtains a dummy fitness value, where
 the fitness of a front $F(n)$ is better than the fitness of $F(n+1)$. Moreover,
 for every individual the value is divided by a \emph{niching} factor (while
-keeping the fitness inequality). The 
-niching factor is defined as
-$$N(i)=\sum_{j\neq i}{S(d((i,j))}$$ where 
+keeping the fitness inequality). For a distance metric $d$ and a parameter
+$\sigma_{share}$, the niching factor is defined as
+$$N(i)=\sum_{j\neq i}{S(d(i,j))}$$ where $S$ is a sharing function computed as
 \begin{equation}
     S(d(i,j))=
     \begin{cases}
-      1 - (\dfrac{d(i,j)}{\sigma_{share}})^2, & \text{if}\ d(i,j) < \sigma_{share} \\
+      1 - \left(\dfrac{d(i,j)}{\sigma_{share}}\right)^2, & \text{if}\ d(i,j) < \sigma_{share} \\
       0, & \text{otherwise.}
     \end{cases}
 \end{equation}
@@ -561,7 +561,9 @@ As the algorithm has some drawbacks, like dependence on $\sigma_{share}$,
 a very high computational complexity and lack of elitism, the authors of
 NSGA have proposed an improved variant called NSGA-II. This algorithm not only
 adresses the above-mentioned problems, it also outperforms other elitist
-algorithms \citep{Deb:2002:FEM:2221359.2221582}.
+algorithms \citep{Deb:2002:FEM:2221359.2221582}. An extended version designed
+for the many-objective optimization (with four or more objectives) has also
+been developed --- NSGA-III \citep{6600851}.
 
 \section{Genetic programming}
 % TODO GP and dev-GP applications
@@ -579,21 +581,33 @@ leaves  are constants (\emph{terminals}) and variables. Together, all possible
 functions and terminals form the \emph{primitive set}. Every function of the
 set must have a well-defined arity value.
 
-An extension of the genetic programming is \emph{strongly typed GP}. It
-constraints the primitive set in such a way that every primitive has an output
-type and furthermore every function defines input types of its arguments.
-
-The initialization step is very important, as
-there are many different ways how to design trees. Also, specialized genetic
-operators need to be designed. On the other hand, the selection step remains
-largely the same. \cite{Poli:2008:FGG:1796422}
- 
-The fitness is usually computed by running the program and comparing the result 
-with the desired output. It is also possible to apply genetic programming on
+The fitness is usually computed by running the program and assessing its
+performance. It is also possible to apply genetic programming on
 multi-objective problems, where the second objective may be the running time
 of the problem or some other domain-specific property
-\citep{Poli:2008:FGG:1796422}. More about multi-objective optimization can be
+\citep[p.~24--26]{Poli:2008:FGG:1796422}. More about multi-objective optimization can be
 read in section \ref{moo}.
+
+The initialization step of the genetic programming is very important, as
+there are many different ways how to design trees. Also, specialized genetic
+operators need to be designed. On the other hand, the selection step remains
+largely the same \citep{Poli:2008:FGG:1796422}.
+
+Now we describe the components of evolutionary algorithm which are specific
+for the genetic programming along with some important general characteristics
+of the GP.
+
+\paragraph{Type consistency}
+An important property of GP is the \emph{closure}. That is, a function must
+be able to accept any subtree as its argument and produce a valid output if
+it is evaluated. This enables the reproduction operators to work properly, as
+otherwise a lot of invalid individuals would be generated. As a consequence,
+in simple GP all functions have arguments of a single type and produce output
+of the same type. A more complex case is the \emph{strongly typed GP}. It
+constraints the primitive set in such a way that every primitive has a
+well-defined output type and in addition every function defines input types of
+its arguments. With this we lose the closure property, so the genetic operators
+need to be designed in a more careful way \citep[p.~21]{Poli:2008:FGG:1796422}.
 
 \paragraph{Initialization}
 During the initialization, the nodes of the tree are selected from the
@@ -602,35 +616,45 @@ primitive set which is provided as input to the algorithm
 initialization. We well present two methods that are among the simplest and 
 most used ones --- \emph{grow} and \emph{full}.
 
-In both cases, nodes are inserted to the tree up to a certain height limit.
-The two methods differ only in the way how nodes are selected. The grow method
-allows to select both functions and terminals before the limit is reached;
-afterwards, only terminals can be inserted. The full method restricts the
-selection only to functions on all levels but the last one, thus generating 
-a full tree. Leaves are then
-chosen from the terminal set like in the previous approach.
+In both cases, nodes are selected at random and inserted to the tree up to a
+certain height limit. The two methods differ only in the way how nodes are
+selected. The grow method allows to select both functions and terminals
+before the limit is reached; afterwards, only terminals can be inserted. The
+full method restricts the selection only to functions on all levels but the
+last one, thus generating a full tree. Leaves are then chosen from the terminal
+set like in the previous approach.
 
 The drawback of the full method is that all trees are very similar. On the
 contrary, the grow method generates a wide range of sizes and shapes, but the
 number of nodes in a tree might be too small. Because of that, a method called
 \emph{ramped half-and-half} is often used in practice. It combines both 
 of the presented methods; half of the population is generated using the full
-method, the other one via grow method. Also, instead of one height limit, a
+method, the other one via the grow method. Also, instead of one height limit, a
 range of values is used to introduce more diversity.
 \citep{Poli:2008:FGG:1796422}
 
+In strongly typed GP, the initialization must not violate the typing. As such,
+when inserting a node into the tree, we randomly choose node whose output type
+matches the argument type of its parent.
+
 \paragraph{Genetic operators} \label{treeops}
-The most common type of crossover is \emph{subtree crossover} of two
+The most common type of crossover is the \emph{subtree crossover} of two
 individuals. A random node --- the crossover point ---
 is selected in each individual independently. Then, subtrees corresponding
 to the points are exchanged between them.
 
-Similarly, the most used mutation technique is \emph{subtree mutation}.
+Similarly, the most used mutation technique is the \emph{subtree mutation}.
 Just like in subtree crossover, a mutation point is randomly chosen.
 Afterwards, the corresponding subtree is entirely replaced by a new randomly
 generated tree. Another possibility is to swap a node with a different one
-from the primitive set. In the case of strongly typed GP, both input an output
-types must match the types of the previous node.
+from the primitive set --- this is called the \emph{point mutation}.
+
+In case of the strongly typed GP, the result of all genetic operations must
+be a valid individual. This means that during the crossover we can swap only
+these subtrees whose roots have a common output type and in subtree mutation
+the new tree has a root of the same output type as the previous one. In point
+mutation we must generate a node with the same input types and output type as
+the old node has.
 \citep{Poli:2008:FGG:1796422}
 
 \subsection{Developmental genetic programming} \label{devGP}
@@ -654,5 +678,8 @@ to evolve analogue circuits \citep{Koza:1998:circuits}. With this, it was even
 possible to achieve human-competitive result, that is, reinventing a circuit
 that has been previously designed for a specific purpose by hand.
 
-More about the encoding and modifying operations will be presented in
-chapter \ref{our:solution}.
+In our work we are using developmental GP to evolve ML workflows, which have
+the structure of a directed acyclic graph. We present this in more detail in
+chapter \ref{our:solution} along with specific examples of the encoding and
+of modifying operations.
+.

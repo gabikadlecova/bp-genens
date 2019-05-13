@@ -19,7 +19,7 @@ as in Auto-WEKA, but the algorithm is \emph{warm-started} via a history of most
 successful models on similar datasets. In the end, the resulting models are
 combined together to a specific ensemble. This is done to take advantage of all
 potentially good methods instead of choosing only one (not necessarily the best)
-and discarding the rest. \citep{Feurer:2015:ERA:2969442.2969547}
+and discarding the rest \citep{Feurer:2015:ERA:2969442.2969547}.
 % AutoNet --- based on autoweka, CASH for ANN, architecture as well (via
 % parametrization)
 
@@ -32,21 +32,21 @@ The reason behind this limitation is that by increasing the model complexity the
 configuration space becomes too large.
 
 A similar system has been developed for the purpose of automatic tuning of neural
-networks --- Auto-Net. \citep{pmlr-v64-mendoza_towards_2016}
+networks --- Auto-Net \citep{pmlr-v64-mendoza_towards_2016}.
 
 \paragraph{Architecture search}
 The search for an ideal model architecture can be understood as a part of the
 CASH problem. This subfield of AutoML has recently gained in popularity with the
 demand for automated \emph{neural architecture search} (NAS)
-\cite{2018arXiv180805377E}. It also encompasses the task of pipeline design.
+\citep{2018arXiv180805377E}. It also encompasses the task of pipeline design.
 
 There are only few systems that allow unlimited pipeline sizes. The system
 \emph{RECIPE} uses grammar-based GP to evolve pipelines, but still limits the
-size of the pipeline. \citep{10.1007/978-3-319-55696-3_16}
+size of the pipeline \citep{10.1007/978-3-319-55696-3_16}.
 There are two systems which support arbitrary-sized pipelines. One of them is
 \emph{TPOT}, which uses genetic programming to evolve tree-based models. The
 root of the tree represents a single estimator whereas the branches are feature
-preprocessing methods. \citep{Olson2016EvoBio}
+preprocessing methods \citep{Olson2016EvoBio}.
 The other system --- \emph{ML-Plan} --- is based on hierarchical planning
 \citep{Mohr2018}. Both of the methods support a chain of feature preprocessors,
 including feature union and stacking (ensemble methods which construct new
