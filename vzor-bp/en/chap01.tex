@@ -296,10 +296,10 @@ curve. More on this topic is described in a recent survey by
 The metalearning, also known as `learning to learn' is a field closely related
 to AutoML. The subjects of study of this approach are universal properties of 
 data and the learning process itself. Just as in case of the traditional
-learning --- or also \emph{base-learning} --- metalearning improves with
-experience. The difference lies in the learning process. While base-learning
-comprises of a single run on a specific task, metalearning may include a
-several runs or many different tasks. 
+learning --- called \emph{base-learning} in this context --- metalearning
+improves with experience. The difference lies in the learning process. While
+base-learning comprises of a single run on a specific task, metalearning may
+include several runs or many different tasks. 
 
 One of the applications of metalearning is model recommendation. The input
 data is most frequently a history of previous runs. First, we need to
@@ -307,7 +307,7 @@ accumulate some \emph{metadata} to learn from. Mostly, the metadata contains
 algorithm performance from past runs and \emph{metafeatures}, which are
 artificial features based on characteristics of input datasets. Using the
 \emph{metaknowledge} learned from the metadata, we can choose an algorithm that
-performed well on datasets whose metafeatures are similar to those of our
+performed well on dataset- whose metafeatures are similar to those of our
 dataset.
 
 There are many other concepts used in metalearning; some are presented in more
@@ -316,21 +316,26 @@ detail in following chapters, others can be found in the book by
 \cite{DBLP:journals/corr/abs-1810-03548}.
 
 \section{Evolutionary computing} \label{ea}
-Evolutionary computing is a heuristic optimization method inspired by 
-Charles Darwin's theory of \emph{natural selection}. \cite{darwin} In 
-a population, individuals with the best characteristics are most likely
+Evolutionary computing is a heuristic population-based optimization method
+inspired by  Charles Darwin's theory of \emph{natural selection} \cite{darwin}.
+In a population, individuals with the best characteristics are most likely
 to reproduce, thus passing the traits to the offspring. As the 
 evolution is repeated over several generations, the most advantageous traits 
 predominate. This phenomenon is also called `survival of the fittest'.
 
-In an evolutionary algorithm, the goal is to find the ``best'' solution 
-to the given problem by optimizing a \emph{objective function}. The term
-`population' refers to a set of solutions encoded as chromosomes which 
-represent the defining features of a particular solution. This corresponds
-to the genotype--phenotype relationship from genetics. The `natural selection'
-can be then understood as a stochastic search through the space of possible 
-chromosome values. 
-(\cite{Engelbrecht:2007:CII:1557464})
+In nature, every individual is defined by its \emph{genome} --- a long string
+of information which determines all of its characteristics. The genome of an
+offspring is created by combining the genomes of its parents. Therefore, it
+inherits some features of both of the parents.
+
+In evolutionary computing, we maintain a population of individuals. A
+ge\-no\-me of an individual represents a particular solution to the problem
+which we optimize. A new individual can be created by randomly combining or
+altering genomes of existing individuals. The `natural selection' is realized
+according to the \emph{fitness} of the individual, which is determined by the
+quality of the corresponding solution. The whole process can be understood as
+a stochastic search through the space of all possible solutions
+(\cite{Engelbrecht:2007:CII:1557464}).
 
 % Maybe a better section name
 \subsection{Evolutionary algorithms in detail}
@@ -366,31 +371,31 @@ directly choose a small number of the most successful individuals. This method
 is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
 An example of an elitist selection algorithm is NSGA-II, which
 is described in section \ref{nsgaii}.
-% TODO cite pages directly, when citing from a single source for several
-% paragraphs?
 
 \paragraph{Crossover and mutation}
 The crossover and mutation (also called reproduction operators
 \citep{Engelbrecht:2007:CII:1557464}) are genetic operators that modify the
 structure of individuals to create new ones. Both operations are highly
-dependent on problem encoding, as they directly alter the genomes. An example
-of the operators can be found in section \ref{gp:treebased}. In the schema 
-of the \hyperref[alg:EA]{evolutionary algorithm} (EA), reproduction operators
+dependent on problem encoding, as they directly alter the structure of
+individuals. An example of the operators can be found in section
+\ref{gp:treebased}. In the schema of the
+\hyperref[alg:EA]{evolutionary algorithm} (EA), reproduction operators
 are applied on parents selected by the mating selection, as can be seen on 
 lines \ref{crossover} and \ref{mutation}.
 
 During the crossover, the genetic information of the parents is combined into
-one or more children. Most usually, two parents are used to produce two
+one or more children. Often, two parents are used to produce two
 offspring, though the counts may differ in some special types of evolutionary
 algorithms. Ideally, if we have two parents with different but nevertheless
 `good' features, the offspring receives both of them.
 \citep{Eiben:2015:IEC:2810085}
 
 The mutation is a stochastic operator which is used to introduce diversity into
-the population. The structure of the genome is randomly changed in the hope
-of creating a more fit individual. Thus, it must be applied with care, as it is
-also possible that some good part may be distorted in the process. This can be
-avoided by setting a low mutation probability or by elitism.
+the population. It randomly alters the genome in hope of creating a more
+fit individual. Thus, it must be applied with care, as it is
+also possible that some `good' parts of the genome may become distorted in the
+process. This can be avoided by setting a low mutation probability or by
+elitism.
 
 \paragraph{Stopping criteria}
 Some commonly used stopping criteria, as listed by Engelbrecht, are for example 
