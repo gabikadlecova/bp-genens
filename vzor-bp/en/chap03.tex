@@ -273,7 +273,7 @@ dUnion      & $\mbox{data}^n$        & data & Create feature union in the prepro
 and preprocessor present}} \\
 
 \multicolumn{4}{l}{\footnotesize
-\textsuperscript{2}\textit{Variable arity is allowed (i.e. $n \in <1, max\_n>)$}} \\
+\textsuperscript{2}\textit{Variable arity is allowed (i.e. $n \in [1, max\_arity])$}} \\
 
 \multicolumn{4}{l}{\footnotesize
 \textsuperscript{3}\textit{In the last level classifier and preprocessing
@@ -306,9 +306,39 @@ during the growing phase.
 \begin{algorithm}
 \DontPrintSemicolon 
 \caption{Modified grow method for individual initialization\label{alg:ourgrow}}
-  \KwData{maximum height \emph{max\_height}, maximum arity, node configi}
+  \KwData{maximum height \emph{max\_height}, maximum arity $max\_arity$, sets of nodes
+  $S_{func}$ and $S_{term}$, hyperparameter dictionary $H$}
   \KwResult{generated individual}
+  \SetKwFunction{Arity}{choose\_arity}
+  \SetKwFunction{HParams}{choose\_hyperparams}
   \;
+  $h \longleftarrow$ randomly select tree height from interval $[1, max\_height]$ 
+  \;  
+  \If{$h > 1$}{
+     set $cPipe$ or $cPred$ as the root of $ind$
+  }  
+  \Else{
+      \KwRet{a random classifier}
+  }
+  
+  \;
+  \While{$ind$ has a function with a child missing}{
+      $f \longleftarrow$ a parent node which can accept a child\;
+      $t_f \longleftarrow$ argument input type of $f$\;
+      $h_{node} \longleftarrow$ height at which the node is inserted
+      \;\;
+      \If{$h_{node} < h$}{
+      $S \longleftarrow S_{func}$
+      }
+      \Else{
+      $S \longleftarrow S_{term}$
+      }
+      $node \longleftarrow$ randomly choose a node from $S$ with output type $t_f$\;
+      $node.arity \longleftarrow$ \Arity{$node$, $max\_arity$}\;
+      $node.hyperparams \longleftarrow$ \HParams{$node$, $H$}\;\;
+      
+      add the child $node$ as an argument of $f$
+  }
   \KwRet{$ind$}
   
 \end{algorithm}
@@ -326,15 +356,18 @@ $out$. Then we select a group $g$ from $G$ by a weighted random choice.
 Finally, the node is selected by a simple random choice from $g$.
 
 \paragraph{Variable arity}
-Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}. This means
+Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}.
+For example, a voting may have two base estimators or many more, but the
+actual model combination method remains the same. Therefore, it is represented
+by a single nod. This means
 that the actual arity is determined just when the node is about to be inserted
-to the tree. The arity is determined by an interval which may or may not have
+into the tree. The arity is determined by an interval which may or may not have
 an upper bound. If the upper bound is not provided, it is usually limited by
 a global arity limit to avoid bloat of the trees.
 
 \paragraph{Method hyperparameters}
 Every node has a list of possible values per hyperparameter associated with
-it. During selection, the actual values are randomly selected from every list.
+it. During initialization, the actual values are randomly selected from every list.
 The validity is not verified in this phase, instead it is handled in the
 evaluation phase (section \ref{genens:eval}).
 
@@ -348,7 +381,7 @@ The mutation operators will be described in more detail.
 As defined in section \ref{treeops}, in subtree mutation a chosen subtree is
 replaced with a randomly generated tree. In our implementation we moreover
 limit the height of the generated tree. For height $h$ of the subtree, the
-height of the newly generated tree must be between $<1, h + \epsilon>$ for a
+height of the newly generated tree must be between $[1, h + \epsilon]$ for a
 small value of $\epsilon$. This way we ensure that for small subtrees the new
 subtree may be slightly higher and for big subtrees the overall height should
 not increase too much.
