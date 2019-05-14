@@ -123,7 +123,31 @@ Dedication.
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
-Abstract.
+
+This work deals with automated machine learning (AutoML), which is a field
+that aims to automatize the process of model selection for a given
+machine learning problem. We have developed a system that, for a given
+supervised learning task represented by a dataset, finds a suitable
+pipeline --- combination of machine learning, ensembles and preprocessing
+methods. For the search we designed a special instance of the developmental
+genetic programming which enables us to encode directed acyclic graph
+pipelines into a tree representation. The system is implemented in the 
+Python programming language and operates on top of the scikit-learn 
+library. The performance of our solution was tested on 72 datasets of 
+the OpenML-CC18 benchmark with very good results.
+
+Práce se zabývá automatickým strojovým učením (AutoML), které má za cíl
+automatizovat proces výběru vhodného modelu strojového učení pro daný problém.
+Vyvinuli jsme systém, který pro zadanou úlohu učení s učitelem
+reprezentovanou množinou dat najde vhodné schéma řešení (pipeline) ---
+kombinaci metod strojového učení, ansámblů a metod předzpracování. Jako
+prohledávací algoritmus jsme navrhli speciální variantu developmentálního
+genetického programování, která umožňuje reprezentovat orientované acyklické
+grafy schémat řešení pomocí stromů. Systém je implementován v programovacím
+jazyce Python a využívá knihovnu scikit-learn. Úspěšnost našeho řešení byla
+ověřena na 72 datových množinách benchmarku OpenML-CC18, na kterém jsme
+dosáhli dobrých výsledků.
+
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces

@@ -15,7 +15,7 @@ learning, Flach provides the following general definition:
 that improve their knowledge or performance with experience
 \citep{Flach:2012:MLA:2490546}.}
 
-
+% the algo also depends on some hyperparams which influence the learning process
 The knowledge of a system is gained through learning from \emph{experience}.
 This procedure is referred to as the \emph{training} phase. In this process, 
 the ML system adjusts its parameters according to the nature of training data.
@@ -337,6 +337,8 @@ a stochastic search through the space of all possible genomes
 
 % Maybe a better section name
 \subsection{Evolutionary algorithms in detail}
+% TODO evo pracuje s popu jedincema, pomoci op prechazi z jedny k druhy,
+% v cyklu, viz to vyse
 A general schema of an \emph{evolutionary algorithm} is presented in algorithm
 \ref{alg:EA}. Every evolutionary algorithm
 algorithm should define a suitable \emph{selection} method, \emph{mutation}
@@ -353,7 +355,7 @@ In case of evolutionary algorithms, we optimize a \emph{fitness} function,
 which determines the quality of an individual. It is an essential component of
 evolutionary algorithms, as it also determines the chance of an individual
 surviving and reproducing. To compute the fitness, we decode the genome of
-the individual to obtain the encoded solution. The result is then computed by
+the individual to obtain the actual solution. The result is then computed by
 applying the objective function on the solution. As such, the fitness function
 and the objective function are optimized simultaneously. Most frequently the
 value of both of the functions is the same.
