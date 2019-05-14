@@ -233,11 +233,15 @@ classifier method which is present in \ref{tab03:methods}. The purpose of
 these methods is to define which particular method should be inserted into
 a pipeline.
 
-Input type is defined as a cartesian product of types, output type
-is a single type; terminals have only the output type defined. Output types of
+In order to produce reasonable pipelines (i.e. with correct logical ordering of
+methods), we use the strongly typed genetic programming.
+This means that a node has a well-defined input and output type.
+Formally, the input type of is defined as a Cartesian product of types,
+whereas the output type is a single type; terminals have only the output type
+specified. Output types of
 child nodes must match the input type of parent node. The list of nodes
 is extensible,
-it is possible to add a definion of similar nodes, e.g. a different ensemble
+it is possible to add a definition of similar nodes, e.g. a different ensemble
 flavour like stacking. The nodes that are specific for a given estimator
 correspond to the list of methods in section \ref{tab03:methods}. To decode
 the pipeline, the tree is traversed from root to leaves while applying the
@@ -252,16 +256,16 @@ operations associated with the nodes.
 \mc{\textbf{Node}\textsuperscript{1}} & \mc{\textbf{In type}\textsuperscript{2}} &
 \mc{\textbf{Out type}\textsuperscript{3}} & \mc{\textbf{Operation}} \\
 \midrule
-cPipe       & $ens \times data$      & $out$  & Create pipeline with a preprocessor chain and a predictor \\
-cPred       & $ens$                  & $out$  & Create pipeline only with a predictor \\
-cData       & $featsel \times scale$ & $data$ & Create preprocessor chain with feature selector and scaler \\
-cFeatSelect & $featsel$              & $data$ & Create preprocessor chain only with a feature selector \\
-cScale      & $scale$                & $data$ & Create preprocessor chain only with a scaler \\
-dUnion      & $data^n$               & $data$ & Create feature union in the preprocessor chain \\
-\textit{ensemble} & $out^n$ & $ens$ & Insert ensemble \\
-\textit{classifier} & $\emptyset$ & $out$ & Insert classifier \\
-\textit{selector} & $\emptyset$ & $featsel$ & Insert feature selector \\
-\textit{scaler} & $\emptyset$ & $scale$ & Insert scaler \\
+cPipe       & ens $\times$ data      & out & Create pipeline with a preprocessor chain and a predictor \\
+cPred       & ens                    & out  & Create pipeline only with a predictor \\
+cData       & featsel $\times$ scale & data & Create preprocessor chain with feature selector and scaler \\
+cFeatSelect & featsel                & data & Create preprocessor chain only with a feature selector \\
+cScale      & scale                  & data & Create preprocessor chain only with a scaler \\
+dUnion      & $\mbox{data}^n$        & data & Create feature union in the preprocessor chain \\
+\textit{ensemble} & $\mbox{out}^n$          & ens  & Insert ensemble \\
+\textit{classifier} & $\emptyset$    & out  & Insert classifier \\
+\textit{selector} & $\emptyset$      & featsel  & Insert feature selector \\
+\textit{scaler} & $\emptyset$        &  scale  & Insert scaler \\
 \bottomrule
 
 \multicolumn{4}{l}{\footnotesize
@@ -282,7 +286,7 @@ can have output type $ens$ and $data$ resp.}}
 \subsection{Initialization} \label{sec:init}
 As the initial population we grow $n$ trees where every tree has a random
 height between 1 and overall maximum height (max\_height in algorithm
-\ref{alg:devgp}). The tree is grown from root, which
+\ref{alg:ourgrow}). The tree is grown from root, which
 is either a `cPipe' or `cPred' node (Table \ref{tab03:nodes}). Then, nodes are
 inserted into the tree according to the input type of the parent. Before the
 height limit is reached (during the \emph{growing phase}), both functions and
@@ -302,7 +306,7 @@ during the growing phase.
 \begin{algorithm}
 \DontPrintSemicolon 
 \caption{Modified grow method for individual initialization\label{alg:ourgrow}}
-  \KwData{maximum height, maximum arity, node config}
+  \KwData{maximum height \emph{max\_height}, maximum arity, node configi}
   \KwResult{generated individual}
   \;
   \KwRet{$ind$}
