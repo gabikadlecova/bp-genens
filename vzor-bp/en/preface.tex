@@ -46,12 +46,52 @@ discover novel structures.
 
 The goal of this work is to solve some of these limitations. We want to design
 an extensive system that enables to create more complex model architectures
-while also taking into account simpler structures with good results.
+while also taking into account simpler structures with equally good results.
 To do so, we explore existing systems and propose a a more general
 representation. A machine learning model has the structure of a pipeline ---
 a directed acyclic graph with a logical order of methods. As it is hard to
-optimize this kind of structure directly, we provide an encoding that converts
-an arbitrary pipeline to a tree representation.
+optimize this kind of structures directly, we provide an encoding that converts
+an arbitrary pipeline to a tree representation. This enables us to use the
+developmental genetic programming, which is a heuristic optimization method
+that operates on tree structures.
 
-model struct of a pipeline (meths applied one after another), 
-a typic. pipe has the struc of a DAG
+We will propose an evolutionary algorithm based on the developmental genetic
+programming. The algorithm should find the most suitable model architecture
+for a given problem as well as optimize the hyperparameters of every method
+contained in the structure. As we design more complex pipelines which may
+induce some overhead in evaluation time, we also introduce a performance
+estimation method based on sampling which should reduce the overall running
+time of the algorithm.
+
+The whole system will be evaluated on a suite of publicly available datasets
+--- on the OpenML-CC18 benchmark. This benchmark suite is tied with the OpenML
+machine learning environment, which is a project that provides data of
+results of previous runs on machine learning tasks. As such, we will be able
+to compare our system with reference results.
+
+This thesis has the following structure. Chapter \ref{ch1:prelim} provides the
+necessary theoretical background of this work. We first define the machine
+learning in general (section \ref{sec:ml}), along with the process of model
+evaluation. We will also describe the ensembles --- combinations of models
+--- in detail. Then we present an overview of problems which are solved by
+AutoML systems (chapter \ref{sec:automl}). In section \ref{ea}, we define the
+evolutionary algorithms in a general way, as well as some concepts relevant
+to our work, namely the multi-objective optimization. Next, we continue with
+a subfield of evolutionary algorithms, which is the genetic programming.
+Specifically, we present the developmental genetic programming which we will
+use in our work (section \ref{sec:gp}). 
+Chapter \ref{ch2:related} is dedicated to existing AutoML systems, which are
+also compared with our approach.
+In chapter \ref{our:solution} we present our solution in detail. We describe
+in what way we use the developmental genetic programming and the character of
+the tree encoding (section \ref{genens:devGP}). Moreover, we discuss the
+performance estimation strategy used in our work (section\ref{genens:eval}).
+Finally, section \ref{genens:impl} lists some implementation details of our
+system along with utilized libraries.
+In chapter \ref{experiments} we will examine the general properties of our
+system and assess its performance. We first carry out an experiment which
+compares the different sampling strategies proposed in previous chapters (
+section \ref{sec:exp:sample}). Next, we test the influence of genetic
+operators on the quality of the solution (section \ref{sec:exp:genop}).
+Finally, we evaluate our system on the OpenmML-CC18 benchmark and present the
+results in section \ref{sec:exp:openml}.
