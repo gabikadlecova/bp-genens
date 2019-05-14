@@ -109,7 +109,7 @@ section \ref{sec:init}. All reproduction operators are presented in section
   \Fn{\GenValid{}}{
   		\While{$score$ is not valid}{
            $ind \longleftarrow$ initialize a new individual\;
-           $score \longleftarrow$ \Eval{ind}
+           $score \longleftarrow$ \Eval{$ind$}
         }
   }  
   \;  
@@ -431,6 +431,7 @@ classification problems. Tables \ref{tab:clf}, \ref{tab:prepro} and
 configuration. Every method has a list of hyperparameter values associated
 with it. These are optimized during the process of evolution;
 if a hyperparameter is not present, it will be always set to its default value.
+The list has been created by slightly extending the hyp. list composed by \ref{aaa}. 
 
 {\footnotesize
 \begin{longtable}{l l}
