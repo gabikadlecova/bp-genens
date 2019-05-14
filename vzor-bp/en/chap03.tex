@@ -4,18 +4,38 @@
 In our solution we design an AutoML system for workflow optimization based on
 developmental genetic programming. Compared to existing systems it supports 
 arbitrary-sized pipelines as well as complex ensemble structures. An overview
-of the process is shown in algorithm \ref{alg:genens}. In section
-\ref{genens:devGP} we describe how we apply the developmental GP to this
-problem (line \ref{line:devGP}). Evaluation of pipelines (line \ref{line:compile})
-and implementation details as well as relation to scikit-learn
-(\cite{scikit-learn}) are presented in section \ref{genens:eval}.
+of the process is shown in algorithm \ref{alg:genens}.
+
+The input of the
+algorithm is the dataset for which we want to find an optimized pipeline, and
+configuration of the system. The latter comprises of settings of the
+underlying evolutionary algorithm, configuration related to encoding (Tables
+\ref{tab03:nodes} and \ref{tab03:methods}, or a user-defined alternative) and
+evaluation method along with the metric used for scoring.
+
+The dataset provided to the algorithm must be already preprocessed to some
+extent, as no imputation of missing values or string feature encoding is
+performed. On the other hand, feature selection and scaling is a part of
+the algorithm.
+
+When everything is set up, we run the developmental GP optimization
+(line \ref{line:devGP}), which operates with pipelines in a tree-based
+representation. The output of this algorithm are individuals which
+performed the best on the given datasets. The individuals are decoded into
+pipelines (line \ref{line:compile}) and returned as the final output of the
+algorithm.
+
+The process of the developmental GP along with the specific tree encoding of
+individuals is described in more detail in section \ref{genens:devGP}. 
+Evaluation of pipelines and implementation details as well as relation to
+scikit-learn (\cite{scikit-learn}) are presented in section \ref{genens:eval}.
 
 \begin{algorithm}
 \DontPrintSemicolon 
 \caption{Pipeline optimization --- main\label{alg:genens}}
   \KwData{dataset $d$, configuration $c$}
   \KwResult{optimized pipelines}
-  \SetKwFunction{Compile}{Compile}
+  \SetKwFunction{Compile}{compile}
   \;
   $individuals \longleftarrow$ run developmental GP on $d$ with $c$ \label{line:devGP} \;
   $pipelines \longleftarrow$ \Compile{$individuals$} \label{line:compile}
@@ -49,7 +69,8 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
 \caption{Pipeline optimization --- developmental GP \label{alg:devgp}}
   \KwData{population size $k$, maximum number of generations $max\_gen$,
   crossover probability $p_{cx}$,
-  mutation probabilities $p_{mut}$, $p_{mut\_node}$, $p_{mut\_args}$ }
+  mutation probabilities $p_{mut}$, $p_{mut\_node}$, $p_{mut\_args}$,
+  height and arity limits $max\_height$ and $max\_arity$ }
   \KwResult{evolved tree individuals}
   \SetNoFillComment
   \SetKwFunction{Cx}{crossover}

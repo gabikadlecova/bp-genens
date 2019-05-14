@@ -80,11 +80,8 @@
 \renewcommand{\forcond}{$i$ \KwTo\Range{$n$}}
 \AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
 
-
-% TODO notice this line, discuss it
-\PassOptionsToPackage{usenames}{xcolor}
 % TODO
-%\usepackage[usenames]{xcolor}  % typesetting in color
+\usepackage{xcolor}  % typesetting in color
 
 %%% Basic information on the thesis
 
@@ -136,17 +133,17 @@ Python programming language and operates on top of the scikit-learn
 library. The performance of our solution was tested on 72 datasets of 
 the OpenML-CC18 benchmark with very good results.
 
-Práce se zabývá automatickým strojovým učením (AutoML), které má za cíl
-automatizovat proces výběru vhodného modelu strojového učení pro daný problém.
-Vyvinuli jsme systém, který pro zadanou úlohu učení s učitelem
-reprezentovanou množinou dat najde vhodné schéma řešení (pipeline) ---
-kombinaci metod strojového učení, ansámblů a metod předzpracování. Jako
-prohledávací algoritmus jsme navrhli speciální variantu developmentálního
-genetického programování, která umožňuje reprezentovat orientované acyklické
-grafy schémat řešení pomocí stromů. Systém je implementován v programovacím
-jazyce Python a využívá knihovnu scikit-learn. Úspěšnost našeho řešení byla
-ověřena na 72 datových množinách benchmarku OpenML-CC18, na kterém jsme
-dosáhli dobrých výsledků.
+% Práce se zabývá automatickým strojovým učením (AutoML), které má za cíl
+% automatizovat proces výběru vhodného modelu strojového učení pro daný problém.
+% Vyvinuli jsme systém, který pro zadanou úlohu učení s učitelem
+% reprezentovanou množinou dat najde vhodné schéma řešení (pipeline) ---
+% kombinaci metod strojového učení, ansámblů a metod předzpracování. Jako
+% prohledávací algoritmus jsme navrhli speciální variantu developmentálního
+% genetického programování, která umožňuje reprezentovat orientované acyklické
+% grafy schémat řešení pomocí stromů. Systém je implementován v programovacím
+% jazyce Python a využívá knihovnu scikit-learn. Úspěšnost našeho řešení byla
+% ověřena na 72 datových množinách benchmarku OpenML-CC18, na kterém jsme
+% dosáhli dobrých výsledků.
 
 }
 
@@ -193,10 +190,6 @@ dosáhli dobrých výsledků.
 %%% Tables used in the thesis (consider if this is needed)
 %%% In mathematical theses, it could be better to move the list of tables to the beginning of the thesis.
 \listoftables
-
-%%% Abbreviations used in the thesis, if any, including their explanation
-%%% In mathematical theses, it could be better to move the list of abbreviations to the beginning of the thesis.
-\chapwithtoc{List of Abbreviations}
 
 %%% Attachments to the bachelor thesis, if any. Each attachment must be
 %%% referred to at least once from the text of the thesis. Attachments
