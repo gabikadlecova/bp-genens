@@ -53,13 +53,35 @@ scikit-learn (\cite{scikit-learn}) are presented in section \ref{genens:eval}.
 In this section, we describe the necessary components of the evolutionary algorithm.
 The process corresponds to the schema of a general evolutionary algorithm
 \ref{alg:EA}. A more detailed schema is presented in algorithm \ref{alg:devgp}.
-Individuals of this particular EA are pipelines encoded as trees via
-developmental GP; the encoding is summarized in section \ref{sec:encoding}.
-The initialization procedure (line \ref{alg:genens:init}) is explained in
-section \ref{sec:init}. All reproduction operators
-(line \ref{alg:genens:repro}) are presented in section \ref{sec:repro}.
-Finally, the selection and fitness are specified in section \ref{sec:fitsel}
-(lines \ref{alg:genens:genvalid} and \ref{alg:genens:nsga}).
+
+The input of the algorithm is the population size, maximum number of
+generations (which defines the stopping condition), probabilities of a genetic
+operator being applied and node arity and tree height limits.
+
+At the beginning, the initial population of individuals, that is, encoded pipelines,
+is generated and evaluated (lines \ref{alg:genens:init} and
+\ref{alg:genens:genvalid}). If an error occurred during the evaluation of a
+pipeline, the corresponding individual is removed from the population. New 
+individuals are then generated and evaluated until a valid one is found.
+
+We then run the actual evolutionary optimization (line \ref{alg:evo}).
+In every generation, we first perform the parent selection of individuals for
+reproduction (line~\ref{alg:parent}). Then, the genetic operators are applied
+with well-defined
+probabilities one after another (lines \ref{alg:firstop}--\ref{alg:lastop}).
+The newly created offspring are evaluated and added
+to population of offspring; in case of invalid fitness, we generate a
+valid individual instead(lines \ref{alg:offseval}--\ref{alg:offsvalid}).
+Finally, the next generation is created by
+performing the NSGA-II selection on population of offspring and parents
+combined (line \ref{alg:genens:nsga}).
+
+In following sections we describe the components of this particular
+evolutionary algorithm in detail. The encoding of pipelines is summarized in
+section \ref{sec:encoding} and the initialization procedure is explained in
+section \ref{sec:init}. All reproduction operators are presented in section
+\ref{sec:repro}. Finally, the selection and fitness are specified in section
+\ref{sec:fitsel}.
 
 
 \begin{algorithm}
@@ -82,13 +104,13 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
   \SetKwFunction{GenValid}{generate\_valid}
   \;
  
-  \Fn{\Eval}{ \label{alg:genens:eval}
-        $pipe \longleftarrow$ \Compile($ind$) \;
+  \Fn{\Eval{$ind$}}{ \label{alg:genens:eval}
+        $pipe \longleftarrow$ \Compile{$ind$} \;
         $score, time \longleftarrow$ cross-validate $pipe$ on a sample\;
         $ind.fitness \longleftarrow (score, \log\mleft(time\mright))$
   }
   \;
-  \Fn{\GenValid}{
+  \Fn{\GenValid{}}{
   		\While{$score$ is not valid}{
            $ind \longleftarrow$ initialize a new individual\;
            $score \longleftarrow$ \Eval{ind}
@@ -98,21 +120,23 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
   \tcc{run developmental GP}  
   $P(0) \longleftarrow$ initialize population of GP trees \label{alg:genens:init}
   \;\;
-  \While{$n < max\_gen$}{
-      \;
-      \tcc{compute fitness of population}
-      \For{$ind$ in $P(n)$} {  \label{alg:genens:genvalid}
-         \Eval{$ind$}\;
-         \If{fitness is not valid}{
-             \GenValid{$ind$}
-         }
-      }
+  \tcc{compute fitness of initial population}
+  \For{$ind$ in $P(n)$} {  \label{alg:genens:genvalid}
+     \Eval{$ind$}\;
+     \If{fitness is not valid}{
+         \GenValid{$ind$}
+     }
+  }
+  \;
+  \tcc{the process of evolution}
+  \While{$n < max\_gen$}{ \label{alg:evo}
+      
       \;
       \tcc{reproduction} \label{alg:genens:repro}
       \For{$i$ in \Range{$k/2$}} {
-         $i_1, i_2 \longleftarrow$ tournament selection from $P(n)$
+         $i_1, i_2 \longleftarrow$ tournament selection from $P(n)$ \label{alg:parent}
 
-         \If{$p_{cx}$} {
+         \If{$p_{cx}$} { \label{alg:firstop}
             \Cx{$i_1$, $i_2$} \tcc*[r]{subtree crossover}
          }
          \;
@@ -123,19 +147,19 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
             \Mutnode{$i_k$} \tcc*[r]{node mutation}
          }
          \If{$p_{mut\_args}$ for $k=1,2$} {
-            \Mutarg{$i_k$} \tcc*[r]{hyperparameter mutation}
+            \Mutarg{$i_k$} \label{alg:lastop} \tcc*[r]{hyperparameter mutation} 
          }
          
          \;
-         \If{\Eval{$i_k$} for $k=1,2$}{
+         \If{\Eval{$i_k$} for $k=1,2$}{ \label{alg:offseval}
              add $i_k$ to offspring population $P_o(n)$
          }
          \Else{
-             \GenValid{$i_k$} and add to $P_o(n)$
+             \GenValid{$i_k$} and add to $P_o(n)$ \label{alg:offsvalid}
          }
       }
       \;
-      $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$ \label{alg:genens:nsga} \;
+      $P(n+1) \longleftarrow$ NSGA-II selection from $P_o(n)$ and $P(n)$ \label{alg:genens:nsga} \;
   }
   \;
   \KwRet{Pareto front of $P(c)$} 
@@ -151,10 +175,15 @@ Finally, the selection and fitness are specified in section \ref{sec:fitsel}
 \label{pic02:pipeline}
 \end{figure}
 
-The individual encoding is one of the most important parts of this system. With
-ensembles and complex feature preprocessing methods like stacking or feature
-union, most of the pipelines become in fact directed acyclic graphs (Figure~\ref{pic02:pipeline}). Therefore, we cannot directly use the simple tree-based
-encoding. Instead we use the developmental GP with cellular encoding described
+The encoding is one of the most important parts of this system. The individual
+represents a particular ML pipeline, which is composed of a chain of feature
+preprocessing methods and of a final estimator. Additionally, we may allow
+more complex pipeline steps like ensembles and complex feature
+preprocessing methods like stacking or feature union (some of these methods are
+described in the book by \cite{Brazdil:2008:MAD:1507541}). In such case, most of the
+pipelines become in fact directed acyclic graphs (Figure~\ref{pic02:pipeline}).
+Therefore, we cannot directly use the simple tree-based encoding. Instead we
+use the developmental GP with cellular encoding described
 in section~\ref{devGP}.
 
 In our case, the embryo is an empty pipeline. To create a complex pipeline, we
@@ -173,7 +202,7 @@ The process can be demonstrated on Figure
 be modified by subsequent operations. In this case, the left subtree modifies
 the ensemble structure whereas the right subtree modifies the feature
 preprocessor chain. The pipeline contains only one preprocessor, hence the
-right subtree is terminated by the corresponding node. The left son can be
+right subtree is terminated by the corresponding node. The left child can be
 either an ensemble or a simple method. Here it is the AdaBoost ensemble which
 has one base classifier. The subestimator is again a pipeline, which is composed
 of a MinMaxScaler and Stochastic gradient descent classifier. The specific
