@@ -44,10 +44,6 @@ scikit-learn (\cite{scikit-learn}) are presented in section \ref{genens:eval}.
   
 \end{algorithm}
 
-% POHLED ZVRCHU shrnout vse, detaily dole
-
-% indiv. preloz do sklearn pipeliny, evaluuj ji na datech
-
 
 \section{Evolutionary optimization of pipelines} \label{genens:devGP}
 In this section, we describe the necessary components of the evolutionary algorithm.
@@ -58,7 +54,7 @@ The input of the algorithm is the population size, maximum number of
 generations (which defines the stopping condition), probabilities of a genetic
 operator being applied and node arity and tree height limits.
 
-At the beginning, the initial population of individuals, that is, encoded pipelines,
+At the beginning, the initial population of individuals, that is, encoded pi\-pe\-li\-nes,
 is generated and evaluated (lines \ref{alg:genens:init} and
 \ref{alg:genens:genvalid}). If an error occurred during the evaluation of a
 pipeline, the corresponding individual is removed from the population. New 
@@ -193,7 +189,12 @@ modify it by inserting steps into it.
     \subfloat[Tree encoding]{{\includegraphics[width=0.25\textwidth]{../img/ada.png} }}%
     \qquad
     \subfloat[Encoded pipeline]{{\includegraphics[width=0.5\textwidth]{../img/ada-pdfa.pdf} }}%
-    \caption{An example pipeline encoded to a tree individual}%
+    \caption[An example pipeline encoded into a tree individual]{
+    An example pipeline encoded into a tree individual. The word \emph{cPipe}
+    stands for our pipeline representation, other acronyms refer to
+    corresponding ML methods --- the AdaBoostClassifier ensemble method,
+    SGD classifier and preprocessing methods PCA and MinMaxScaler.
+    }%
     \label{pic:pipeencoding}%
 \end{figure}
 
@@ -202,18 +203,40 @@ The process can be demonstrated on Figure
 be modified by subsequent operations. In this case, the left subtree modifies
 the ensemble structure whereas the right subtree modifies the feature
 preprocessor chain. The pipeline contains only one preprocessor, hence the
-right subtree is terminated by the corresponding node. The left child can be
+right subtree is terminated by the corresponding node, PCA in this case. The
+left child can be
 either an ensemble or a simple method. Here it is the AdaBoost ensemble which
 has one base classifier. The subestimator is again a pipeline, which is composed
 of a MinMaxScaler and Stochastic gradient descent classifier. The specific
-hyperparameter of every pipeline step are stored aside the nodes and are not
+hyperparameters of every pipeline step are stored aside the nodes and are not
 depicted in the figures.
 
 \label{sec:decoding}
 Table \ref{tab03:nodes} lists all nodes used in the current implementation of
-our system. Input type is defined as a cartesian product of types, output type
+our system. There are several nodes that represent structure altering
+operations. The most common nodes are \emph{cPipe} and \emph{cPred}, which
+create a pipeline in the model. The pipeline is composed from an estimator
+and, in case of \emph{cPipe}, of a feature preprocessor chain. The estimator
+may be another pipeline or a single base estimator.
+
+The nodes \emph{cFeatSelect}, \emph{cScale} and \emph{cData} all create the feature
+preprocessor chain. The first node creates a chain that contains only a
+feature selection method, the second creates a chain with a scaling method
+and the last creates a chain with both types of preprocessors. This way, the
+methods may be logically ordered one after another. The last node which
+operates with preprocessing methods is \emph{dUnion}. It inserts a feature union
+into the preprocessor chain --- a method that takes several feature
+preprocessing methods and combines the outputs into a final output.
+
+Lastly, we define a specific node for every ensemble, preprocessing and
+classifier method which is present in \ref{tab03:methods}. The purpose of
+these methods is to define which particular method should be inserted into
+a pipeline.
+
+Input type is defined as a cartesian product of types, output type
 is a single type; terminals have only the output type defined. Output types of
-child nodes must match the input type of parent node. The list is extensible,
+child nodes must match the input type of parent node. The list of nodes
+is extensible,
 it is possible to add a definion of similar nodes, e.g. a different ensemble
 flavour like stacking. The nodes that are specific for a given estimator
 correspond to the list of methods in section \ref{tab03:methods}. To decode
@@ -258,7 +281,8 @@ can have output type $ens$ and $data$ resp.}}
 
 \subsection{Initialization} \label{sec:init}
 As the initial population we grow $n$ trees where every tree has a random
-height between 1 and overall maximum height. The tree is grown from root, which
+height between 1 and overall maximum height (max\_height in algorithm
+\ref{alg:devgp}). The tree is grown from root, which
 is either a `cPipe' or `cPred' node (Table \ref{tab03:nodes}). Then, nodes are
 inserted into the tree according to the input type of the parent. Before the
 height limit is reached (during the \emph{growing phase}), both functions and
@@ -275,6 +299,16 @@ necessary to include them, as otherwise it would be impossible to finish the
 tree in one level, but they would force the trees to be very short if used
 during the growing phase.
 
+\begin{algorithm}
+\DontPrintSemicolon 
+\caption{Modified grow method for individual initialization\label{alg:ourgrow}}
+  \KwData{maximum height, maximum arity, node config}
+  \KwResult{generated individual}
+  \;
+  \KwRet{$ind$}
+  
+\end{algorithm}
+
 \paragraph{Weighted selection}
 During the node selection, we use weights to manage the probability of a node
 to be chosen. The motivation is that some nodes represent lightweight methods
@@ -282,10 +316,10 @@ which have a short execution time, whereas some nodes slow down the evaluation
 process, especially when present multiple times in the tree.
 
 The process is as follows: every node is assigned to a group and each group has
-a well defined weight. When selecting a node $n$ with output type $out$, we 
+a well defined weight. When selecting a particular node with output type $out$, we 
 first determine all groups $G$ which correspond to any node with output type
 $out$. Then we select a group $g$ from $G$ by a weighted random choice.
-Finally, $n$ is selected by a simple random choice from $g$.
+Finally, the node is selected by a simple random choice from $g$.
 
 \paragraph{Variable arity}
 Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}. This means
@@ -298,11 +332,12 @@ a global arity limit to avoid bloat of the trees.
 Every node has a list of possible values per hyperparameter associated with
 it. During selection, the actual values are randomly selected from every list.
 The validity is not verified in this phase, instead it is handled in the
-evaluation phase \ref{genens:eval}.
+evaluation phase (section \ref{genens:eval}).
 
 \subsection{Genetic operators} \label{sec:repro}
-In our system we use one type of crossover and three different types of
-mutation. The crossover is the standard strongly typed subtree-swap operation.
+In our system, we use one type of crossover and three different types of
+mutation. The crossover is the standard strongly typed subtree-swap operation,
+as described in section \ref{treeops}.
 The mutation operators will be described in more detail.
 
 \paragraph{Subtree mutation}
