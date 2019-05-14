@@ -1,13 +1,57 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
 
-Over the last few years we have witnessed an enormous success of the artificial
+Over the last few years we have witnessed an enormous success of artificial
 intelligence. Thanks to advances in machine learning, a great variety of
 applications emerged, ranging from automatized analyses of documents, through
-image recognition to music recommendation. The artificial intelligence is already
-influencing many parts of our everyday lives.
+image recognition to music recommendation. The artificial intelligence is also
+present in medical research and has initiated the Industry 4.0. As so, it
+already influences many parts of our everyday lives.
 
-However, most of these examples rely on fine tuned models developed by large
-teams of experts. In addition, a lot of time and resources is necessary. These
-factors make the machine learning off-limits to non-experts from unrelated
-fields. % maybe sth about finances
+Most of these examples are however complex systems developed by large teams of
+data scientists and machine learning experts. Every machine learning algorithm
+depends on a set of hyperparameters which influence the learning process.
+Because of that, to obtain good results they must be carefully chosen,
+otherwise the algorithm fails to capture important relations in data. The
+design of a machine learning model is therefore a time-consuming process
+which requires lots of fine-tuning often done by trial and error. 
+
+The character of the input data matters as well, sometimes
+a series of preprocessing must be done before it is possible to analyse it.
+Moreover, powerful machine learning methods, like neural networks, are usually
+very computationally demanding, which further complicates the process.
+
+As such, for small teams and non-experts it may be very difficult (or even
+impossible) to develop a working machine learning system. Due to limitations
+in time, budget or knowledge, instead of choosing the model best suited for
+their purpose, they resort to simple methods with default settings. In some
+cases, this approach may not even produce any satisfactory results.
+
+The automated machine learning (AutoML) is a recent area of research that aims
+to overcome these problems. It is a field that opens up the world of machine
+learning to more people and facilitates the work of machine learning experts
+as well. It encompasses systems that automatize a part of a machine learning
+workflow, which is the iterative process of solving the given problem. Some
+methods optimize the whole workflow, thus enabling the user to obtain decent
+results even without any adjustments or data preprocessing. Other are aimed
+at facilitating the model selection by proposing some models which can be
+further optimized by experts.
+
+Nevertheless, the results of AutoML systems are not always better
+than hand-designed models. The reason is that in order to limit the running time
+without impairing the result, compromises must be made. Existing systems
+usually limit the architecture of the model or operate only with a small number
+of methods. Although this approach works relatively well, it is not possible to
+discover novel structures.
+
+The goal of this work is to solve some of these limitations. We want to design
+an extensive system that enables to create more complex model architectures
+while also taking into account simpler structures with good results.
+To do so, we explore existing systems and propose a a more general
+representation. A machine learning model has the structure of a pipeline ---
+a directed acyclic graph with a logical order of methods. As it is hard to
+optimize this kind of structure directly, we provide an encoding that converts
+an arbitrary pipeline to a tree representation.
+
+model struct of a pipeline (meths applied one after another), 
+a typic. pipe has the struc of a DAG
