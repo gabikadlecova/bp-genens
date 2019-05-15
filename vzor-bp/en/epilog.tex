@@ -1,2 +1,25 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
+
+The goal of our work was to develop an AutoML system for automatic
+pipeline optimization. Using the developmental GP, we created a general encoding
+of the scikit-learn pipelines that converts a DAG pipeline into a tree representation.
+
+The encoding was designed in an extensible way. The method search space can be easily 
+extended with more ensembles and methods that comply to the scikit-learn API.
+We also implemented a tree individual that, compared to the DEAP tree individual, supports
+variable arity of nodes.
+
+We introduced several bloat-reducing approaches. The grow method of the GP was
+modified to initialize less branched trees, which are more suitable in case of
+pipelines. We also employed a weighted node selection, which prefers simpler methods.
+As so, we avoided nested ensembles which are computationally demanding, but do not
+significantly improve the score.
+
+We also designed several genetic operators used for architecture optimization of the
+pipelines as well as for hyperparameter optimization of contained methods.
+
+
+
+
+focus more on the data preprocessing part
