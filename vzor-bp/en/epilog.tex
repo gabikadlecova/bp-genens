@@ -40,11 +40,36 @@ results. This behaviour is to be subject of future research. Finally, in all cas
 the results were better than the simple case where all genetic operators were turned
 off.
 
-Finally, we evaluated the performance on the system on the OpenML-CC18 benchmark suite.
+In the last experiment, we evaluated the performance on the system on the OpenML-CC18 benchmark suite.
 We ran the evolutionary optimization on each of the 72 datasets of the
 benchmark, while using one of the sampling strategies. Three best pipelines were evaluated
 and the maximum of the scores was chosen as the final output. We then compared our
-results with the statistic of runs uploaded to OpenML.
+results with the statistic of runs uploaded to OpenML. Overall, on most datasets
+our system performed better than the upper quartile of OpenML runs or only slightly
+below it. In one case, our system outperformed all runs uploaded to OpenML.
+
+In future extensions of our system, there are several concepts which are to be
+explored. As has been shown in the second experiment, the mutation of hyperparameters
+may significantly improve the results. As such, it would be suitable to employ a
+better optimization strategy that a simple selection of values from a list. One
+possibility would be to use the evolutionary strategies, which is a subfield of
+evolutionary algorithms particularly suited for continuous optimization. Another
+option is to create a Bayesian optimization method inspired by existing AutoML
+systems. Moreover, some additional methods may yield promising results, notably
+hill-climbing or mutation of multiple hyperparameters at once.
+
+As shown in experiment 2, it is necessary to further optimize the genetic operators.
+Again, more sophisticated methods could lead to interesting pipeline architectures.
+A related problem is the setting of weights used for initialization, which should be
+thoroughly explored.
+
+To extend the methods used in the pipelines, a stacking estimator should be added
+to the primitive set, as it may lead to very promising results. Also, we should focus
+more on the data preprocessing methods, as users of this system still need to perform
+some initial encoding and imputation of missing data. Our system should be then
+compared with existing AutoML methods on suitable benchmark data.
+
+
 
 % Future work
 
