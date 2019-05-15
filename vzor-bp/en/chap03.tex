@@ -4,13 +4,13 @@
 In our solution we design an AutoML system for workflow optimization based on
 developmental genetic programming. Compared to most of the existing systems it supports 
 arbitrary-sized pipelines as well as complex ensemble structures. An overview
-of the process is shown in algorithm \ref{alg:genens}.
+of the process is shown in Algorithm \ref{alg:genens}.
 
 The input of the
 algorithm is the dataset for which we want to find an optimized pipeline, and
 configuration of the system. The latter comprises of settings of the
 underlying evolutionary algorithm, configuration related to encoding (Tables
-\ref{tab03:nodes} and \ref{tab03:methods}, or a user-defined alternative) and
+\ref{tab03:nodes} and \ref{tab03:methods}, or a user-defined alternative), and an
 evaluation method along with the metric used for scoring.
 
 The dataset provided to the algorithm must be already preprocessed to some
@@ -19,9 +19,9 @@ performed. On the other hand, feature selection and scaling is a part of
 the algorithm.
 
 When everything is set up, we run the developmental GP optimization
-(line \ref{line:devGP}), which operates with pipelines in a tree-based
+(line \ref{line:devGP} of Algorithm \ref{alg:genens}), which operates with pipelines in a tree-based
 representation. The output of this algorithm are individuals which
-performed the best on the given datasets. The individuals are decoded into
+performed the best on the given dataset. The individuals are decoded into
 pipelines (line \ref{line:compile}) and returned as the final output of the
 algorithm.
 
@@ -47,12 +47,12 @@ scikit-learn (\cite{scikit-learn}) are presented in section \ref{genens:eval}.
 
 \section{Evolutionary optimization of pipelines} \label{genens:devGP}
 In this section, we describe the necessary components of the evolutionary algorithm.
-The process corresponds to the schema of a general evolutionary algorithm
-\ref{alg:EA}. A more detailed schema is presented in algorithm \ref{alg:devgp}.
+The process corresponds to the scheme of a general evolutionary algorithm
+(Algorithm~\ref{alg:EA}). A more detailed scheme is presented in Algorithm \ref{alg:devgp}.
 
 The input of the algorithm is the population size, maximum number of
 generations (which defines the stopping condition), probabilities of a genetic
-operator being applied and node arity and tree height limits.
+operator being applied, node arity and tree height limits.
 
 At the beginning, the initial population of individuals, that is, encoded pi\-pe\-li\-nes,
 is generated and evaluated (lines \ref{alg:genens:init} and
@@ -67,14 +67,14 @@ with well-defined
 probabilities one after another (lines \ref{alg:firstop}--\ref{alg:lastop}).
 The newly created offspring are evaluated and added
 to population of offspring; in case of invalid fitness, we generate a
-valid individual instead(lines \ref{alg:offseval}--\ref{alg:offsvalid}).
+valid individual instead (lines \ref{alg:offseval}--\ref{alg:offsvalid}).
 Finally, the next generation is created by
 performing the NSGA-II selection on population of offspring and parents
 combined (line \ref{alg:genens:nsga}).
 
-In following sections we describe the components of this particular
+In the following sections we describe the components of this particular
 evolutionary algorithm in detail. The encoding of pipelines is summarized in
-section \ref{sec:encoding} and the initialization procedure is explained in
+section \ref{sec:encoding}, and the initialization procedure is explained in
 section \ref{sec:init}. All reproduction operators are presented in section
 \ref{sec:repro}. Finally, the selection and fitness are specified in section
 \ref{sec:fitsel}.
@@ -167,7 +167,7 @@ section \ref{sec:init}. All reproduction operators are presented in section
 \subsection{Individual encoding} \label{sec:encoding}
 \begin{figure}[ht]\centering
 \includegraphics[width=0.7\textwidth]{../img/pipeline-pdfa.pdf}
-\caption{Schema of an example pipeline}
+\caption{Scheme of an example pipeline}
 \label{pic02:pipeline}
 \end{figure}
 
@@ -236,7 +236,7 @@ a pipeline.
 In order to produce reasonable pipelines (i.e. with correct logical ordering of
 methods), we use the strongly typed genetic programming.
 This means that a node has a well-defined input and output type.
-Formally, the input type of is defined as a Cartesian product of types,
+Formally, the input type of a function node is defined as a Cartesian product of types,
 whereas the output type is a single type; terminals have only the output type
 specified. Output types of
 child nodes must match the input type of parent node. The list of nodes
@@ -296,7 +296,7 @@ is no terminal to terminate with in the first set. Thus, the second set is defin
 as to be able to finish the initialization properly.
 
 Algorithm \ref{alg:ourgrow} shows the process in detail. Along with the two sets it
-takes as it input the height and arity limits and the dictionary of method hyperparameters
+takes as its input the height and arity limits and the dictionary of method hyperparameters
 associated with the nodes.
 First, we determine the height of the tree as a random number between 1 and
 $max\_height$, which is the hyperparameter of our system
@@ -408,8 +408,8 @@ predictor  & 1.0 \\
 \paragraph{Variable arity}
 Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}.
 For example, a voting may have two base estimators or many more, but the
-actual model combination method remains the same. Therefore, it is for convenience
-represented by a single node type.
+actual model combination method remains the same. Therefore, it is represented by a
+single node type for convenience.
 
 The input type of a node is a Cartesian product of its argument types. If we allow
 variable arity of each type, the input type is instead defined as
@@ -417,12 +417,12 @@ $$t = \prod_{i=1}^{n}t_i^{k_i},$$
 where $t_i$ is a specific type, $k_i$ is its arity and $\forall i=1\ldots n - 1, t_i \neq t_{i+1}$.
 The representation is defined in a general way as to allow ensembles with groups
 of arguments. The ensemble methods used in this work (Table \ref{tab03:nodes})
-are all relatively simple, but in future extensions more complex cases may be added.
+are all relatively simple, but in future extensions, more complex cases may be added.
 
 The actual arity is determined just when the node is about to be inserted
 into the tree. The range of possible arities is specified by an interval which may or may not have
 an upper bound. If the upper bound is not provided, the values are limited by
-a global arity limit ($max\_arity$ in algorithm \ref{alg:ourgrow}) to avoid bloat
+a global arity limit ($max\_arity$ in Algorithm \ref{alg:ourgrow}) to avoid bloat
 of the trees.
 
 \paragraph{Method hyperparameters}

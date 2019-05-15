@@ -349,7 +349,7 @@ a stochastic search through the space of all possible genomes
 \subsection{Evolutionary algorithms in detail}
 % TODO evo pracuje s popu jedincema, pomoci op prechazi z jedny k druhy,
 % v cyklu, viz to vyse
-A general schema of an \emph{evolutionary algorithm} is presented in algorithm
+A general schema of an \emph{evolutionary algorithm} (EA) is presented in Algorithm
 \ref{alg:EA}. Every evolutionary algorithm
 algorithm should define a suitable \emph{selection} method, \emph{mutation}
 and/or \emph{crossover} operators and a \emph{fitness function}.
@@ -378,7 +378,7 @@ in section \ref{moo}.
 \paragraph{Selection} \label{p}
 The selection may be divided into two steps. The first is the 
 \emph{parent selection}, also called \emph{mating selection}
-(line \ref{parent:sel}), and the second is called
+(line \ref{parent:sel} of Algorithm \ref{alg:EA}), and the second is called
 \emph{environmental selection} or \emph{recombination} (line \ref{envir:sel}).
 Sometimes the latter is omitted, as the selection can be limited to copying 
 all offspring to the new population.
@@ -400,7 +400,7 @@ into account the age of the individuals. As such, it is possible to include
 or not to include the parents along with the offspring. A popular option is to 
 directly choose a small number of the most successful individuals. This method 
 is called \emph{elitism} \citep{Eiben:2015:IEC:2810085}.
-A widely used elitist selection algorithm is NSGA-II, which is used for
+A widely used elitist selection algorithm is the NSGA-II, which is used for
 multiobjective fitness functions and is described in more detail in section
 \ref{nsgaii}.
 
@@ -411,7 +411,7 @@ structure of individuals to create new ones. Both operations are highly
 dependent on problem encoding, as they directly alter the structure of
 individuals. An example of the operators can be found in section
 \ref{gp:treebased}. In the schema of the
-\hyperref[alg:EA]{evolutionary algorithm} (EA), reproduction operators
+\hyperref[alg:EA]{evolutionary algorithm}, reproduction operators
 are applied on parents selected by the mating selection, as can be seen on 
 lines \ref{crossover} and \ref{mutation}.
 
@@ -507,8 +507,8 @@ this purpose, we need the following definition.
 In a minimization problem, a vector $x_1$ dominates a vector $x_2$ if and 
 only if 
 \begin{compactitem}
-\item $\forall i=1,\ldots,k: f_i(x_1) \leq f_i(x_2)$, and
-\item $\exists j=1,\ldots,k: f_j(x_1) < f_j(x_2)$
+\item $\forall i\in\{1,\ldots,k\}: f_i(x_1) \leq f_i(x_2)$, and
+\item $\exists j\in\{1,\ldots,k\}: f_j(x_1) < f_j(x_2)$
 \end{compactitem}
 \end{definition}
 
@@ -525,8 +525,8 @@ is defined as
 $PF^* =\{\, f=(f_1(x^*),\ldots f_k(x^*)) \mid x^* \in P^* ) \,\}$. 
 \end{definition}
 
-If we use evolutionary computation to solve multi-objective problems, the
-algorithm needs to be modified. As not every individuals are directly
+If we use the evolutionary computation to solve multi-objective problems, the
+algorithm needs to be modified. As not all individuals are directly
 comparable, we cannot use the selection operators defined in
 \ref{ea}. As such, there are various approaches on how to solve this problem,
 which can be divided into three groups:
@@ -539,7 +539,7 @@ but does not use the dominance
 \item Pareto-based solutions --- tries to approximate the Pareto front
 \end{compactitem}
 
-From these three groups, we describe in more detail one Pareto-based algorithm.
+From these three groups, we describe in more detail a Pareto-based algorithm.
 More examples are presented in 
 \cite[p.~170-173]{Engelbrecht:2007:CII:1557464}.
 The algorithm is called Nondominated sorting genetic algorithm (NSGA). It is a
@@ -552,10 +552,10 @@ front number to its individuals and removing the from the subpopulation.
 The process is repeated with front numbers increasing until no unassigned
 individuals remain. Every front then obtains a dummy fitness value, where
 the fitness of a front $F(n)$ is better than the fitness of $F(n+1)$. Moreover,
-for every individual the value is divided by a \emph{niching} factor (while
+for every individual, the value is divided by a \emph{niching} factor (while
 keeping the fitness inequality). For a distance metric $d$ and a parameter
 $\sigma_{share}$, the niching factor is defined as
-$$N(i)=\sum_{j\neq i}{S(d(i,j))}$$ where $S$ is a sharing function computed as
+$$N(i)=\sum_{j\neq i}{S(d(i,j))},$$ where $S$ is a sharing function computed as
 \begin{equation}
     S(d(i,j))=
     \begin{cases}
@@ -570,12 +570,11 @@ manner, for example as the count of individuals closer than $\sigma_{share}$
 
 \label{nsgaii}
 As the algorithm has some drawbacks, like dependence on $\sigma_{share}$,
-a very high computational complexity and lack of elitism, the authors of
-NSGA have proposed an improved variant called NSGA-II. This algorithm not only
+a very high computational complexity and lack of elitism, the authors of NSGA have proposed an improved variant called NSGA-II. This algorithm not only
 adresses the above-mentioned problems, it also outperforms other elitist
-algorithms \citep{Deb:2002:FEM:2221359.2221582}. An extended version designed
-for the many-objective optimization (with four or more objectives) has also
-been developed --- NSGA-III \citep{6600851}.
+algorithms \citep{Deb:2002:FEM:2221359.2221582}. An extended version ---
+the NSGA-III --- designed for the many-objective optimization (with four or more objectives)
+has also been developed \citep{6600851}.
 
 \section{Genetic programming} \label{sec:gp}
 % TODO GP and dev-GP applications
@@ -589,7 +588,7 @@ use.
 \subsection{Tree-based genetic programming} \label{gp:treebased}
 The individuals are most frequently represented in the form of 
 \emph{syntax trees}. Inner nodes of the tree are \emph{functions}, whereas 
-leaves  are constants (\emph{terminals}) and variables. Together, all possible
+leaves  are constants and variables (\emph{terminals}). Together, all possible
 functions and terminals form the \emph{primitive set}. Every function of the
 set must have a well-defined arity value.
 
@@ -621,7 +620,7 @@ otherwise a lot of invalid individuals would be generated. As a consequence,
 in simple GP all functions have arguments of a single type and produce output
 of the same type. A more complex case is the \emph{strongly typed GP}. It
 constraints the primitive set in such a way that every primitive has a
-well-defined output type and in addition every function defines input types of
+well-defined output type and in addition, every function defines input types of
 its arguments. With this we lose the closure property, so the genetic operators
 need to be designed in a more careful way \citep[p.~21]{Poli:2008:FGG:1796422}.
 
@@ -629,7 +628,7 @@ need to be designed in a more careful way \citep[p.~21]{Poli:2008:FGG:1796422}.
 During the initialization, the nodes of the tree are selected from the
 primitive set which is provided as input to the algorithm
 \citep{Koza:1992:GPP:138936}. As was mentioned, there are various methods of 
-initialization. We well present two methods that are among the simplest and 
+initialization. We will present two methods that are among the simplest and 
 most used ones --- \emph{grow} and \emph{full}.
 
 In both cases, nodes are selected at random and inserted to the tree up to a
@@ -660,7 +659,7 @@ is selected in each individual independently. Then, subtrees corresponding
 to the points are exchanged between them.
 
 Similarly, the most used mutation technique is the \emph{subtree mutation}.
-Just like in subtree crossover, a mutation point is randomly chosen.
+Just like in subtree crossover, a mutation point is chosen randomly.
 Afterwards, the corresponding subtree is entirely replaced by a new randomly
 generated tree. Another possibility is to swap a node with a different one
 from the primitive set --- this is called the \emph{point mutation}.
@@ -686,7 +685,7 @@ specific \emph{cellular encoding} of individuals. It was first presented by
 \cite{Gruau:1994:thesis} as a form of evolution of neural network architecture.
 In cellular encoding, an \emph{embryo} is a basic structure from which all
 individuals are created.
-The root of the GP tree responds to this cell and every subtree corresponds
+The root of the GP tree corresponds to this cell, and every subtree corresponds
 to operations which modify specific parts of the cell. In the case of neural
 networks, these operation are for example node insertion or parallel/serial
 duplication of a part of the network. John Koza has used the developmental GP

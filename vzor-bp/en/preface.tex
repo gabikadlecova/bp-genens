@@ -64,7 +64,7 @@ estimation method based on sampling which should reduce the overall running
 time of the algorithm.
 
 The whole system will be evaluated on a suite of publicly available datasets
---- on the OpenML-CC18 benchmark. This benchmark suite is tied with the OpenML
+--- namely the OpenML-CC18 benchmark. This benchmark suite is tied with the OpenML
 machine learning environment, which is a project that provides data of
 results of previous runs on machine learning tasks. As such, we will be able
 to compare our system with reference results.
@@ -77,21 +77,22 @@ evaluation. We will also describe the ensembles --- combinations of models
 AutoML systems (chapter \ref{sec:automl}). In section \ref{ea}, we define the
 evolutionary algorithms in a general way, as well as some concepts relevant
 to our work, namely the multi-objective optimization. Next, we continue with
-a subfield of evolutionary algorithms, which is the genetic programming.
+the description of a subfield of evolutionary algorithms, which is the genetic programming.
 Specifically, we present the developmental genetic programming which we will
 use in our work (section \ref{sec:gp}). 
 Chapter \ref{ch2:related} is dedicated to existing AutoML systems, which are
 also compared with our approach.
-In chapter \ref{our:solution} we present our solution in detail. We describe
-in what way we use the developmental genetic programming and the character of
+In chapter \ref{our:solution} we present our solution in detail.
+The original evolutionary algorithm for the search of ML pipelines is presented.
+We describe in what way we use the developmental genetic programming and the character of
 the tree encoding (section \ref{genens:devGP}). Moreover, we discuss the
 performance estimation strategy used in our work (section\ref{genens:eval}).
 Finally, section \ref{genens:impl} lists some implementation details of our
 system along with utilized libraries.
 In chapter \ref{experiments} we will examine the general properties of our
 system and assess its performance. We first carry out an experiment which
-compares the different sampling strategies proposed in previous chapters (
-section \ref{sec:exp:sample}). Next, we test the influence of genetic
+compares the different sampling strategies proposed in previous chapters
+(section \ref{sec:exp:sample}). Next, we test the influence of genetic
 operators on the quality of the solution (section \ref{sec:exp:genop}).
 Finally, we evaluate our system on the OpenmML-CC18 benchmark and present the
 results in section \ref{sec:exp:openml}.
