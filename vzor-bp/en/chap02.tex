@@ -74,12 +74,16 @@ preprocessing methods \citep{Olson2016EvoBio}.
 The other system --- \emph{ML-Plan} --- is based on hierarchical planning
 \citep{Mohr2018}. Both of the methods support a chain of feature preprocessors,
 including feature union and stacking (ensemble methods which construct new
-features from subestimators). However, none of these methods support more
-complex ensemble structures.
-% TODO performance estimation? TPOT newly uses subsets of features...
-\paragraph{Comparison of TPOT with our system}
+features from subestimators).
 
+Nevertheless, none of these methods support more complex ensemble structures. The
+system GP-ML developed by \cite{Kren2017AutomaticCO} uses the strongly typed
+functional programming to develop an arbitrary pipeline structure. This type of GP
+is partly similar to the developmental GP, as every node represents a function.
+However, the constraints on the structure are specified in the language of
+functional programming, which is very different from our approach.
 
+\paragraph{Comparison of our system with TPOT}
 Our system relates most to TPOT, as it uses genetic programming to optimize
 the pipelines. However, instead of using the simple GP like TPOT does, we use
 the developmental GP which enables us to create more complex ensemble
@@ -108,3 +112,18 @@ system are based on `lower fidelities' --- our model proposes sampling strategie
 reduces the instance count, whereas in TPOT there has been recently introduced a
 special biologically inspired feature selection that significantly reduced the
 running time \citep{Le502484}.
+
+\paragraph{Comparison of our system with GP-ML}
+The idea behind GP-ML is to separate the actual ensemble methods from the splitters
+and combinators. A splitter is a method that takes input data and splits or copies them
+into new data; the result is then passed to base-estimators. The combiner in turn
+combines the output of the estimators into a final output.
+
+Compared with our system, this approach is more general, as in our case both
+splitting and combining is implicitly defined by a specific ensemble, which acts as
+a black box. Thus, if we want to combine a specific splitting strategy with a
+combining function, we must define a new ensemble. On the other hand, as the
+developmental GP has a simpler constraint interface, the extensibility is probably
+easier. Moreover, it is more easily convertible to scikit-learn pipeline API, which
+opens up the optimization space for new methods. Lastly, to represent a pipeline as
+an individual of GP-ML, it is necessary to utilize more nodes than in our case.
