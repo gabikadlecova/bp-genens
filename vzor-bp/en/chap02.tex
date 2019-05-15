@@ -1,11 +1,11 @@
 \chapter{Related work} \label{ch2:related}
-The goal of this work is to designe an AutoML system for pipeline optimization.
+The goal of this work is to design an AutoML system for pipeline optimization.
 As such, we present existing AutoML systems in this chapter to provide insight
 into this recently emerged field. There are several approaches, with every system
 focusing on a different aspect of the problem. The examples are divided into
-two groups, where the first comprises of methods focusing mainly on simple
-models and the second of systems which enable more complex architectures.
-Finally we compare the systems, which used a similar approach in
+two groups, where the first one comprises of methods focusing mainly on simple
+models, and the second one of systems which enable more complex architectures.
+Finally, we compare the systems, which used a similar approach in
 pipeline structure representation, with the system designed by us.
 
 \paragraph{Hyperparameter optimization methods} \label{CASH}
@@ -28,11 +28,11 @@ and discarding the rest \citep{Feurer:2015:ERA:2969442.2969547}.
 % AutoNet --- based on autoweka, CASH for ANN, architecture as well (via
 % parametrization)
 
-Although these systems work quite well in practice, they support only a small
-number of model architectures. The algorithms used in Auto-WEKA are general
-enough, but the number of subestimators is limited to 5 and only base-learners can
-be used. Auto-sklearn abandoned ensembles altogether in the optimization process
-and does not support an arbitrary ensemble in the final step of the algorithm.
+Although these systems work quite well in practice, only a small number of model
+architectures is supported. The algorithms used in Auto-WEKA are general
+enough, but the number of subestimators is limited to 5, and only base-learners can
+be used. Auto-sklearn abandoned ensembles altogether in the optimization process,
+and it does not support an arbitrary ensemble in the final step of the algorithm.
 The reason behind this limitation is that by increasing the model complexity the
 configuration space becomes too large.
 
@@ -49,12 +49,12 @@ NAS is the process of optimization of deep neural network architectures. It may 
 seen as a subfield of AutoML, as along with the architecture search it may perform
 a hyperparameter optimization. It has already been
 successful in some problem classes like image recognition or object detection, where
-its architectures outperformed those designed by hand. In the paper by 
+its architectures outperformed those designed by hand. In the paper by \label{NAS:perf}
 \cite{2018arXiv180805377E}, the NAS methods are classified according to three
 dimensions --- search space, search strategy and performance estimation strategy.
-The search space is understood as all possible neural network architectures, that
+The search space is understood as all possible neural network architectures that
 can be created with the automatic method. The search strategy classifies the method
-used for architecture optimization --- some examples are the already mentioned
+used for architecture optimization --- some examples include the already mentioned
 evolutionary algorithms and Bayesian optimization, as well as the reinforcement
 learning or random search. Finally, the performance estimation strategies are aimed
 at reduction of running time. These include `lower fidelities estimates', for example
@@ -93,17 +93,18 @@ example the voting ensemble, which combines the output of several base-estimator
 However, the main difference is that in our system, the pipelines are composed
 from a feature preprocessor chain and of an estimator, which may be in fact another
 pipeline with the same structure. In TPOT, there is also a feature preprocessor
-chain, but at the end of the pipeline must be a simple base-estimator. As such, it
+chain, but at the end of the pipeline, there must be a simple base-estimator. As such, it
 is impossible to create nested structures as in our case.
 
 TPOT also focuses more on the feature preprocessing step of the 
-workflow, providing additional built-in transformers beyond the scikit-learn 
+workflow, introducing additional built-in transformers beyond the scikit-learn 
 provided algorithms, for example a more scalable OneHotEncoder or the stacking
 ensemble. TPOT uses either a standard tournament selection or 
 NSGA-II and multiobjective fitness. The latter is however composed from the 
-score and the tree size, whereas ours uses the score and evaluation time.
+score and the tree size, whereas our system uses the score and evaluation time.
 
-The three dimensions of the optimization may be partly applied to pipeline
+The three dimensions of the optimization, which were mentioned in the
+\hyperref[NAS:perf]{context of NAS}, may be partly applied to pipeline
 optimization as well. For example, the search space of our method are all pipelines,
 whereas the TPOT operates on the search space of tree based pipelines. In both cases,
 the search strategy is the genetic programming, more precisely the developmental GP
