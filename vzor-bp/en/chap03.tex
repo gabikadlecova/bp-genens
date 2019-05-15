@@ -373,6 +373,38 @@ first determine all groups $G$ which correspond to any node with output type
 $out$. Then we select a group $g$ from $G$ by a weighted random choice.
 Finally, the node is selected by a simple random choice from $g$.
 
+The default values of weights are shown in Table \ref{tab03:weights}. Every node
+from Table~\ref{tab03:nodes} is part of exactly one of the groups --- cPipe
+and cPred nodes are in
+group \emph{pipeline}, the group \emph{union} contains only the dUnion node and
+\emph{transform} is the group of cData, cFeatSelect and sScale nodes. The rest of
+the groups corresponds to nodes specific for a given machine learning methods, that
+is, \emph{predictor} is a group of all classifiers and so on. The \emph{ensemble\_l}
+is a group of `lightweight' ensembles; it contains the voting ensemble, which is
+not so computationally demanding as for example the AdaBoostClassifier,
+and therefore it can be selected more frequently.
+
+\begin{table}[ht]
+
+\centering
+\caption{Default weights of node groups}\label{tab03:weights}
+\begin{tabular}{l c}
+\toprule
+\textbf{Group name} & \textbf{Weight} \\
+\midrule
+pipeline   & 1.0 \\
+union      & 0.3 \\
+transform  & 1.0 \\
+prepro     & 1.0 \\
+ensemble   & 0.5 \\
+ensemble\_l\textsuperscript{1} & 1.0 \\
+predictor  & 1.0 \\
+\bottomrule
+\multicolumn{2}{l}{\footnotesize\textsuperscript{1}\itshape less demanding ensembles}
+\end{tabular}
+
+\end{table}
+
 \paragraph{Variable arity}
 Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}.
 For example, a voting may have two base estimators or many more, but the

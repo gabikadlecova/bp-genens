@@ -7,7 +7,7 @@ Finally, we dedicate two sections to the heuristic optimization method ---
 evolutionary computation and its subfield, genetic programming.
 
 \section{Machine learning} \label{sec:ml}
-The field of machine learning, shortly ML, encompasses a broad range of
+The field of machine learning (ML) encompasses a broad range of
 algorithms and statistical methods for data processing. In his book on machine
 learning, Flach provides the following general definition:
 
@@ -25,15 +25,15 @@ as the \emph{testing} data, we obtain the output of the algorithm. The
 result is then evaluated to determine the performance of the method 
 \citep[p.~2]{Bishop:2006:PRM:1162264}. The character of the learning process
 varies with different machine learning problems. There are three main classes 
-of tasks: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement} 
+of ML tasks: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement} 
 learning.
 
 In case of supervised learning, the training data is a set of labelled examples
 (also called instances)
-and the task is to predict labels of previously unseen data. The field is 
+and the task is to predict labels (also called the target) of previously unseen data. The field is 
 further subdivided into two groups. If the labels are elements of a finite 
 number of discrete categories, the problem is called \emph{classification}. 
-The continuous case is then called \emph{regression}.
+Otherwise, if a label may be any real number, the problem is called \emph{regression}.
 In contrast to supervised learning, in unsupervised learning the training data 
 is unlabelled. The key task is then to divide the data into groups of 
 similar examples. The task of reinforcement learning is to find suitable
@@ -41,7 +41,7 @@ actions as to maximize a reward. The training data is in this case a history of
 previous actions and corresponding rewards \citep[p.~3]{Bishop:2006:PRM:1162264}.
 
 In the following sections we elaborate on some important concepts of machine
-learning. We will focus on supervised learning.
+learning. We will focus on supervised learning, as it is the subject of our work.
 
 \subsection{Performance of machine learning models}
 In this section we describe the general terms related to performance evaluation 
@@ -75,28 +75,33 @@ The performance of a model is thus tied with a small error rate. However, it is
 important to note that good performance on training data does not ensure 
 just as good performance on new data. Sometimes the model performs 
 exceptionally well on training data, but fares much worse on testing data. 
-This behaviour is called \emph{overfitting} and usually occurs when 
+This behaviour is called \emph{overfitting}, and it usually occurs when 
 unnecessarily subtle details of the data are learned. The opposite concept 
 is called \emph{generalisation}, which is the ability to perform well on 
 different types of testing data.
 
-A related term is so-called \emph{bias-variance dilemma}, which is a phenomenon
+A related term is the so-called \emph{bias-variance dilemma}, which is a phenomenon
 closely related to model selection. The bias and variance of a model are
 defined as follows \citep[p.59,~356]{CaseBerg:01}.
 
 \begin{definition}[Bias and variance]
 Bias of a model is the value $E(h_t(X)) - y$, where $h_t$ is a
-hypothesis learned from a particular training set $t$ and $X$ and $y$ is the
+hypothesis learned from a particular training set $t$, and $X$ and $y$ is the
 set used for evaluation. Variance of a model is defined as $E[(h_t(X) - y)^2]$.
 \end{definition}
 
-Practically, a model with few parameters will make some errors even with
+In practice, a model with few parameters will make some errors even with
 sufficient training data, thus introducing a bias from the correct output.
 On the other hand, by  increasing the number of model parameters, it will
 highly depend on training data. Then, with small changes in data there will be
 a high variance in the output. A model with both small bias and small variance
 can rarely be found, hence it is often necessary to choose the side that is
-less harmful to the particular task. Another option
+less harmful to the particular task. Also, a choice of a particular model can
+introduce an implicit bias. For example, some models are linear, while other models
+consider that the data is of a special distribution. As so, if the input data does
+not match the assumptions, errors be made.
+
+Another option how to approach the bias-variance dilemma
 is to use some of the ensemble methods described in section \ref{ensemble}. For
 example, \hyperref[bagging]{bagging} is a method of variance reduction, while
 \hyperref[boosting]{boosting} noticeably reduces the bias
@@ -141,7 +146,7 @@ the model. The boosting method has directly inspired one of the most successful
 ensemble methods --- the award winning AdaBoost
 \citep{Freund:1996:ENB:3091696.3091715, Freund:1997:DGO:261540.261549}.
 
-In the following sections, we will present some of the most used ensemble 
+In the following paragraphs, we will present some of the most used ensemble 
 methods.
 \phantomsection
 \paragraph{Bagging} \label{bagging}
@@ -180,13 +185,13 @@ When using machine learning in practice, it is not always evident which model
 is suitable for a particular problem. As a consequence of the `no free lunch'
 theorem \citep{585893}, it is not possible for a single ML algorithm to
 outperform all other methods for an arbitrary problem instance. As such, model
-selection and hyperparameter choice must be performed in order to obtain a 
+selection and hyperparameter choice must often be performed in order to obtain a 
 satisfactory result. Along with this, it is necessary to use more complex
 models for some ML problems. For example, we may use some of the ensemble
 methods which reduce bias or variance (section \ref{ensemble}). Also, the data
 typically requires some preprocessing before it can be passed to a ML
 algorithm, hence the model becomes even more complex. All these aforementioned
-tasks require human  expertise and are usually time-consuming. The automated
+tasks require human expertise, and they are usually time-consuming. The automated
 machine learning --- AutoML --- aims to automatize the process and make
 machine learning available even to non-experts \citep{Zller2019SurveyOA}.
 % TODO internet source - AutoML page
@@ -196,8 +201,8 @@ According to \cite{DBLP:journals/corr/abs-1810-13306},
 \textquote{\textit{AutoML attempts to construct machine learning programs
 \ldots without human assistance and within limited computational budgets.}}
 Informally, AutoML encompasses methods that automatize a part of a machine
-learning workflow. Examples of existing AutoML systems are presented in chapter
-\ref{ch2:related}.
+learning workflow. Examples of existing AutoML systems are presented in
+Chapter~\ref{ch2:related}.
 
 \subsection{Machine learning workflows}
 A machine learning workflow is the process of solving a particular machine
@@ -287,7 +292,7 @@ Another option is to estimate the performance of the architecture. There are
 various approaches. For example, we can evaluate the model on smaller subsets of
 data, which however introduces some bias in the estimate. Another option is to
 decrease the training time, if it is possible, and extrapolate the learning
-curve. More on this topic is described in a recent survey by
+curve. More on this topic can be found in a recent survey by
 \cite{2018arXiv180805377E}.
 
 \subsection{Metalearning} \label{metalearning}
@@ -297,7 +302,7 @@ data and the learning process itself. Just as in case of the traditional
 learning --- called \emph{base-learning} in this context --- metalearning
 improves with experience. The difference lies in the learning process. While
 base-learning comprises of a single run on a specific task, metalearning may
-include several runs or many different tasks. 
+include several runs on many different tasks. 
 
 One of the applications of metalearning is model recommendation. The input
 data is most frequently a history of previous runs. First, we need to
@@ -305,7 +310,7 @@ accumulate some \emph{metadata} to learn from. Mostly, the metadata contains
 algorithm performance from past runs and \emph{metafeatures}, which are
 artificial features based on characteristics of input datasets. Using the
 \emph{metaknowledge} learned from the metadata, we can choose an algorithm that
-performed well on dataset- whose metafeatures are similar to those of our
+performed well on a dataset whose metafeatures are similar to those of our
 dataset.
 
 There are many other concepts used in metalearning; some are presented in more
@@ -592,7 +597,7 @@ to be adopted, for example it is possible to add a second objective to the funct
 that minimizes the number of nodes \citep[p.~24--26]{Poli:2008:FGG:1796422}.
 More about multi-objective optimization can be
 read in section \ref{moo}. We also mention other bloat-reducing approaches 
-in chapter \ref{our:solution}.
+in Chapter \ref{our:solution}.
 
 The initialization step of the genetic programming is very important, as
 there are many different ways how to design trees. Also, specialized genetic
@@ -686,6 +691,6 @@ that has been previously designed for a specific purpose by hand.
 
 In our work we are using developmental GP to evolve ML workflows, which have
 the structure of a directed acyclic graph. We present this in more detail in
-chapter \ref{our:solution} along with specific examples of the encoding and
+Chapter \ref{our:solution} along with specific examples of the encoding and
 of modifying operations.
 .
