@@ -1,11 +1,16 @@
 \chapter{Related work} \label{ch2:related}
-In this section we present existing AutoML system. The examples are divided into
+The goal of this work is to designe an AutoML system for pipeline optimization.
+As such, we present existing AutoML systems in this chapters to provide insight
+into this recently emerged field. There are several approaches, with every system
+focusing on a different aspect of the problem. The examples are divided into
 two groups, where the first comprises of methods focusing mainly on simple
 models and the second of systems which enable more complex architectures.
-Finally we compare one of the systems (TPOT) with our approach.
+Finally we compare the systems, which used a similar approach in
+pipeline structure representation, with the system designed by us.
 
 \paragraph{Hyperparameter optimization methods} \label{CASH}
-The first attempt to solve the CASH problem was the AutoML system \emph{Auto-WEKA}
+The first attempt to solve the CASH problem (defined in section \ref{CASH})
+was the AutoML system \emph{Auto-WEKA}
 \citep{DBLP:journals/corr/abs-1208-3719}. It employs a Bayesian optimization
 method to find the optimal set of hyperparameters. To solve the model selection
 at the same time, an artificial hyperparameter which represents the selected
