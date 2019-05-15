@@ -28,7 +28,7 @@ varies with different machine learning problems. There are three main classes
 of ML tasks: \emph{supervised}, \emph{unsupervised} and \emph{reinforcement} 
 learning.
 
-In case of supervised learning, the training data is a set of labelled examples
+In case of the supervised learning, the training data is a set of labelled examples
 (also called instances)
 and the task is to predict labels (also called the target) of previously unseen data. The field is 
 further subdivided into two groups. If the labels are elements of a finite 
@@ -39,6 +39,12 @@ is unlabelled. The key task is then to divide the data into groups of
 similar examples. The task of reinforcement learning is to find suitable
 actions as to maximize a reward. The training data is in this case a history of
 previous actions and corresponding rewards \citep[p.~3]{Bishop:2006:PRM:1162264}.
+
+In all ML tasks, the actual learning process is influenced by the
+\emph{hyperparameters} of the algorithm. Not to be confused with the internal
+parameters which are set during the learning process, the hyperparameters are the
+actual settings of the algorithm. Often, the hyperparameters largely influence the
+success of a particular method on a specific machine learning task.
 
 In the following sections we elaborate on some important concepts of machine
 learning. We will focus on supervised learning, as it is the subject of our work.
@@ -340,7 +346,6 @@ quality of the corresponding solution. The whole process can be understood as
 a stochastic search through the space of all possible genomes
 (\cite{Engelbrecht:2007:CII:1557464}).
 
-% Maybe a better section name
 \subsection{Evolutionary algorithms in detail}
 % TODO evo pracuje s popu jedincema, pomoci op prechazi z jedny k druhy,
 % v cyklu, viz to vyse
