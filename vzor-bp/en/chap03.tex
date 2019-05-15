@@ -247,7 +247,7 @@ correspond to the list of methods in section \ref{tab03:methods}. To decode
 the pipeline, the tree is traversed from root to leaves while applying the
 operations associated with the nodes.
 
-\begin{table}[b!]
+\begin{table}[ht]
 
 \centering
 \caption{Nodes representing modifying operations}\label{tab03:nodes}
@@ -295,7 +295,9 @@ there is a cPipe, cPred or dUnion node (Table \ref{tab03:nodes}) in the penultim
 is no terminal to terminate with in the first set. Thus, the second set is defined
 as to be able to finish the initialization properly.
 
-Algorithm \ref{alg:ourgrow} shows the process in detail.
+Algorithm \ref{alg:ourgrow} shows the process in detail. Along with the two sets it
+takes as it input the height and arity limits and the dictionary of method hyperparameters
+associated with the nodes.
 First, we determine the height of the tree as a random number between 1 and
 $max\_height$, which is the hyperparameter of our system
 (line \ref{alg:ourgrow:height}). If the selected height is one, we directly return
@@ -309,14 +311,16 @@ select a node whose output type matches the type of this argument. Also, we choo
 its hyperparameters and, if it is a function, we define its arity (this is
 described in section \ref{sec:fitsel}). Finally, the node can be inserted as a child
 of the function into the tree
-(lines \ref{alg:ourgrow:process}--\ref{alg:ourgrow:processend}).
+(lines \ref{alg:ourgrow:process}--\ref{alg:ourgrow:processend}). This process ends
+as soon as all functions have a child for every argument. The output of the algorithm
+is the generated individual.
 
 As terminals are inserted in the growing phase as well, the tree may become
 smaller than the height limit. However, if the tree were built using the full
 method, it would introduce a lot of feature preprocessing methods for taller
 trees.
 
-\begin{algorithm}
+\begin{algorithm}[t]
 \DontPrintSemicolon 
 \caption{Modified grow method for individual initialization\label{alg:ourgrow}}
   \KwData{maximum height \emph{max\_height}, maximum arity $max\_arity$, sets of nodes
@@ -375,8 +379,9 @@ actual model combination method remains the same. Therefore, it is represented
 by a single nod. This means
 that the actual arity is determined just when the node is about to be inserted
 into the tree. The arity is determined by an interval which may or may not have
-an upper bound. If the upper bound is not provided, it is usually limited by
-a global arity limit to avoid bloat of the trees.
+an upper bound. If the upper bound is not provided, it is limited by
+a global arity limit ($max\_arity$ in algorithm \ref{alg:ourgrow}) to avoid bloat
+of the trees.
 
 \paragraph{Method hyperparameters}
 Every node has a list of possible values per hyperparameter associated with
@@ -387,19 +392,26 @@ evaluation phase (section \ref{genens:eval}).
 \subsection{Genetic operators} \label{sec:repro}
 In our system, we use one type of crossover and three different types of
 mutation. The crossover is the standard strongly typed subtree-swap operation,
-as described in section \ref{treeops}.
-The mutation operators will be described in more detail.
+as described in section \ref{treeops}. The first mutation type is the \emph{subtree
+mutation}, which is used to replace whole parts of the pipeline with new structures.
+The other two mutation types are more conservative: the \emph{point mutation} replaces
+a random node of the tree with a new one, while the \emph{node argument mutation} randomly
+changes a hyperparameter of a node.
+The mutation operators will be described in more detail in the following paragraphs.
 
 \paragraph{Subtree mutation}
-As defined in section \ref{treeops}, in subtree mutation a chosen subtree is
+This mutation type is in the most `aggressive' mutation type in this system, as
+it greatly alters the structure of a pipeline. As defined in section \ref{treeops},
+in subtree mutation a chosen subtree is
 replaced with a randomly generated tree. In our implementation we moreover
 limit the height of the generated tree. For height $h$ of the subtree, the
 height of the newly generated tree must be between $[1, h + \epsilon]$ for a
 small value of $\epsilon$. This way we ensure that for small subtrees the new
 subtree may be slightly higher and for big subtrees the overall height should
-not increase too much.
+not increase too much. In other words, we try to minimize the bloat induced by
+this operation.
 
-\paragraph{Node swap mutation}
+\paragraph{Point mutation}
 In this type of mutation, a randomly chosen node is replaced with a new node.
 Both output and input types must match; if the new node supports variable
 arity, all input types of the old node must satisfy the bounds. For this type
@@ -417,8 +429,9 @@ The specific machine learning methods which are used in the pipelines along
 with evaluation details are listed in the following section.
 
 The fitness has two objectives~---~evaluation score and logarithmized
-evaluation time. The enviromental selection is done via NSGA-II and the 
-parental selection is a tournament selection based on individual dominance and 
+evaluation time. The enviromental selection is done via the NSGA-II operator
+(described in section \ref{nsgaii}), and the 
+parent selection is a tournament selection based on individual dominance and 
 crowding distance. This approach allows us to prefer simpler yet
 well-performing pipelines, as complex ensemble methods are typically
 time-consuming. 
@@ -703,13 +716,15 @@ We use one of the performance estimation methods mentioned in section
 
 The strategy is as follows: we generate stratified random samples of the
 original dataset. The samples are either generated per generation or per
-every fitness evaluation, while the latter has proved to be more effective. A
-possible explanation is that if we generate only one sample per generation,
-we cannot ensure that it is representative enough. Thus, the individuals which
-score particularly well on this sample may not generalize well. The second
-approach suffers from this problem as well, but since we generate a sample
-per evaluation, every individual has a fair chance of getting a good sample.
-Possible improvements of this approach are presented in section \ref{future}.
+every fitness evaluation. Both approaches were compared in experiment
+\ref{sec:exp:sample}; although we have not shown any significant difference between
+the methods, the results had a greater variance if the sample was generated for
+every individual evaluation. A possible explanation is that if we generate a sample
+per generation, the fitness of individuals from a single generation is directly
+comparable, but in the second case all samples are different and one fitness value
+may have a diametrically different meaning than another. More flexible sampling and
+evaluation methods should be developed in future extensions of the system as to
+improve the overall results.
 
 As the samples are typically much smaller than the whole dataset, the score
 is computed as a (stratified) k-fold cross-validation on a sample.
@@ -733,8 +748,6 @@ reimplemented the concept.
 For parallelization of fitness evaluations we used the library Joblib
 \citep{joblib}.
 
-% TODO timeouts cite lib (+ check if any other libraries like that)
-
 \subsection{Configurability}
 The system can be customised by following configuration hyperparameters:
 
@@ -749,27 +762,5 @@ The system can be customised by following configuration hyperparameters:
 \item custom scorer (according to scikit-learn API)
 \end{itemize}
 
-
-
-% o chap 4
-% exper.
-
-% exp - evaluace - per gen, per ind, cele  10x 10 fold cv (train test?)
-%    --- schovat kappu
-
-% V patek rozmyslet experiment
-% probs & wilt + small, big dataset
-
-% popsat ten velky, jako posledni experiment
-% porovnani ja vs max z openml
-% popsat...
-% boxplot,...
-% cil je jestli to funguje...
-% presne nastaveni. Vsechno. Na githubu mit to nstaveni, zkopirovat configy
-
-% zeptat na obrazky, az to vygeneruju
-
-% patek Conclus, Intro
-
-
-% Cil, nastaveni, vysledky tabulka obrazek jedinec; koment, co je videt, ukazali jsme co jsme chteli?
+A set of scripts designed for testing of the system is also included in the project
+repository.
