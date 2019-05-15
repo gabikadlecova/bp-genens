@@ -663,3 +663,16 @@ month={Aug},}
   volume={26},
   pages={1-24}
 }
+
+@article {Le502484,
+	author = {Le, Trang T. and Fu, Weixuan and Moore, Jason H.},
+	title = {Scaling tree-based automated machine learning to biomedical big data with a dataset selector},
+	elocation-id = {502484},
+	year = {2018},
+	doi = {10.1101/502484},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Automated machine learning (AutoML) systems are helpful data science assistants designed to scan data for novel features, select appropriate supervised learning models and optimize their parameters. For this purpose, Tree-based Pipeline Optimization Tool (TPOT) was developed using strongly typed genetic programming to recommend an optimized analysis pipeline for the data scientist{\textquoteright}s prediction problem. However, TPOT may reach computational resource limits when working on big data such as whole-genome expression data. We introduce two new features implemented in TPOT that helps increase the system{\textquoteright}s scalability: Dataset selector and Template. Dataset selector (DS) provides the option to specify subsets of the features as separate datasets, assuming the signals come from one or more of these specific data subsets. Built in at the beginning of each pipeline structure, DS reduces the computational expense of TPOT to only evaluate on a smaller subset of data rather than the entire dataset. Consequently, DS increases TPOT{\textquoteright}s efficiency in application on big data by slicing the dataset into smaller sets of features and allowing genetic programming to select the best subset in the final pipeline. Template enforces type constraints with strongly typed genetic programming and enables the incorporation of DS at the beginning of each pipeline. We show that DS and Template help reduce TPOT computation time and may provide more interpretable results. Our simulations show TPOT-DS significantly outperforms a tuned XGBoost model and standard TPOT implementation. We apply TPOT-DS to real RNA-Seq data from a study of major depressive disorder. Independent of the previous study that identified significant association with depression severity of the enrichment scores of two modules, in an automated fashion, TPOT-DS corroborates that one of the modules is largely predictive of the clinical diagnosis of each individual.Author Summary Big data have recently become prevalent in many fields including meteorology, complex physics simulations, large scale imaging, genomics, biomedical research, environmental research and more. TPOT is a Python Automated Machine Learning (AutoML) tool that uses genetic programming to optimize machine learning pipelines for analyzing biomedical data. However, like other AutoML tools, when analyzing big data, the early implementations of TPOT face the challenges of long runtime, high computational expense as well complex pipeline with low interpretability. Here, we develop two novel features for TPOT, Dataset Selector and Template, that leverage domain knowledge, greatly reduce the computational expense and flexibly extend TPOT{\textquoteright}s application to biomedical big data analysis.},
+	URL = {https://www.biorxiv.org/content/early/2018/12/20/502484},
+	eprint = {https://www.biorxiv.org/content/early/2018/12/20/502484.full.pdf},
+	journal = {bioRxiv}
+}
