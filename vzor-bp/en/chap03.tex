@@ -375,11 +375,20 @@ Finally, the node is selected by a simple random choice from $g$.
 \paragraph{Variable arity}
 Some nodes, e.g. ensemble nodes, may have a \emph{variable arity}.
 For example, a voting may have two base estimators or many more, but the
-actual model combination method remains the same. Therefore, it is represented
-by a single nod. This means
-that the actual arity is determined just when the node is about to be inserted
-into the tree. The arity is determined by an interval which may or may not have
-an upper bound. If the upper bound is not provided, it is limited by
+actual model combination method remains the same. Therefore, it is for convenience
+represented by a single node type.
+
+The input type of a node is a Cartesian product of its argument types. If we allow
+variable arity of each type, the input type is instead defined as
+$$t = \prod_{i=1}^{n}t_i^{k_i},$$
+where $t_i$ is a specific type, $k_i$ is its arity and $\forall i=1\ldots n - 1, t_i \neq t_{i+1}$.
+The representation is defined in a general way as to allow ensembles with groups
+of arguments. The ensemble methods used in this work (Table \ref{tab03:nodes})
+are all relatively simple, but in future extensions more complex cases may be added.
+
+The actual arity is determined just when the node is about to be inserted
+into the tree. The range of possible arities is specified by an interval which may or may not have
+an upper bound. If the upper bound is not provided, the values are limited by
 a global arity limit ($max\_arity$ in algorithm \ref{alg:ourgrow}) to avoid bloat
 of the trees.
 
@@ -412,10 +421,31 @@ not increase too much. In other words, we try to minimize the bloat induced by
 this operation.
 
 \paragraph{Point mutation}
-In this type of mutation, a randomly chosen node is replaced with a new node.
-Both output and input types must match; if the new node supports variable
-arity, all input types of the old node must satisfy the bounds. For this type
-of mutation, any lower bound must be greater than zero.
+The point mutation enables to change only one step of the pipeline while preserving
+the overall structure. In this mutation, a randomly chosen node is replaced with a
+new node. Both output and input types must match. Moreover, if the new node
+supports variable arity, we must compare the subtypes one by one, as depicted in
+\ref{alg:arities}. For this type of mutation, any lower bound of any arity must
+be greater than zero.
+
+
+\begin{algorithm}[t]
+\DontPrintSemicolon 
+\caption{Input type arity comparation\label{alg:arities}}
+  \KwData{type $t$ with fixed arities, type $t'$ with variable arities}
+  \KwResult{true if $t$ can be equal to $t'$}
+  \;
+  \If{the number of subtypes of $t$ and $t'$ differs}{
+  \KwRet{false}
+  }\;
+  
+  \For{i in \Range{n}}{
+     \If{arity of $t_i$ is not in the arity interval of $t_i'$}{
+        \KwRet{false}\;
+     }
+  }
+  \KwRet{true}
+\end{algorithm}
 
 \paragraph{Node argument mutation}
 Mutates a hyperparameter of a random node --- chooses a new value from the list
@@ -457,7 +487,9 @@ classification problems. Tables \ref{tab:clf}, \ref{tab:prepro} and
 configuration. Every method has a list of hyperparameter values associated
 with it. These are optimized during the process of evolution;
 if a hyperparameter is not present, it will be always set to its default value.
-The list has been created by slightly extending the hyp. list composed by \ref{aaa}. 
+The list has been created by slightly extending the hyperparameter list 
+used by \cite{Kren2017AutomaticCO} in the AutoML system mentioned in
+section \ref{CASH}. 
 
 {\footnotesize
 \begin{longtable}{l l}
@@ -701,11 +733,14 @@ voting & [hard]\\
  
 \subsection{Scoring and sampling} \label{sec:scoresample}
 The score is computed by running the pipeline on the dataset using the
-scikit-learn scorer interface. The default score is predictive accuracy,
+scikit-learn scorer interface \citep{sklearn_scorer}. The default score is predictive accuracy,
 but other metrics are supported as well. There are multiple evaluation
-strategies to choose from --- the default strategy is k-fold cross-validation,
-but it is also possible to specify a separate validation set for scoring.
-% TODO cite scorer
+strategies to choose from. The default strategy is the k-fold cross-validation. In
+this evaluation method, the dataset is split into k parts and in every `fold', one
+part is used as the testing set and the rest is used as the training set. Every part
+is used exactly once, hence we obtain k different scores which are then averaged
+into a final score. Another evaluation strategy is to provide as separate validation
+set for scoring purpose, while using the original dataset for training.
 
 If the number of examples is small enough, it is possible to use the whole
 dataset for evaluation. On larger datasets though, the duration time may be
