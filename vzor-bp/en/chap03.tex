@@ -364,7 +364,8 @@ trees.
 During the node selection, we use weights to manage the probability of a node
 to be chosen. The motivation is that some nodes represent lightweight methods
 which have a short execution time, whereas some nodes slow down the evaluation
-process, especially when present multiple times in the tree.
+process, especially when present multiple times in the tree. In other words, this is
+one of the bloat-reducing techniques used in our work.
 
 The process is as follows: every node is assigned to a group and each group has
 a well defined weight. When selecting a particular node with output type $out$, we 

@@ -584,11 +584,15 @@ functions and terminals form the \emph{primitive set}. Every function of the
 set must have a well-defined arity value.
 
 The fitness is usually computed by running the program and assessing its
-performance. It is also possible to apply genetic programming on
-multi-objective problems, where the second objective may be the running time
-of the problem or some other domain-specific property
-\citep[p.~24--26]{Poli:2008:FGG:1796422}. More about multi-objective optimization can be
-read in section \ref{moo}.
+performance. Sometimes, the fitness is impaired by a phenomenon called the
+\emph{bloat}. A bloat occurs when the GP tree grows in size without significant
+improvement in fitness. The result may be even worsened by parts of the tree which
+do not contribute in any way to the solution. As such, some countermeasures need
+to be adopted, for example it is possible to add a second objective to the function
+that minimizes the number of nodes \citep[p.~24--26]{Poli:2008:FGG:1796422}.
+More about multi-objective optimization can be
+read in section \ref{moo}. We also mention other bloat-reducing approaches 
+in chapter \ref{our:solution}.
 
 The initialization step of the genetic programming is very important, as
 there are many different ways how to design trees. Also, specialized genetic
