@@ -432,7 +432,7 @@ be greater than zero.
 \begin{algorithm}[t]
 \DontPrintSemicolon 
 \caption{Input type arity comparation\label{alg:arities}}
-  \KwData{type $t$ with fixed arities, type $t'$ with variable arities}
+  \KwData{type $t$ with fixed arities, type $tm'$ with variable arities}
   \KwResult{true if $t$ can be equal to $t'$}
   \;
   \If{the number of subtypes of $t$ and $t'$ differs}{
@@ -448,9 +448,12 @@ be greater than zero.
 \end{algorithm}
 
 \paragraph{Node argument mutation}
-Mutates a hyperparameter of a random node --- chooses a new value from the list
-of possible values. This method has many possible extensions which are more
-described in section \ref{future} (future work).
+This type of mutation changes one hyperparameter of a random node --- chooses a new
+value from the list of possible values. On some problem instances, this mutation
+is essential (as shown in experiment \ref{sec:exp:genop}), because it directly searches the hyperparameter space of a
+single pipeline. There are many possibilities in how to improve this operator, which
+could significantly improve the results of our system. These will be part of future
+research of our system.
 
 \subsection{Fitness and selection} \label{sec:fitsel}
 To compute the fitness, the individuals are decoded into scikit-learn 
@@ -458,7 +461,7 @@ pipelines as described in section \ref{sec:decoding} (individual encoding).
 The specific machine learning methods which are used in the pipelines along
 with evaluation details are listed in the following section.
 
-The fitness has two objectives~---~evaluation score and logarithmized
+The fitness has two objectives~---~the evaluation score and logarithmized
 evaluation time. The enviromental selection is done via the NSGA-II operator
 (described in section \ref{nsgaii}), and the 
 parent selection is a tournament selection based on individual dominance and 
