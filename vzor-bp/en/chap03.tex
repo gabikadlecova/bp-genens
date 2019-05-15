@@ -19,7 +19,7 @@ performed. On the other hand, feature selection and scaling is a part of
 the algorithm.
 
 When everything is set up, we run the developmental GP optimization
-(line \ref{line:devGP} of Algorithm \ref{alg:genens}), which operates with pipelines in a tree-based
+(line~\ref{line:devGP} of Algorithm \ref{alg:genens}), which operates with pipelines in a tree-based
 representation. The output of this algorithm are individuals which
 performed the best on the given dataset. The individuals are decoded into
 pipelines (line \ref{line:compile}) and returned as the final output of the
@@ -40,7 +40,7 @@ scikit-learn (\cite{scikit-learn}) are presented in section \ref{genens:eval}.
   $individuals \longleftarrow$ run developmental GP on $d$ with $c$ \label{line:devGP} \;
   $pipelines \longleftarrow$ \Compile{$individuals$} \label{line:compile}
   \;\;
-  \KwRet{pipelines}
+  \KwRet{$pipelines$}
   
 \end{algorithm}
 
@@ -74,7 +74,7 @@ combined (line \ref{alg:genens:nsga}).
 
 In the following sections we describe the components of this particular
 evolutionary algorithm in detail. The encoding of pipelines is summarized in
-section \ref{sec:encoding}, and the initialization procedure is explained in
+section~\ref{sec:encoding}, and the initialization procedure is explained in
 section \ref{sec:init}. All reproduction operators are presented in section
 \ref{sec:repro}. Finally, the selection and fitness are specified in section
 \ref{sec:fitsel}.
@@ -277,7 +277,7 @@ and preprocessor present}} \\
 
 \multicolumn{4}{l}{\footnotesize
 \textsuperscript{3}\textit{In the last level classifier and preprocessing
-can have output type $ens$ and $data$ resp.}} 
+can have output type \emph{ens} and \emph{data} resp.}} 
 
 \end{tabular}
 
@@ -464,7 +464,7 @@ be greater than zero.
 
 \begin{algorithm}[t]
 \DontPrintSemicolon 
-\caption{Input type arity comparation\label{alg:arities}}
+\caption{Input type arity comparison\label{alg:arities}}
   \KwData{type $t$ with fixed arities, type $t'$ with variable arities}
   \KwResult{true if $t$ can be equal to $t'$}
   \;

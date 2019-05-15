@@ -344,17 +344,69 @@ altering genomes of existing individuals. The `natural selection' is realized
 according to the \emph{fitness} of the individual, which is determined by the
 quality of the corresponding solution. The whole process can be understood as
 a stochastic search through the space of all possible genomes
-(\cite{Engelbrecht:2007:CII:1557464}).
+\citep{Engelbrecht:2007:CII:1557464}.
 
 \subsection{Evolutionary algorithms in detail}
-% TODO evo pracuje s popu jedincema, pomoci op prechazi z jedny k druhy,
-% v cyklu, viz to vyse
-A general schema of an \emph{evolutionary algorithm} (EA) is presented in Algorithm
-\ref{alg:EA}. Every evolutionary algorithm
-algorithm should define a suitable \emph{selection} method, \emph{mutation}
+A general schema of an evolutionary algorithm (EA) is presented in
+Algorithm~\ref{alg:EA}. Every evolutionary algorithm
+algorithm defines a suitable \emph{selection} method, \emph{mutation}
 and/or \emph{crossover} operators and a \emph{fitness function}.
-The algorithm terminates when some \emph{stopping condition} is met. These
-concepts will be described in more detail.
+
+First, a population  of individuals is initialized (line \ref{EA:init} of Algorithm
+\ref{alg:EA}). Then, using the parent selection we choose two individuals for
+reproduction (line \ref{parent:sel}). Using the reproduction operators, we create
+two new individuals, which are added to the offspring population
+(lines \ref{crossover}--\ref{EA:add}). The reproduction is
+repeated with other individuals until the offspring population is of the same size
+as the population of parents. Afterwards, we create a new population via
+environmental selection from the combined populations (line \ref{envir:sel}).
+
+We continue with the process until a certain \emph{stopping condition} is met
+(line~\ref{EA:stopc}). The result of the algorithm is the last population, which
+should contain individuals with a high fitness value.
+
+In the following paragraphs, the components of the evolutionary algorithm
+will be described in more detail.
+
+\begin{algorithm}
+\DontPrintSemicolon 
+\caption{Evolutionary algorithm\label{alg:EA}}
+  \KwData{population size $k$, stopping condition $c$, 
+          crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
+  \KwResult{evolved individuals}
+  \SetNoFillComment
+  \SetKwFunction{Cx}{crossover}
+  \SetKwFunction{Mut}{mutation}
+  \;
+  $P(0) \longleftarrow$ population of size $k$ \label{EA:init}
+
+  \While{$c$ is not met}{ \label{EA:stopc}
+      \For{individual $ind$} {
+         $f(ind) \longleftarrow$ compute fitness
+      }
+      \;
+      \tcc{reproduction}
+      \For{i in \Range{$k/2$}} {
+      \tcc{parent selection}
+         $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
+
+         \If{$p_{cx}$} {
+            \Cx{$i_1, i_2$} \label{crossover}
+         }
+         
+         \If{$p_{mut}$ for $k=1,2$} {
+            \Mut{$i_k$} \label{mutation}
+         }
+         \;
+         add $i_1, i_2$ to offspring population $P_o(n)$ \label{EA:add}
+      }
+      \;
+      \tcc{environmental selection}
+      $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)\cup P(n)$ \label{envir:sel}
+  }
+  \;
+  \KwRet{$P(c)$}  
+\end{algorithm}
 
 \paragraph{Fitness and objective functions}
 The goal of an optimization process is to maximize or minimize a certain
@@ -419,8 +471,8 @@ During the crossover, the genetic information of the parents is combined into
 one or more children. Often, two parents are used to produce two
 offspring, though the counts may differ in some special types of evolutionary
 algorithms. Ideally, if we have two parents with different but nevertheless
-`good' features, the offspring receives both of them.
-\citep{Eiben:2015:IEC:2810085}
+`good' features, the offspring receives both of them
+\citep{Eiben:2015:IEC:2810085}.
 
 The mutation is a stochastic operator which is used to introduce diversity into
 the population. It randomly alters the genome in hope of creating a more
@@ -432,56 +484,16 @@ elitism.
 \paragraph{Stopping criteria}
 Some commonly used stopping criteria, as listed by Engelbrecht, are for example 
 a limit on the number of generations, an objective function threshold, or
-termination after no improvement is observed.
-(\citep{Engelbrecht:2007:CII:1557464})
+termination after no improvement is observed
+\citep{Engelbrecht:2007:CII:1557464}.
 
-
-\begin{algorithm}
-\DontPrintSemicolon 
-\caption{Evolutionary algorithm\label{alg:EA}}
-  \KwData{population size $k$, stopping condition $c$, 
-          crossover probability $p_{cx}$ and mutation probability $p_{mut}$}
-  \KwResult{evolved individuals}
-  \SetNoFillComment
-  \SetKwFunction{Cx}{crossover}
-  \SetKwFunction{Mut}{mutation}
-  \;
-  $P(0) \longleftarrow$ population of size $k$
-
-  \While{$c$ is not met}{
-      \For{individual $ind$} {
-         $f(ind) \longleftarrow$ compute fitness
-      }
-      \;
-      \tcc{reproduction}
-      \For{i in \Range{$k/2$}} {
-      \tcc{parent selection}
-         $i_1, i_2 \longleftarrow$ select two individuals from $P(n)$\label{parent:sel}
-
-         \If{$p_{cx}$} {
-            \Cx{$i_1, i_2$} \label{crossover}
-         }
-         
-         \If{$p_{mut}$ for $k=1,2$} {
-            \Mut{$i_k$} \label{mutation}
-         }
-         \;
-         add $i_1, i_2$ to offspring population $P_o(n)$
-      }
-      \;
-      \tcc{environmental selection}
-      $P(n+1) \longleftarrow$ select $k$ individuals from $P_o(n)\cup P(n)$ \label{envir:sel}
-  }
-  \;
-  \KwRet{$P(c)$}  
-\end{algorithm}
-
+\paragraph*{}
 The advantage of evolutionary algorithms is such that there are potentially 
 many different solutions present in every population. With well defined 
 selection and fitness, the algorithm performs a multi-directional search. 
 In comparison with other directed search methods, this proves to be a more 
-robust approach. (\cite{Michalewicz:1996:GAD:229930}, 
-\cite{Mitchell:1997:ML:541177}) % Mitchell page 260 TODO
+robust approach \citep{Michalewicz:1996:GAD:229930}, 
+\cite{Mitchell:1997:ML:541177}.
 
 \subsection{Multi-objective optimization} \label{moo}
 In many problems, the quality of the solution depends on more than one
@@ -697,4 +709,3 @@ In our work we are using developmental GP to evolve ML workflows, which have
 the structure of a directed acyclic graph. We present this in more detail in
 Chapter \ref{our:solution} along with specific examples of the encoding and
 of modifying operations.
-.
