@@ -284,51 +284,64 @@ can have output type $ens$ and $data$ resp.}}
 \end{table}
 
 \subsection{Initialization} \label{sec:init}
-As the initial population we grow $n$ trees where every tree has a random
-height between 1 and overall maximum height (max\_height in algorithm
-\ref{alg:ourgrow}). The tree is grown from root, which
-is either a `cPipe' or `cPred' node (Table \ref{tab03:nodes}). Then, nodes are
-inserted into the tree according to the input type of the parent. Before the
-height limit is reached (during the \emph{growing phase}), both functions and
-terminals are inserted into the tree. Then, only terminals are inserted to
-keep the limit.
+To initialize an individual, we use a modified grow method (the original algorithm
+is described in section \ref{sec:gp:init}). For the initialization process, we
+define two sets of nodes. The first ($S_{grow}$) is a set of functions and terminals and is used
+in the growing phase, that is, until the height limit is reached. The second set ($S_{term}$)
+contains all terminals contained in the first set, and also some additional
+terminals --- copies of all classifier nodes, but of output type `ens', and copies
+of all preprocessors, but instead of type `data'. The reason of this is that if
+there is a cPipe, cPred or dUnion node (Table \ref{tab03:nodes}) in the penultimate level of the tree, there
+is no terminal to terminate with in the first set. Thus, the second set is defined
+as to be able to finish the initialization properly.
+
+Algorithm \ref{alg:ourgrow} shows the process in detail.
+First, we determine the height of the tree as a random number between 1 and
+$max\_height$, which is the hyperparameter of our system
+(line \ref{alg:ourgrow:height}). If the selected height is one, we directly return
+a random classifier from $S_{term}$. Otherwise, we insert one of the pipeline
+creating operations into the tree (line \ref{alg:ourgrow:root}).
+
+The tree is then grown from root, choosing nodes from $S_{grow}$ or $S_{term}$
+respectively. When inserting a node, we first choose a function which has any argument
+without a child associated with it. To preserve the type consistency, we randomly
+select a node whose output type matches the type of this argument. Also, we choose
+its hyperparameters and, if it is a function, we define its arity (this is
+described in section \ref{sec:fitsel}). Finally, the node can be inserted as a child
+of the function into the tree
+(lines \ref{alg:ourgrow:process}--\ref{alg:ourgrow:processend}).
 
 As terminals are inserted in the growing phase as well, the tree may become
 smaller than the height limit. However, if the tree were built using the full
 method, it would introduce a lot of feature preprocessing methods for taller
-trees. Therefore, all node types listed in Table \ref{tab03:nodes} may be used
-during the growing phase. Moreover, we define special terminal nodes which are
-used only in the last level (\hyperref[tab03:nodes]{footnote 2}). It is
-necessary to include them, as otherwise it would be impossible to finish the
-tree in one level, but they would force the trees to be very short if used
-during the growing phase.
+trees.
 
 \begin{algorithm}
 \DontPrintSemicolon 
 \caption{Modified grow method for individual initialization\label{alg:ourgrow}}
   \KwData{maximum height \emph{max\_height}, maximum arity $max\_arity$, sets of nodes
-  $S_{func}$ and $S_{term}$, hyperparameter dictionary $H$}
+  $S_{grow}$ and $S_{term}$, hyperparameter dictionary $H$}
   \KwResult{generated individual}
   \SetKwFunction{Arity}{choose\_arity}
   \SetKwFunction{HParams}{choose\_hyperparams}
   \;
-  $h \longleftarrow$ randomly select tree height from interval $[1, max\_height]$ 
+  $h \longleftarrow$ randomly select tree height from interval $[1, max\_height]$ \label{alg:ourgrow:height}
   \;  
-  \If{$h > 1$}{
+  \If{$h > 1$}{\label{alg:ourgrow:root}
      set $cPipe$ or $cPred$ as the root of $ind$
   }  
   \Else{
-      \KwRet{a random classifier}
+      \KwRet{a random classifier from $S_{term}$}
   }
   
   \;
-  \While{$ind$ has a function with a child missing}{
+  \While{$ind$ has a function with a child missing}{ \label{alg:ourgrow:process}
       $f \longleftarrow$ a parent node which can accept a child\;
       $t_f \longleftarrow$ argument input type of $f$\;
       $h_{node} \longleftarrow$ height at which the node is inserted
       \;\;
       \If{$h_{node} < h$}{
-      $S \longleftarrow S_{func}$
+      $S \longleftarrow S_{grow}$
       }
       \Else{
       $S \longleftarrow S_{term}$
@@ -337,7 +350,7 @@ during the growing phase.
       $node.arity \longleftarrow$ \Arity{$node$, $max\_arity$}\;
       $node.hyperparams \longleftarrow$ \HParams{$node$, $H$}\;\;
       
-      add the child $node$ as an argument of $f$
+      add the child $node$ as an argument of $f$ \label{alg:ourgrow:processend}
   }
   \KwRet{$ind$}
   
