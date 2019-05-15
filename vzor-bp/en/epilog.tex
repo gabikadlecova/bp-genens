@@ -5,21 +5,48 @@ The goal of our work was to develop an AutoML system for automatic
 pipeline optimization. Using the developmental GP, we created a general encoding
 of the scikit-learn pipelines that converts a DAG pipeline into a tree representation.
 
-The encoding was designed in an extensible way. The method search space can be easily 
+The encoding was designed in an extensible way. The list of used methods can be easily 
 extended with more ensembles and methods that comply to the scikit-learn API.
 We also implemented a tree individual that, compared to the DEAP tree individual, supports
 variable arity of nodes.
 
 We introduced several bloat-reducing approaches. The grow method of the GP was
-modified to initialize less branched trees, which are more suitable in case of
-pipelines. We also employed a weighted node selection, which prefers simpler methods.
-As so, we avoided nested ensembles which are computationally demanding, but do not
-significantly improve the score.
+modified to initialize less branched trees, which were more suitable for representation
+of pipelines. We also employed a weighted node selection, which prefers simpler methods.
+That way, we avoided nested ensembles which are computationally demanding, but do not
+significantly improve the score. 
 
-We also designed several genetic operators used for architecture optimization of the
-pipelines as well as for hyperparameter optimization of contained methods.
+To decrease the running time of the optimization, we implemented some performance
+estimation strategies based on sampling. A sample of the input dataset was either
+created once per generation or per individual evaluation. The two strategies were
+then tested in the first experiment on two medium size dataset and one large dataset.
+The results of the experiment did not show any noticeable difference in
+the two approaches, but implied that by generating a sample for every evaluation, we
+increase the variance of results.
 
+For the evolutionary optimization itself, we designed specific genetic operators. The
+subtree crossover and subtree mutation greatly alter the structure of the pipeline.
+The point mutation changes only one method of the pipeline while preserving the
+architecture. Finally, the node argument mutation changes a random hyperparameter of
+a random node, thus targeting the CASH problem.
 
+To test whether the absence of a certain genetic operator influences the final result,
+we carried out the second experiment, where we turned the operators off one at a time.
+With this settings, we have done several runs on a small dataset and on a medium sized
+unbalanced dataset. The results of the experiments have shown that on the medium
+sized dataset, the hyperparameter mutation is essential for obtaining good results.
+On the second dataset, turning off the point mutation produced significantly better
+results. This behaviour is to be subject of future research. Finally, in all cases
+the results were better than the simple case where all genetic operators were turned
+off.
 
+Finally, we evaluated the performance on the system on the OpenML-CC18 benchmark suite.
+We ran the evolutionary optimization on each of the 72 datasets of the
+benchmark, while using one of the sampling strategies. Three best pipelines were evaluated
+and the maximum of the scores was chosen as the final output. We then compared our
+results with the statistic of runs uploaded to OpenML.
 
-focus more on the data preprocessing part
+% Future work
+
+% focus more on the data preprocessing part
+% fut work - time measurements
