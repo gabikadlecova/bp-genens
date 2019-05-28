@@ -4,11 +4,11 @@
 
 \usepackage{amsmath}    
 \usepackage{amsfonts}   
-\usepackage{amsthm}  
-\usepackage{graphicx} 
+\usepackage{amsthm} 
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{paralist}
 \usepackage{xcolor}
-\usepackage{relsize}
-
 
 \definecolor{darktyrkis}{RGB}{0,143,149}
 
@@ -20,7 +20,7 @@
 	headerColorOne=darktyrkis,
 	headerColorTwo=darktyrkis,
 	headerFontColor=white,
-  headerheight=10em,
+  headerheight=8em,
 	boxColorOne=white,
   boxpadding=1em,
 	headershape=rounded,
@@ -47,6 +47,8 @@
 {
 }
 
+\small
+
 %%% Abstract %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Abstract}{name=abstract,column=0,row=0,span=2}{
 The subject of this work is the automated machine learning (AutoML), which
@@ -64,7 +66,11 @@ on top of the scikit-learn library. The performance of our solution was tested o
 
 % last box to reference
 \headerbox{OpenML-CC18}{name=box3,column=0,span=2,above=bottom}{
+% TODO popisek???
+Here will be a nice description of the experiment. May be reduced to only one of the
+graphs for illustrative purpose only.
 
+\vspace{0.5em}
 \begin{minipage}{.5\textwidth}
   \centering
   \includegraphics[width=0.9\linewidth]{../img/openml-boxplot0-hdpi.png}
@@ -75,6 +81,8 @@ on top of the scikit-learn library. The performance of our solution was tested o
   \includegraphics[width=0.9\linewidth]{../img/openml-boxplot1-hdpi.png}
 
 \end{minipage}
+
+\vspace{0.5em}
 
 \begin{minipage}{.5\textwidth}
   \centering
@@ -94,38 +102,70 @@ Here will be a general workflow description.
 
 \begin{minipage}{\textwidth}
   \centering
-  \vspace{1em}
-  \includegraphics[width=0.9\linewidth]{../img/workflow-pdfa.pdf}
-  \vspace{1em}
+  \vspace{0.5em}
+  \includegraphics[width=0.7\linewidth]{../img/workflow-pdfa.pdf}
+  \vspace{0.5em}
 \end{minipage}
 
-Existing systems focused only on\ldots
+Existing systems focused only on\ldots The subject of this type of AutoML are mainly
+pipelines. Represented by a DAG.
 
 \begin{minipage}{\textwidth}
   \centering
-  \vspace{1em}
+  \vspace{0.5em}
   \includegraphics[width=0.7\linewidth]{../img/pipeline-pdfa.pdf}
-  \vspace{1em}
+  \vspace{0.5em}
 \end{minipage}
 }
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Some Box}{name=box2,column=1,below=abstract,above=box3}{
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width=0.5\linewidth]{../img/ada.png}
+\headerbox{Developmental GP}{name=box2,column=1,below=abstract,above=box3}{
+For pipeline optimization, we used the genetic programming (GP), which is a subfield
+of evolutionary algorithms. An individual in GP is in fact a computer program. Usually,
+it is represented as an expression tree. The fitness of the tree is determined by
+running the program, or also evaluating all functions and their arguments.
 
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width=0.9\linewidth]{../img/ada-pdfa.pdf}
+\vspace{0.5em}
+\begin{minipage}{\textwidth}
 
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.45\linewidth]{../img/ada.png}
+
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=0.8\linewidth]{../img/ada-pdfa.pdf}
+  \end{minipage}
+  
+  \captionof{figure}{Example of an encoded pipeline}
+  \label{fig:encoding}
 \end{minipage}
-\vspace{1em}
+\vspace{0.5em}
 
-Here will be a description of pipeline-to-tree encoding.
+We created a specific encoding that enables to convert pipelines in the form of a DAG into
+a tree representation. Instead of directly encoding pipeline steps as nodes, we apply the
+developmental GP, where the nodes represent \emph{operations} that create the pipeline.
+
+An example of the encoding is shown in Figure \ref{fig:encoding}. The tree individual
+contains instructions which construct the actual pipeline:
+
+\vspace{0.5em}
+\textbf{cPipe} --- create a pipeline with a preprocessor chain and an estimator
+\begin{compactitem}
+  \item[-] \textbf{ada} --- insert an AdaBoost ensemble with a base-estimator
+  \begin{compactitem}
+    \item[-] \textbf{cPipe} --- create a pipeline with a preprocessor chain
+    \begin{compactitem}
+      \item[-] \textbf{SGD} --- insert a SGD classifier
+      \item[-] \textbf{MinMaxScaler} --- insert a MinMaxScaler
+    \end{compactitem}
+  
+  \end{compactitem}
+  
+  \item[-] \textbf{PCA} --- insert the PCA preprocessor
+\end{compactitem}
 }
-
 
 \end{poster}
 
