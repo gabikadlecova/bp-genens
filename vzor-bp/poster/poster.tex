@@ -8,28 +8,27 @@
 \usepackage{graphicx} 
 \usepackage{xcolor}
 \usepackage{relsize}
-\usepackage{epstopdf}
 
 
-\definecolor{ultramarine}{RGB}{0,32,96}
+\definecolor{darktyrkis}{RGB}{0,143,149}
 
 \begin{document}
 \begin{poster}{
   columns=2,
 	grid=false,
-	borderColor=ultramarine,
-	headerColorOne=ultramarine,
-	headerColorTwo=ultramarine,
+	borderColor=darktyrkis,
+	headerColorOne=darktyrkis,
+	headerColorTwo=darktyrkis,
 	headerFontColor=white,
-  headerheight=14em,
+  headerheight=10em,
 	boxColorOne=white,
   boxpadding=1em,
 	headershape=rounded,
 	headerfont=\Large\textsf,
 	textborder=rounded,
 	background=shadetb,
-  bgColorOne=ultramarine!10,
-  bgColorTwo=ultramarine!30,
+  bgColorOne=darktyrkis!10,
+  bgColorTwo=darktyrkis!30,
 	headerborder=open,
   boxshade=plain,
   eyecatcher=false
@@ -45,26 +44,26 @@
   \\Gabriela Suchopárová
 }
 %%% Logo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+{
+}
 
 %%% Abstract %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Abstract}{name=abstract,column=0,row=0,span=2}{
-aa
+The subject of this work is the automated machine learning (AutoML), which
+is a field that aims to automatize the process of model selection for a given machine
+learning problem. We have developed a system that, for a given supervised
+learning task represented by a dataset, finds a suitable pipeline --- combination
+of machine learning, ensembles and preprocessing methods. For the search we
+designed a special instance of the developmental genetic programming which enables
+us to encode directed acyclic graph pipelines into a tree representation.
+The system is implemented in the Python programming language and operates
+on top of the scikit-learn library. The performance of our solution was tested on
+72 datasets of the OpenML-CC18 benchmark with very good results.
 }
 
-%%% Box 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Some Box}{name=box1,column=0,below=abstract}{
-  % two columns, see: https://tex.stackexchange.com/questions/112983/beamer-columns-environment-in-article-document
-  aa
-}
 
-%%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Some Box}{name=box2,column=1,below=abstract}{
-
-sss
-}
-
-\headerbox{OpenML-CC18}{name=box3,column=0,below=box1,span=2,above=bottom}{
+% last box to reference
+\headerbox{OpenML-CC18}{name=box3,column=0,span=2,above=bottom}{
 
 \begin{minipage}{.5\textwidth}
   \centering
@@ -88,6 +87,45 @@ sss
 
 \end{minipage}
 }
+
+%%% Box 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Workflows}{name=box1,column=0,below=abstract, above=box3}{
+Here will be a general workflow description.
+
+\begin{minipage}{\textwidth}
+  \centering
+  \vspace{1em}
+  \includegraphics[width=0.9\linewidth]{../img/workflow-pdfa.pdf}
+  \vspace{1em}
+\end{minipage}
+
+Existing systems focused only on\ldots
+
+\begin{minipage}{\textwidth}
+  \centering
+  \vspace{1em}
+  \includegraphics[width=0.7\linewidth]{../img/pipeline-pdfa.pdf}
+  \vspace{1em}
+\end{minipage}
+}
+
+%%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Some Box}{name=box2,column=1,below=abstract,above=box3}{
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.5\linewidth]{../img/ada.png}
+
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{../img/ada-pdfa.pdf}
+
+\end{minipage}
+\vspace{1em}
+
+Here will be a description of pipeline-to-tree encoding.
+}
+
 
 \end{poster}
 
