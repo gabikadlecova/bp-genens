@@ -1,5 +1,16 @@
 \documentclass[a0paper,portrait]{baposter}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}    
+\usepackage{amsfonts}   
+\usepackage{amsthm}  
+\usepackage{graphicx} 
 \usepackage{xcolor}
+\usepackage{relsize}
+\usepackage{epstopdf}
+
+
 \definecolor{ultramarine}{RGB}{0,32,96}
 
 \begin{document}
@@ -23,16 +34,15 @@
   boxshade=plain,
   eyecatcher=false
 }
-%%% Eye Cacther %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Eye Catcher %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
 }
 %%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{ This title is quite long as you can see\\it spans two lines}
+{ \Huge Evolutionary optimization of machine learning pipelines}
 %%% Authors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
-  \vspace{1em}
-  Max Mustermann*, Sabine Musterfrau\\
-	{ *max.mustermann@univie.ac.at}
+  %\vspace{1em}
+  \\Gabriela Suchopárová
 }
 %%% Logo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,15 +53,40 @@ aa
 }
 
 %%% Box 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Some Box}{name=box1,column=0,below=abstract,above=bottom}{
+\headerbox{Some Box}{name=box1,column=0,below=abstract}{
   % two columns, see: https://tex.stackexchange.com/questions/112983/beamer-columns-environment-in-article-document
   aa
 }
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Some Box}{name=box2,column=1,below=abstract,above=bottom}{
+\headerbox{Some Box}{name=box2,column=1,below=abstract}{
 
 sss
+}
+
+\headerbox{OpenML-CC18}{name=box3,column=0,below=box1,span=2,above=bottom}{
+
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot0-hdpi.png}
+
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot1-hdpi.png}
+
+\end{minipage}
+
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot2-hdpi.png}
+
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot3-hdpi.png}
+
+\end{minipage}
 }
 
 \end{poster}
