@@ -50,22 +50,17 @@
 \small
 
 %%% Abstract %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Abstract}{name=abstract,column=0,row=0,span=2}{
+\headerbox{Abstract}{name=abstract,column=0,row=0}{
 The subject of this work is the automated machine learning (AutoML), which
 is a field that aims to automatize the process of model selection for a given machine
 learning problem. We have developed a system that, for a given supervised
-learning task represented by a dataset, finds a suitable pipeline --- combination
-of machine learning, ensembles and preprocessing methods. For the search we
-designed a special instance of the developmental genetic programming which enables
-us to encode directed acyclic graph pipelines into a tree representation.
-The system is implemented in the Python programming language and operates
-on top of the scikit-learn library. The performance of our solution was tested on
-72 datasets of the OpenML-CC18 benchmark with very good results.
+learning task, finds a suitable pipeline --- combination
+of machine learning, ensembles and preprocessing methods.
 }
 
 
 % last box to reference
-\headerbox{OpenML-CC18}{name=box3,column=0,span=2,above=bottom}{
+\headerbox{OpenML-CC18 benchmark}{name=box4,column=0,span=2,above=bottom}{
 % TODO popisek???
 Here will be a nice description of the experiment. May be reduced to only one of the
 graphs for illustrative purpose only.
@@ -97,29 +92,61 @@ graphs for illustrative purpose only.
 }
 
 %%% Box 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Workflows}{name=box1,column=0,below=abstract, above=box3}{
-Here will be a general workflow description.
-
+\headerbox{Workflows}{name=box1,column=0,below=abstract}{
 \begin{minipage}{\textwidth}
   \centering
-  \vspace{0.5em}
   \includegraphics[width=0.7\linewidth]{../img/workflow-pdfa.pdf}
+  \captionof{figure}{Schema of a general workflow}
+  \label{fig:workflow}
   \vspace{0.5em}
 \end{minipage}
 
-Existing systems focused only on\ldots The subject of this type of AutoML are mainly
-pipelines. Represented by a DAG.
+A machine learning workflow is the process of solving a given machine learning
+problem. As we can see in Figure \ref{fig:workflow}, a general workflow can be divided
+into several steps. The first two steps are usually handled by an expert from an
+unrelated field, who provides data to machine learning experts. Then, the data is
+preprocessed and a suitable machine learning method needs to be chosen. This process is
+usually iterative, as there are many different methods with several hyperparameters. To
+obtain good results, it is necessary to carefully choose them, and so the procedure may be
+very time consuming.
+
+}
+
+\headerbox{AutoML}{name=box3,column=0, below=box1,above=box4}{
+The AutoML systems aim to automatize the process of feature preprocessing and
+model selection. The idea is that with these systems, machine learning may be accessible
+even to non-experts, and on the other hand experts may use it for model
+recommendation. 
 
 \begin{minipage}{\textwidth}
   \centering
   \vspace{0.5em}
-  \includegraphics[width=0.7\linewidth]{../img/pipeline-pdfa.pdf}
+  \includegraphics[width=0.65\linewidth]{../img/pipeline-pdfa.pdf}
+  \captionof{figure}{A more complex machine learning pipeline}
+  \label{fig:pipeline}  
   \vspace{0.5em}
 \end{minipage}
+
+One of the tasks targeted by AutoML systems is \emph{pipeline optimization}. A machine
+learning pipeline is composed from a chain of feature preprocessing methods and one
+estimator. The estimator can be a simple method or an ensemble that contains one or more
+base-estimators. Because a base-estimator can be a pipeline as well, a general pipeline
+is a directed acyclic graph.
+}
+
+\headerbox{Our system}{name=box5,column=1}{
+Existing methods for pipeline optimization operated only on a limited structure. Some of
+them focused only on hyperparameter optimization of simple models and they did not include
+any ensembles or feature preprocessing methods. Others allowed an arbitrary-sized
+preprocessor chain, however, no ensembles with pipelines as base-estimators were supported.
+
+Our systems aims to search for a pipeline that performs well on the given task. The
+pipelines can be composed from both ensembles and feature preprocessing methods, but simple
+methods are tried out as well.
 }
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Developmental GP}{name=box2,column=1,below=abstract,above=box3}{
+\headerbox{Developmental GP}{name=box2,column=1,below=box5,above=box4}{
 For pipeline optimization, we used the genetic programming (GP), which is a subfield
 of evolutionary algorithms. An individual in GP is in fact a computer program. Usually,
 it is represented as an expression tree. The fitness of the tree is determined by
