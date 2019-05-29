@@ -61,19 +61,17 @@ of machine learning, ensembles and preprocessing methods.
 
 % last box to reference
 \headerbox{OpenML-CC18 benchmark}{name=box4,column=0,span=2,above=bottom}{
-% TODO popisek???
-Here will be a nice description of the experiment. May be reduced to only one of the
-graphs for illustrative purpose only.
 
+\begin{minipage}{\textwidth}
 \vspace{0.5em}
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot0-hdpi.png}
+  \includegraphics[width=0.8\linewidth]{../img/openml-boxplot0-hdpi.png}
 
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot1-hdpi.png}
+  \includegraphics[width=0.8\linewidth]{../img/openml-boxplot1-hdpi.png}
 
 \end{minipage}
 
@@ -81,13 +79,17 @@ graphs for illustrative purpose only.
 
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot2-hdpi.png}
+  \includegraphics[width=0.8\linewidth]{../img/openml-boxplot2-hdpi.png}
 
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.9\linewidth]{../img/openml-boxplot3-hdpi.png}
+  \includegraphics[width=0.8\linewidth]{../img/openml-boxplot3-hdpi.png}
 
+\end{minipage}
+
+\captionof{figure}{Results on OpenML-CC18 benchmark}
+\label{fig:openml}
 \end{minipage}
 }
 
@@ -113,18 +115,19 @@ very time consuming.
 }
 
 \headerbox{AutoML}{name=box3,column=0, below=box1,above=box4}{
-The AutoML systems aim to automatize the process of feature preprocessing and
-model selection. The idea is that with these systems, machine learning may be accessible
+The AutoML systems aim to automatize the process of selection of suitable feature
+preprocessing methods and of a model with a particular hyperparameter setting. The idea
+is that with these systems, machine learning may be accessible
 even to non-experts, and on the other hand experts may use it for model
 recommendation. 
 
 \begin{minipage}{\textwidth}
   \centering
-  \vspace{0.5em}
+  \vspace{0.7em}
   \includegraphics[width=0.65\linewidth]{../img/pipeline-pdfa.pdf}
   \captionof{figure}{A more complex machine learning pipeline}
   \label{fig:pipeline}  
-  \vspace{0.5em}
+  \vspace{0.7em}
 \end{minipage}
 
 One of the tasks targeted by AutoML systems is \emph{pipeline optimization}. A machine
@@ -138,7 +141,7 @@ is a directed acyclic graph.
 Existing methods for pipeline optimization operated only on a limited structure. Some of
 them focused only on hyperparameter optimization of simple models and they did not include
 any ensembles or feature preprocessing methods. Others allowed an arbitrary-sized
-preprocessor chain, however, no ensembles with pipelines as base-estimators were supported.
+preprocessor chain, however,k no ensembles with pipelines as base-estimators were supported.
 
 Our systems aims to search for a pipeline that performs well on the given task. The
 pipelines can be composed from both ensembles and feature preprocessing methods, but simple
@@ -146,7 +149,7 @@ methods are tried out as well.
 }
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Developmental GP}{name=box2,column=1,below=box5,above=box4}{
+\headerbox{Developmental GP}{name=box2,column=1,below=box5}{
 For pipeline optimization, we used the genetic programming (GP), which is a subfield
 of evolutionary algorithms. An individual in GP is in fact a computer program. Usually,
 it is represented as an expression tree. The fitness of the tree is determined by
@@ -173,7 +176,6 @@ running the program, or also evaluating all functions and their arguments.
 We created a specific encoding that enables to convert pipelines in the form of a DAG into
 a tree representation. Instead of directly encoding pipeline steps as nodes, we apply the
 developmental GP, where the nodes represent \emph{operations} that create the pipeline.
-
 An example of the encoding is shown in Figure \ref{fig:encoding}. The tree individual
 contains instructions which construct the actual pipeline:
 
@@ -192,6 +194,15 @@ contains instructions which construct the actual pipeline:
   
   \item[-] \textbf{PCA} --- insert the PCA preprocessor
 \end{compactitem}
+}
+
+\headerbox{OpenML experiment}{name=box2,column=1,below=box2,above=box4}{
+Our system was tested on the OpenML-CC18 benchmark, which is a suite of 72 datasets
+available at OpenML. Each of the datasets is associated with a classification task,
+the evaluation method is 10-fold cross-validation.
+A comparison of our results with all other results uploaded to OpenML are shown in Figure
+\ref{fig:openml}. On most of the datasets our system performed in the upper quartile of
+all results.
 }
 
 \end{poster}
