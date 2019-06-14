@@ -10,6 +10,26 @@
 \usepackage{paralist}
 \usepackage{xcolor}
 
+% python-like algorithm environment
+\usepackage[ruled,noline]{algorithm2e}
+
+\newcommand{\forcond}{$i=0$ \KwTo $n$}
+\SetKwFunction{FRecurs}{FnRecursive}%
+
+\SetArgSty{}
+
+\SetStartEndCondition{ }{}{}%
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKwFunction{Range}{range}%%
+\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+\SetKwFor{While}{while}{:}{}%
+\renewcommand{\forcond}{$i$ \KwTo\Range{$n$}}
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{algorithm}{\let\textnormal\sffamily\small}
+
 \definecolor{darktyrkis}{RGB}{0,143,149}
 
 \begin{document}
@@ -118,9 +138,26 @@ is a directed acyclic graph.
 }
 
 \headerbox{Our system}{name=box5,column=0, below=box3, above=box4}{
-Our system aims to search for a pipeline that performs well on the given task. A
-pipeline can be composed from both ensembles and feature preprocessing methods, but simple
-methods are tried out as well.
+Our system aims to search for a pipeline that performs well on the given task.
+\vspace{0.5em}
+
+\begin{algorithm}[H]
+\DontPrintSemicolon 
+\caption{Pipeline optimization --- main\label{alg:genens}}
+  \vspace{0.3em}
+  \KwData{dataset $d$, configuration $c$}
+  \SetKwFunction{Compile}{compile}
+  \;
+  $inds \longleftarrow$ run developmental GP on $d$ with $c$ \label{line:devGP} \;
+  $pipelines \longleftarrow$ \Compile{$inds$} \label{line:compile}
+  \;\;
+  \KwRet{$pipelines$}
+  
+\end{algorithm}
+
+% TODO most simple algorithm
+% mention fitness
+% components are (fit, EA,...)
 }
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,9 +204,15 @@ contains instructions which construct the actual pipeline:
   
   \item[-] \textbf{PCA} --- insert the PCA preprocessor
 \end{compactitem}
+
+
+% TODO compact EA schema, "generate valid", mutations (reproduction(c1, c2), describe in text)
 }
 
-\headerbox{OpenML experiment}{name=box7,column=1,below=box2,above=box4}{
+\headerbox{Evolutionary algorithm}{name=box8,column=1,below=box2}{
+}
+
+\headerbox{OpenML experiment}{name=box7,column=1,below=box8,above=box4}{
 Our system was tested on the OpenML-CC18 benchmark, which is a suite of 72 datasets
 available at OpenML. Each of the datasets is associated with a classification task,
 the evaluation method is 10-fold cross-validation.
