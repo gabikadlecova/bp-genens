@@ -138,22 +138,29 @@ is a directed acyclic graph.
 }
 
 \headerbox{Our system}{name=box5,column=0, below=box3, above=box4}{
-Our system aims to search for a pipeline that performs well on the given task.
+Our system aims to optimize scikit-learn pipelines. The search space comprises of all
+scikit-learn preprocessors, ensembles and simple methods. We also extended the Pipeline
+class to act as a base-estimator of an ensemble.
 \vspace{0.5em}
 
 \begin{algorithm}[H]
 \DontPrintSemicolon 
 \caption{Pipeline optimization --- main\label{alg:genens}}
   \vspace{0.3em}
-  \KwData{dataset $d$, configuration $c$}
+  \KwData{dataset $d$}
   \SetKwFunction{Compile}{compile}
-  \;
-  $inds \longleftarrow$ run developmental GP on $d$ with $c$ \label{line:devGP} \;
-  $pipelines \longleftarrow$ \Compile{$inds$} \label{line:compile}
+  $individuals \longleftarrow$ run developmental GP on a dataset \;
+  $pipelines \longleftarrow$ \Compile{$individuals$} \label{line:compile}
   \;\;
   \KwRet{$pipelines$}
   
 \end{algorithm}
+
+\vspace{0.5em}
+
+For pipeline optimization, we used the genetic programming (GP), which is a subfield
+of evolutionary algorithms. We evolve pipelines encoded as GP individuals. The result
+is a set of pipelines that perform the best on the input dataset.
 
 % TODO most simple algorithm
 % mention fitness
@@ -162,10 +169,14 @@ Our system aims to search for a pipeline that performs well on the given task.
 
 %%% Box 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Developmental GP}{name=box2,column=1}{
-For pipeline optimization, we used the genetic programming (GP), which is a subfield
-of evolutionary algorithms. 
 
-\vspace{0.5em}
+We created a specific encoding that enables to convert pipelines in the form of a DAG into
+a tree representation. Instead of directly encoding pipeline steps as nodes, we apply the
+developmental GP, where the nodes represent \emph{operations} that create the pipeline.
+An example of the encoding is shown in Figure \ref{fig:encoding}. The tree individual
+contains instructions which construct the actual pipeline:
+
+\vspace{0.4em}
 \begin{minipage}{\textwidth}
 
   \begin{minipage}{.5\textwidth}
@@ -181,15 +192,8 @@ of evolutionary algorithms.
   \captionof{figure}{\sffamily Example of an encoded pipeline}
   \label{fig:encoding}
 \end{minipage}
-\vspace{0.5em}
 
-We created a specific encoding that enables to convert pipelines in the form of a DAG into
-a tree representation. Instead of directly encoding pipeline steps as nodes, we apply the
-developmental GP, where the nodes represent \emph{operations} that create the pipeline.
-An example of the encoding is shown in Figure \ref{fig:encoding}. The tree individual
-contains instructions which construct the actual pipeline:
-
-\vspace{0.5em}
+\vspace{0.4em}
 \textbf{cPipe} --- create a pipeline with a preprocessor chain and an estimator
 \begin{compactitem}
   \item[-] \textbf{ada} --- insert an AdaBoost ensemble with a base-estimator
@@ -204,12 +208,35 @@ contains instructions which construct the actual pipeline:
   
   \item[-] \textbf{PCA} --- insert the PCA preprocessor
 \end{compactitem}
-
-
-% TODO compact EA schema, "generate valid", mutations (reproduction(c1, c2), describe in text)
 }
 
 \headerbox{Evolutionary algorithm}{name=box8,column=1,below=box2}{
+In GP, the fittest tree individuals are combined to produce better individuals. 
+The fitness is composed from the score of the encoded pipeline on the input dataset
+and from evaluation time.
+
+\vspace{0.4em}
+\begin{algorithm}[H]
+\DontPrintSemicolon 
+\caption{Pipeline optimization --- developmental GP}
+  \vspace{0.3em}
+  \SetKwFunction{Evaluate}{evalutate}
+  \SetKwFunction{Repr}{reproduction}
+  $P(0) \longleftarrow$ initial population of GP trees\;
+  \While{$n < max\_gen$}{
+     \Evaluate{P(0)}\;
+     \For{$i$ in \Range{$i/2$}}{
+        $i_1, i_2\longleftarrow$ tournament selection from $P(n)$\;
+        \Repr{$i_1$, $i_2$}\;
+        \Evaluate{$i_1$ and $i_2$}\;
+        add $i_1, i_2$ to $P_o(n)$        
+     
+     }\;
+     $P(n+1)\longleftarrow$ NSGA-II selection from $P_o(n)$ and $P(n)$
+  }\;
+  \KwRet{$pipelines$}
+\end{algorithm}
+\vspace{-0.4em}
 }
 
 \headerbox{OpenML experiment}{name=box7,column=1,below=box8,above=box4}{
