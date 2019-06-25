@@ -77,7 +77,8 @@
 We have developed a system that, for a given supervised
 learning task, finds a suitable pipeline --- combination
 of machine learning, ensembles and preprocessing methods --- using the developmental
-genetic programming.
+genetic programming. The system has been successfully tested on 72 datasets of
+the OpenML-CC18 benchmark.
 }
 
 % last box to reference
@@ -141,7 +142,7 @@ is a directed acyclic graph.
 Our system aims to optimize scikit-learn pipelines. The search space comprises of all
 scikit-learn preprocessors, ensembles and simple methods. We also extended the Pipeline
 class to act as a base-estimator of an ensemble.
-\vspace{0.5em}
+\vspace{0.2em}
 
 \begin{algorithm}[H]
 \DontPrintSemicolon 
@@ -215,7 +216,7 @@ In GP, the fittest tree individuals are combined to produce better individuals.
 The fitness is composed from the score of the encoded pipeline on the input dataset
 and from evaluation time.
 
-\vspace{0.4em}
+\vspace{0.2em}
 \begin{algorithm}[H]
 \DontPrintSemicolon 
 \caption{Pipeline optimization --- developmental GP}
